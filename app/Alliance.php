@@ -8,7 +8,7 @@ use App\Ruler;
 
 class Alliance extends Model
 {
-    public function rulers(
+    public function rulers()
     {
         return $this->hasMany(Ruler::class);
     }
