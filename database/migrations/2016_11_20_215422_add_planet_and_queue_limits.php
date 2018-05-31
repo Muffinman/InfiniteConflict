@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Schema;
 
 class AddPlanetAndQueueLimits extends Migration
 {
@@ -13,7 +12,7 @@ class AddPlanetAndQueueLimits extends Migration
      */
     public function up()
     {
-        Schema::table('rulers', function($table) {
+        Schema::table('rulers', function ($table) {
             $table->integer('queue_limit')->default(3)->after('password');
             $table->integer('planet_limit')->default(4)->after('password');
         });
@@ -26,7 +25,7 @@ class AddPlanetAndQueueLimits extends Migration
      */
     public function down()
     {
-        Schema::table('rulers', function($table) {
+        Schema::table('rulers', function ($table) {
             $table->dropColumn('queue_limit');
             $table->dropColumn('planet_limit');
         });

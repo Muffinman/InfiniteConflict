@@ -11,6 +11,5 @@ class ConversionRequiredResearchTableSeeder extends Seeder
      */
     public function run()
     {
-
     }
 }

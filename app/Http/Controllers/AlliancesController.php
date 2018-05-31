@@ -8,7 +8,6 @@ class AlliancesController extends Controller
 {
     public function index(Request $request)
     {
-
         return view('alliances/index', [
 
         ]);

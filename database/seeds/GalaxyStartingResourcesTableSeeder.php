@@ -2,10 +2,6 @@
 
 use Illuminate\Database\Seeder;
 
-use App\Galaxy;
-use App\Resource;
-use App\Config;
-
 class GalaxyStartingResourcesTableSeeder extends Seeder
 {
     /**
