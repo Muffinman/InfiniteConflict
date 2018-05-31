@@ -11,7 +11,7 @@ class ResearchTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('research')->insert([          
+        DB::table('research')->insert([
             ['name' => 'Resource Collection Research', 'turns' => 24, 'given' => 0],
             ['name' => 'Fleet Technology Research', 'turns' => 24, 'given' => 0],
             ['name' => 'Planet Management Research', 'turns' => 24, 'given' => 0],

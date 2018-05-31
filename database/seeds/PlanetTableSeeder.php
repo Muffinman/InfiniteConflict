@@ -1,18 +1,14 @@
 <?php
 
-use Illuminate\Database\Seeder;
-
 use App\Config;
-use App\Galaxy;
-use App\System;
-use App\Planet;
-use App\Resource;
 use App\GalaxyStartingResource;
 use App\PlanetStartingResource;
+use App\Resource;
+use App\System;
+use Illuminate\Database\Seeder;
 
 class PlanetTableSeeder extends Seeder
 {
-
     /**
      * Run the database seeds.
      *
@@ -20,7 +16,6 @@ class PlanetTableSeeder extends Seeder
      */
     public function run()
     {
-
         $planet_types = Config::find('planet_types')->value;
 
         $home_sys_cols = Config::find('home_sys_cols')->value;
@@ -53,11 +48,11 @@ class PlanetTableSeeder extends Seeder
                 $gal = $sys->galaxy;
                 $total_planets = $sys->galaxy->home ? ($home_sys_cols * $home_sys_rows) : ($free_sys_cols * $free_sys_rows);
 
-                for ($i=0; $i<$total_planets; $i++) {
-                    if ($sys->home){
+                for ($i = 0; $i < $total_planets; $i++) {
+                    if ($sys->home) {
                         $row = floor($i / $home_sys_cols) + 1;
                         $col = ($i % $home_sys_cols) + 1;
-                    }else{
+                    } else {
                         $row = floor($i / $free_sys_cols) + 1;
                         $col = ($i % $free_sys_cols) + 1;
                     }
@@ -65,10 +60,10 @@ class PlanetTableSeeder extends Seeder
                     $planets[] = [
                         'system_id' => $sys->id,
                         'galaxy_id' => $gal->id,
-                        'row' => $row,
-                        'col' => $col,
-                        'home' => $sys->home,
-                        'type' => rand(1, $planet_types),
+                        'row'       => $row,
+                        'col'       => $col,
+                        'home'      => $sys->home,
+                        'type'      => rand(1, $planet_types),
                     ];
                 }
                 $this->command->getOutput()->progressAdvance();
@@ -78,6 +73,5 @@ class PlanetTableSeeder extends Seeder
         });
 
         $this->command->getOutput()->progressFinish();
-
     }
 }

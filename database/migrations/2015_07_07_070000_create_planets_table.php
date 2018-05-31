@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreatePlanetsTable extends Migration
 {
@@ -19,7 +19,7 @@ class CreatePlanetsTable extends Migration
             $table->integer('galaxy_id')->unsigned();
             $table->integer('system_id')->unsigned();
             $table->integer('col');
-            $table->integer('row');            
+            $table->integer('row');
             $table->boolean('home')->default(0);
             $table->integer('type');
             $table->unique(['system_id', 'col', 'row']);

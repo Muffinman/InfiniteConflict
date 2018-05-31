@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -49,7 +49,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call(PlanetColoBuildingsTableSeeder::class);
         $this->call(PlanetColoResourcesTableSeeder::class);
-
 
         Model::reguard();
     }

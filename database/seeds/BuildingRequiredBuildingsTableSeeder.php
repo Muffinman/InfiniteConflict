@@ -86,6 +86,5 @@ class BuildingRequiredBuildingsTableSeeder extends Seeder
             ['building_id' => 35, 'requirement_id' => 17, 'qty' => 1],
             ['building_id' => 35, 'requirement_id' => 18, 'qty' => 1],
         ]);
-
     }
 }
