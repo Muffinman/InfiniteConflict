@@ -4,14 +4,6 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\System;
-use App\Galaxy;
-use App\Ruler;
-use App\Building;
-use App\Unit;
-use App\Fleet;
-use App\Resource;
-
 class Planet extends Model
 {
     public $timestamps = false;
@@ -123,7 +115,6 @@ class Planet extends Model
         //dd(Building::query()->researched()->prerequisitesMet($this)->belowMax($this)->toSql());
         return Building::query()->researched()->prerequisitesMet($this)->belowMax($this)->get();
     }
-
 
     /**
      * Filter by only populated planets.
