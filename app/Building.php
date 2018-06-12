@@ -48,7 +48,7 @@ class Building extends Model
      */
     public function requiredBuildings()
     {
-        return $this->belongsToMany(Building::class, 'building_required_buidlings')->withPivot(['qty']);
+        return $this->belongsToMany(Building::class, 'building_required_buildings', 'requirement_id')->withPivot(['qty']);
     }
 
     /**
@@ -97,7 +97,7 @@ class Building extends Model
         return $query->whereHas('requiredResearch', function($query) {
             $query->whereIn('id', Auth::user()->research->modelKeys());
         })
-        ->DoesntHave('requiredResearch', 'or');
+        ->doesntHave('requiredResearch', 'or');
     }
 
 
@@ -111,7 +111,7 @@ class Building extends Model
             $query->whereIn('id', $buildings);
             $query->where('planet_id', $planet->id);
         })
-        ->DoesntHave('requiredBuildings', 'or');
+        ->doesntHave('requiredBuildings', 'or');
     }
 
 
