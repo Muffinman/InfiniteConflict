@@ -76,8 +76,8 @@ class PlanetResourceTableSeeder extends Seeder
                     }
                 }
                 $planet->resources()->attach($attached_resources);
-                $this->command->getOutput()->progressAdvance();
             }
+            $this->command->getOutput()->progressAdvance(sizeof($planets));
         });
 
         $this->command->getOutput()->progressFinish();

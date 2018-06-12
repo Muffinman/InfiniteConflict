@@ -133,25 +133,8 @@ class Planet extends Model
      */
     public function availableBuildings()
     {
-
-        // Find any buildings below max qty which have no pre-reqs
-        $buildings = Building::leftJoin('building_required_research', function ($join){
-            $join->on('buildings.id', '=', 'building_required_research.building_id');
-        })
-        ->leftJoin('planet_building', function ($join){
-            $join->on('buildings.id', '=', 'planet_building.building_id');
-        })
-        ->whereNull('building_required_research.research_id')
-        ->whereNull('buildings.max')->orWhere('buildings.max', '<', 'planet_building.qty');
-
-        dd((array) $buildings->get());
-
-        // Find any buildings below max qty which have required research pre-reqs
-
-        // Find any buildings below max qty which have required building pre-reqs
-
-        // Return array of buildings
-        Building::availableToBuild($this);
+        //dd(Building::query()->researched()->prerequisitesMet($this)->belowMax($this)->toSql());
+        return Building::query()->researched()->prerequisitesMet($this)->belowMax($this)->get();
     }
 
 

@@ -57,7 +57,7 @@ class Ruler extends Model implements AuthenticatableContract, CanResetPasswordCo
 
     public function research()
     {
-        return $this->hasMany(Research::class);
+        return $this->belongsToMany(Research::class, 'ruler_research');
     }
 
     public function resources()

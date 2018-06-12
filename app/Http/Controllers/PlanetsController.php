@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Ruler;
 use App\Planet;
+use App\PlanetStartingBuilding;
 use Auth;
 
 class PlanetsController extends Controller
@@ -32,6 +33,7 @@ class PlanetsController extends Controller
         if ($planet->ruler_id !== Auth::user()->id) {
             return redirect()->route('planets.index')->withErrors(['This planet does not belong to you!']);
         }
+
 
         return view('planets/view', [
             'planet' => $planet,

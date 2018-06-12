@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Planet;
+use App\PlanetStartingBuilding;
 
 use Validator;
 use Auth;
@@ -40,6 +41,17 @@ class RulerController extends Controller
         $home_planet->name = $request->input('home_planet_name');
         $home_planet->ruler_id = Auth::user()->id;
         $home_planet->save();
+
+
+        $starting_buildings = PlanetStartingBuilding::all()->toArray();
+        $rekey = [];
+        foreach ($starting_buildings as $b) {
+            $rekey[$b['building_id']] = ['qty' => $b['qty']];
+        }
+        $starting_buildings = $rekey;
+
+        $home_planet->buildings()->sync($starting_buildings);
+
 
         $user = Auth::user();
         $user->name = $request->input('ruler_name');

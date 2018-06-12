@@ -71,7 +71,7 @@
         </div>
     </div>
 
-    {{ $planet->availableBuildings }}
+    {{ $planet->availableBuildings() }}
 
 @endsection
 
