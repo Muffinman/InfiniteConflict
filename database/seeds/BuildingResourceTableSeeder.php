@@ -184,6 +184,6 @@ class BuildingResourceTableSeeder extends Seeder
             ['building_id' => 35, 'resource_id' => 6, 'cost' => 0,      'output' => 1,      'single_output' => 1,    'stores' => 0, 'interest' => 0, 'abundance' => 0, 'refund_on_completion' => 0],
             ['building_id' => 35, 'resource_id' => 7, 'cost' => 100000, 'output' => 0,      'single_output' => null, 'stores' => 0, 'interest' => 0, 'abundance' => 0, 'refund_on_completion' => 1],
 
-		]);
-	}
+        ]);
+    }
 }
