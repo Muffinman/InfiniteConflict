@@ -9,23 +9,25 @@ use App\PlanetStartingBuilding;
 
 use Validator;
 use Auth;
+use Illuminate\Http\Request;
+use Validator;
 
 class RulerController extends Controller
 {
-    public function createEmpire(Request $request) {
-
+    public function createEmpire(Request $request)
+    {
         return view('rulers/create', [
             'data' => [
-                'ruler_name' => $request->input('ruler_name'),
+                'ruler_name'       => $request->input('ruler_name'),
                 'home_planet_name' => $request->input('home_planet_name'),
             ],
         ]);
-
     }
 
-    public function storeEmpire(Request $request) {
+    public function storeEmpire(Request $request)
+    {
         $validator = Validator::make($request->all(), [
-            'ruler_name' => 'required|unique:rulers,name,' . Auth::user()->id . '|max:32',
+            'ruler_name'       => 'required|unique:rulers,name,'.Auth::user()->id.'|max:32',
             'home_planet_name' => 'required|max:32',
         ]);
 
@@ -58,7 +60,5 @@ class RulerController extends Controller
         $user->save();
 
         return redirect()->route('planets.index');
-
     }
-
 }

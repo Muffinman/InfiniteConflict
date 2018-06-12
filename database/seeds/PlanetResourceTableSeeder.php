@@ -1,18 +1,14 @@
 <?php
 
-use Illuminate\Database\Seeder;
-
 use App\Config;
-use App\Galaxy;
-use App\System;
-use App\Planet;
-use App\Resource;
 use App\GalaxyStartingResource;
+use App\Planet;
 use App\PlanetStartingResource;
+use App\Resource;
+use Illuminate\Database\Seeder;
 
 class PlanetResourceTableSeeder extends Seeder
 {
-
     /**
      * Run the database seeds.
      *
@@ -20,7 +16,6 @@ class PlanetResourceTableSeeder extends Seeder
      */
     public function run()
     {
-
         $planet_types = Config::find('planet_types')->value;
 
         $home_sys_cols = Config::find('home_sys_cols')->value;
@@ -50,11 +45,10 @@ class PlanetResourceTableSeeder extends Seeder
             foreach ($planets as $planet) {
                 $attached_resources = [];
                 foreach ($resources as $resource) {
-
                     $stored = $abundance = 0;
 
                     // Home planet in home gal
-                    if ($planet->home && isset($planet_resources[$resource->id]) ) {
+                    if ($planet->home && isset($planet_resources[$resource->id])) {
                         $stored = $planet_resources[$resource->id]['stored'];
                         $abundance = $planet_resources[$resource->id]['abundance'];
                     }
@@ -81,6 +75,5 @@ class PlanetResourceTableSeeder extends Seeder
         });
 
         $this->command->getOutput()->progressFinish();
-
     }
 }

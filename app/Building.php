@@ -14,52 +14,47 @@ use DB;
 
 class Building extends Model
 {
-	public $timestamps = false;
+    public $timestamps = false;
 
     // Cache var for output
     protected $output = [];
 
-
     /**
-     * Get planets this building is built on
+     * Get planets this building is built on.
      */
     public function planets()
     {
         return $this->belongsToMany(Planet::class, 'planet_building')->withPivot('qty');
     }
 
-
     /**
-     * Get building resources
+     * Get building resources.
      */
     public function resources()
     {
         return $this->belongsToMany(Resource::class)->withPivot('cost', 'output', 'single_output', 'stores', 'interest', 'abundance', 'refund_on_completion');
     }
 
-
     /**
-     * Get the required research
+     * Get the required research.
      */
     public function requiredResearch()
     {
         return $this->belongsToMany(Research::class, 'building_required_research');
     }
 
-
     /**
-     * Get the required buildings
+     * Get the required buildings.
      */
     public function requiredBuildings()
     {
-        return $this->belongsToMany(Building::class, 'building_required_buildings')->withPivot(['qty']);
+        return $this->belongsToMany(Building::class, 'building_required_buidlings')->withPivot(['qty']);
     }
 
-
     /**
-     * Calculated the resource output of this planet
+     * Calculated the resource output of this planet.
      */
-    public function output($planet_id, $resource_id, $cached=true)
+    public function output($planet_id, $resource_id, $cached = true)
     {
 
         // Use model cache if available and allowed
@@ -76,20 +71,21 @@ class Building extends Model
             $total += $qty * $output;
             // Update cache
             $this->output[$planet_id][$resource_id] = $total;
+
             return $total;
         }
 
         return 0;
     }
 
-
     /**
-     * Formatted output
+     * Formatted output.
      */
-    public function outputFormatted($planet_id, $resource, $cached=true)
+    public function outputFormatted($planet_id, $resource, $cached = true)
     {
         $output = $this->output($planet_id, $resource, $cached);
-        return ($output >= 1 ? '+' : '') . number_format($output);
+
+        return ($output >= 1 ? '+' : '').number_format($output);
     }
 
 

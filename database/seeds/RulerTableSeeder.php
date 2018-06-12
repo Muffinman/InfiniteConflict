@@ -12,8 +12,8 @@ class RulerTableSeeder extends Seeder
     public function run()
     {
         DB::table('rulers')->insert([
-            'name' => 'Muffinman',
-            'email' => 'matt@azmatt.co.uk',
+            'name'     => 'Muffinman',
+            'email'    => 'matt@azmatt.co.uk',
             'password' => '$2y$10$bPKSEzh/8xa9dmpFIaTTbeYGJDVJnE3Xbd2HRaPWhRSXcMJNfglUa',
         ]);
     }

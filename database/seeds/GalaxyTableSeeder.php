@@ -1,8 +1,7 @@
 <?php
 
-use Illuminate\Database\Seeder;
-
 use App\Config;
+use Illuminate\Database\Seeder;
 
 class GalaxyTableSeeder extends Seeder
 {
@@ -22,8 +21,8 @@ class GalaxyTableSeeder extends Seeder
         $free_gal_cols = Config::find('free_gal_cols')->value;
         $free_gal_rows = Config::find('free_gal_rows')->value;
 
-        for ($i=0; $i<$num_gals; $i++) {
-            $home = ($i+1) % 2;
+        for ($i = 0; $i < $num_gals; $i++) {
+            $home = ($i + 1) % 2;
             DB::table('galaxies')->insert([
                 'home' => $home,
                 'cols' => ($home ? $home_gal_cols : $free_gal_cols),

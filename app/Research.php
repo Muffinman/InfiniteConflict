@@ -9,5 +9,4 @@ class Research extends Model
     public $timestamps = false;
 
     protected $table = 'research';
-
 }

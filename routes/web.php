@@ -13,7 +13,6 @@
 
 Route::get('/', 'WelcomeController@index')->name('index');
 
-
 // Authentication routes
 // Route::get('auth/login', 'Auth\AuthController@getLogin');
 // Route::post('auth/login', 'Auth\AuthController@postLogin');
@@ -39,9 +38,9 @@ Route::group(['middleware' => ['auth', 'planets']], function () {
     Route::get('navigation/{galaxy}', 'NavigationController@galaxy')->name('navigation.galaxy');
     Route::get('navigation/{galaxy}/{system}', 'NavigationController@system')->name('navigation.system');
 
-    Route::get('research', 'ResearchController@index')->name('research.index');    
+    Route::get('research', 'ResearchController@index')->name('research.index');
 
-    Route::get('alliances', 'AlliancesController@index')->name('alliances.index');    
+    Route::get('alliances', 'AlliancesController@index')->name('alliances.index');
 });
 
 Route::group(['middleware' => ['auth']], function () {

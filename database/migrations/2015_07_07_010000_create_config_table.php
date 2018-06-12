@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateConfigTable extends Migration
 {
@@ -12,13 +12,11 @@ class CreateConfigTable extends Migration
      */
     public function up()
     {
-
         Schema::create('config', function (Blueprint $table) {
             $table->string('key')->primary();
             $table->text('value');
             $table->timestamps();
         });
-
     }
 
     /**

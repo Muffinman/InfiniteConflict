@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Ruler;
-
-use Validator;
-use Socialite;
-use Auth;
-
 use App\Http\Controllers\Controller;
+use App\Ruler;
+use Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-
+use Socialite;
+use Validator;
 
 class AuthController extends Controller
 {
@@ -41,7 +38,7 @@ class AuthController extends Controller
      */
     public function redirectToGoogle()
     {
-        return Socialite::driver('google')->scopes(['profile','email'])->redirect();
+        return Socialite::driver('google')->scopes(['profile', 'email'])->redirect();
     }
 
     /**
@@ -62,20 +59,23 @@ class AuthController extends Controller
             'social_expires_at' => time() + $user->expiresIn,
         ])) {
             Auth::loginUsingId($ruler->id, true);
+
             return redirect('/');
         }
     }
+
     /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param array $data
+     *
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
+            'name'     => 'required|max:255',
+            'email'    => 'required|email|max:255|unique:users',
             'password' => 'required|min:6|confirmed',
         ]);
     }
@@ -83,14 +83,15 @@ class AuthController extends Controller
     /**
      * Create a new user instance after a valid registration.
      *
-     * @param  array  $data
+     * @param array $data
+     *
      * @return User
      */
     protected function create(array $data)
     {
         return Ruler::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
+            'name'     => $data['name'],
+            'email'    => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
     }

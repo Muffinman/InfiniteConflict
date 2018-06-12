@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
 
 class CreateResourcesTable extends Migration
 {
@@ -18,7 +18,7 @@ class CreateResourcesTable extends Migration
             $table->integer('hp')->default(0);
             $table->integer('ap')->default(0);
             $table->boolean('creatable')->default(0);
-            $table->boolean('transferable')->default(0);            
+            $table->boolean('transferable')->default(0);
             $table->integer('turns')->default(0);
             $table->double('interest', 15, 8)->default(0);
             $table->boolean('requires_storage')->default(0);

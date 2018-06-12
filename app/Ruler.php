@@ -3,17 +3,10 @@
 namespace App;
 
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-
-use App\Alliance;
-use App\Planet;
-use App\Fleet;
-use App\Research;
-use App\Resource;
-use App\Building;
+use Illuminate\Database\Eloquent\Model;
 
 class Ruler extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
