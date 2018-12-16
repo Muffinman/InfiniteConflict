@@ -11,8 +11,7 @@
 |
 */
 
-Route::group(['namespace' => 'Web', 'middleware' => 'web'], function() {
-
+Route::group(['namespace' => 'Web', 'middleware' => 'web'], function () {
     Route::get('/', 'AppController@index')->name('index');
 
     Auth::routes(['verify' => true]);
@@ -24,5 +23,4 @@ Route::group(['namespace' => 'Web', 'middleware' => 'web'], function() {
     Route::group(['middleware' => ['auth:web']], function () {
         Route::get('logout', 'Auth\AuthController@logout')->name('logout');
     });
-
 });
