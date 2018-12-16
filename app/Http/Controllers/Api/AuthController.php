@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 
-
 class AuthController extends ApiController
 {
     use SendsPasswordResetEmails;
-
 
     /**
      * Get a JWT via given credentials.
@@ -61,7 +59,7 @@ class AuthController extends ApiController
     /**
      * Get the token array structure.
      *
-     * @param  string $token
+     * @param string $token
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -69,8 +67,8 @@ class AuthController extends ApiController
     {
         return response()->json([
             'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
+            'token_type'   => 'bearer',
+            'expires_in'   => auth()->factory()->getTTL() * 60,
         ]);
     }
 }

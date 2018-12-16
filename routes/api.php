@@ -11,8 +11,7 @@
 |
 */
 
-Route::group(['namespace' => 'Api'], function() {
-
+Route::group(['namespace' => 'Api'], function () {
     Route::get('index', 'IndexController@index');
 
     Route::post('login', 'AuthController@login');

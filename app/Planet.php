@@ -207,9 +207,8 @@ class Planet extends Model
             // Update caches
             $this->resources()->syncWithoutDetaching([$resource_id => ['storage' => $total]]);
             $this->storage[$resource_id] = $total;
-
         }
-        
+
         return $total;
     }
 
