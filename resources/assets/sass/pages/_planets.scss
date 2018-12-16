@@ -26,16 +26,12 @@
     .planet {
 
         @include grey-box;
-        @include outer-container;
 
         .planet-static-resources {
-            @include span-columns(21 of 24);
-            @include omega;
             margin-bottom: 1em;
         }
 
         .planet-image {
-            @include span-columns(3 of 24);
             img {
                 width: 100px;
                 height: 100px;
@@ -44,8 +40,6 @@
         }
 
         .planet-static-resources {
-            @include span-columns(21 of 24);
-            @include omega;
             margin-bottom: 1em;
 
             h2 {
@@ -70,8 +64,6 @@
         }
 
         .planet-production-resources {
-            @include span-columns(21 of 24);
-            @include omega;
             margin-bottom: 1em;
 
             ul {
@@ -88,13 +80,9 @@
         }
 
         .planet-production {
-            @include span-columns(21 of 24);
-            @include omega;
             ul {
-                @include outer-container;
+                display: flex;
                 li {
-                    @include span-columns(4);
-                    @include omega(3n);
                 }
             }
         }
@@ -113,7 +101,6 @@
     }
 
     .planet-image {
-        @include span-columns(5 of 24);
         img {
             display: block;
         }
@@ -121,25 +108,18 @@
 
     .planet-static-resources {
         @include grey-box(0.75em, $mid-grey, 1);
-        @include span-columns(24 of 24);
-        @include omega;
         margin-bottom: 0.75em;
     }
 
     .planet-production-resources {
         @include grey-box(0.75em, $mid-grey, 1);
-        @include span-columns(19 of 24);
-        @include omega;
         margin-bottom: 0.75em;
     }
 
     ul.planet-menu {
-        @include outer-container;
-        @include span-columns(19 of 24);
+        display: flex;
         li {
             display: block;
-            @include span-columns(6 of 24);
-            @include omega(4n);
             a {
                 display: block;
                 @include grey-box(0.4em, $mid-grey);
@@ -155,7 +135,6 @@
     }
 
     .planet-completed-list {
-        @include span-columns(10 of 24);
     }
 
     .completed-list {
@@ -182,7 +161,6 @@
     }
 
     .planet-content {
-        @include span-columns(14 of 24);
     }
 
     .building-queue {

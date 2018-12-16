@@ -154,6 +154,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\TelescopeServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Laravel\Tinker\TinkerServiceProvider::class,
 
@@ -161,9 +162,7 @@ return [
          * Custom classes
          */
         Laravel\Socialite\SocialiteServiceProvider::class,
-        GrahamCampbell\Exceptions\ExceptionsServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class,
-
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
     ],
 
     /*
@@ -214,7 +213,6 @@ return [
          * Custom aliases
          */
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
-        'Debugbar'  => Barryvdh\Debugbar\Facade::class,
     ],
 
 ];

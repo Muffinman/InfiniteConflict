@@ -8,8 +8,9 @@ class Planet extends Model
 {
     public $timestamps = false;
 
-    // Cache var for output
+    // Cache var for output and storage
     protected $output = [];
+    protected $storage = [];
 
     /**
      * Get the system for this planet.
@@ -64,7 +65,7 @@ class Planet extends Model
      */
     public function resources()
     {
-        return $this->belongsToMany(Resource::class)->withPivot('stored', 'output', 'abundance', 'stored', 'storage', 'busy');
+        return $this->belongsToMany(Resource::class)->withPivot(['stored', 'output', 'abundance', 'storage', 'busy']);
     }
 
     /**
@@ -72,7 +73,7 @@ class Planet extends Model
      */
     public function productionResources()
     {
-        return $this->belongsToMany(Resource::class)->withPivot('stored', 'output', 'abundance', 'stored', 'storage', 'busy')->where('production_resource', 1);
+        return $this->belongsToMany(Resource::class)->withPivot(['stored', 'output', 'abundance', 'storage', 'busy'])->where('production_resource', 1);
     }
 
     /**
@@ -80,7 +81,7 @@ class Planet extends Model
      */
     public function staticResources()
     {
-        return $this->belongsToMany(Resource::class)->withPivot('stored', 'output', 'abundance', 'stored', 'storage', 'busy')->where('production_resource', 0);
+        return $this->belongsToMany(Resource::class)->withPivot(['stored', 'output', 'abundance', 'storage', 'busy'])->where('production_resource', 0);
     }
 
     /**
@@ -112,7 +113,6 @@ class Planet extends Model
      */
     public function availableBuildings()
     {
-        //dd(Building::query()->researched()->prerequisitesMet($this)->belowMax($this)->toSql());
         return Building::query()->researched()->prerequisitesMet($this)->belowMax($this)->get();
     }
 
@@ -161,9 +161,9 @@ class Planet extends Model
         foreach ($this->buildings as $building) {
             if (isset($building->pivot)) {
                 $qty = $building->pivot->qty;
-                $resources = $building->resources()->wherePivot('resource_id', $resource_id)->first();
-                if ($resources) {
-                    $output = $resources->pivot->output;
+                $resource = $building->resources()->wherePivot('resource_id', $resource_id)->first();
+                if ($resource) {
+                    $output = $resource->pivot->output;
                     $total += $qty * $output;
                 }
             }
@@ -171,11 +171,46 @@ class Planet extends Model
             // Update caches
             $this->resources()->syncWithoutDetaching([$resource_id => ['output' => $total]]);
             $this->output[$resource_id] = $total;
-
-            return $total;
         }
 
-        return 0;
+        return $total;
+    }
+
+    /**
+     * Calculated the resource storage of this planet.
+     */
+    public function storage($resource_id, $cached = true, $rebuild = false)
+    {
+
+        // Use model cache if available and allowed
+        if ($cached === true && $rebuild === false && isset($this->storage[$resource_id])) {
+            return $this->storage[$resource_id];
+        }
+
+        // Use DB cache is allowed
+        if ($cached === true && $rebuild === false) {
+            return $this->resources()->wherePivot('resource_id', $resource_id)->first()->pivot->storage;
+        }
+
+        // Else rebuild the cache and return
+        $total = 0;
+        foreach ($this->buildings as $building) {
+            if (isset($building->pivot)) {
+                $qty = $building->pivot->qty;
+                $resource = $building->resources()->wherePivot('resource_id', $resource_id)->wherePivot('stores', '>', 0)->first();
+                if ($resource) {
+                    $stores = $resource->pivot->stores;
+                    $total += $qty * $stores;
+                }
+            }
+
+            // Update caches
+            $this->resources()->syncWithoutDetaching([$resource_id => ['storage' => $total]]);
+            $this->storage[$resource_id] = $total;
+
+        }
+        
+        return $total;
     }
 
     /**

@@ -1,10 +1,10 @@
 @section('title', 'Login')
 
-@extends('layouts/html')
+@extends('index')
 
 @section('content')
 
-    <form method="POST" action="/auth/login">
+    <form method="POST" action="{{ route('login') }}">
         {!! csrf_field() !!}
 
         <div>

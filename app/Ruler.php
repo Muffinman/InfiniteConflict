@@ -2,15 +2,19 @@
 
 namespace App;
 
-use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class Ruler extends Model implements AuthenticatableContract, CanResetPasswordContract
+
+class Ruler extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract, MustVerifyEmailContract, JWTSubject
 {
-    use Authenticatable, CanResetPassword;
+    use CanResetPassword, Notifiable, MustVerifyEmail;
 
     /**
      * The database table used by the model.
@@ -32,6 +36,28 @@ class Ruler extends Model implements AuthenticatableContract, CanResetPasswordCo
      * @var array
      */
     protected $hidden = ['password', 'remember_token'];
+
+    // Rest omitted for brevity
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
 
     public function homePlanet()
     {
