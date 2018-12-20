@@ -9,11 +9,7 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-import Vuex from 'vuex';
-import VueRouter from 'vue-router';
 
-Vue.use(Vuex);
-Vue.use(VueRouter);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -21,48 +17,19 @@ Vue.use(VueRouter);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-import Index from './Index.vue';
-import Login from './components/Login.vue';
-
-Vue.component('index', Index);
-Vue.component('login', Login);
-
-const routes = [
-    { path: '/', component: Index, name: 'index' },
-    { path: '/login', component: Login, name: 'login' },
-];
-
-const router = new VueRouter({
-    routes // short for `routes: routes`
-});
-
-const store = new Vuex.Store({
-    state: {
-        auth: {
-            token: ''
-        }
-    },
-    getters: {
-        getAuth: state => {
-            return state.auth
-        }
-    },
-    mutations: {
-        set (authValues) {
-            state.auth = authValues;
-        }
-    }
-});
+import router from './router.js'
+import store from './store.js'
 
 const app = new Vue({
     router,
     store,
     mounted() {
-
-        window.axios.defaults.headers.common['Authorisation'] = 'Bearer ' + store.getters.getAuth.token;
+        window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$store.state.auth.access_token;
 
         let that = this;
         axios.get('/api/ping').catch(error => {
+            that.$store.commit('setUser', {});
+            that.$store.commit('setAuth', {});
             that.$router.replace('/login');
         });
     }

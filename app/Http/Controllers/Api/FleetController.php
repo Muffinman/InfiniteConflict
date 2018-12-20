@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\ResearchResource;
-use App\Research;
+use App\Fleet;
+use App\Http\Resources\FleetResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class ResearchController extends Controller
+class FleetController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class ResearchController extends Controller
      */
     public function index()
     {
-        return ResearchResource::collection(Research::paginate());
+        return FleetResource::collection(Fleet::paginate());
     }
 
     /**
@@ -27,45 +27,45 @@ class ResearchController extends Controller
      */
     public function store(Request $request)
     {
-        $research = new Research;
-        $research->fill($request->all());
-        return new ResearchResource($research);
+        $fleet = new Fleet;
+        $fleet->fill($request->all());
+        return new FleetResource($fleet);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Research $research
+     * @param  Fleet $fleet
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    public function show(Research $research)
+    public function show(Fleet $fleet)
     {
-        return new ResearchResource($research);
+        return new FleetResource($fleet);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  Research $research
+     * @param  Fleet $fleet
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    public function update(Request $request, Research $research)
+    public function update(Request $request, Fleet $fleet)
     {
-        $research->fill($request->all());
-        return new ResearchResource($research);
+        $fleet->fill($request->all());
+        return new FleetResource($fleet);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Research $research
+     * @param  Fleet $fleet
      * @return \Illuminate\Support\Facades\Response
      * @throws \Exception;
      */
-    public function destroy(Research $research)
+    public function destroy(Fleet $fleet)
     {
-        $research->delete();
+        $fleet->delete();
         return response()->json('OK', 204);
     }
 }

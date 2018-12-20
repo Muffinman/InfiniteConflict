@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\ResearchResource;
-use App\Research;
+use App\Http\Resources\UnitResource;
+use App\Unit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class ResearchController extends Controller
+class UnitController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class ResearchController extends Controller
      */
     public function index()
     {
-        return ResearchResource::collection(Research::paginate());
+        return UnitResource::collection(Unit::paginate());
     }
 
     /**
@@ -27,45 +27,45 @@ class ResearchController extends Controller
      */
     public function store(Request $request)
     {
-        $research = new Research;
-        $research->fill($request->all());
-        return new ResearchResource($research);
+        $unit = new Unit;
+        $unit->fill($request->all());
+        return new UnitResource($unit);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Research $research
+     * @param  Unit $unit
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    public function show(Research $research)
+    public function show(Unit $unit)
     {
-        return new ResearchResource($research);
+        return new UnitResource($unit);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  Research $research
+     * @param  Unit $unit
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    public function update(Request $request, Research $research)
+    public function update(Request $request, Unit $unit)
     {
-        $research->fill($request->all());
-        return new ResearchResource($research);
+        $unit->fill($request->all());
+        return new UnitResource($unit);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Research $research
+     * @param  Unit $unit
      * @return \Illuminate\Support\Facades\Response
      * @throws \Exception;
      */
-    public function destroy(Research $research)
+    public function destroy(Unit $unit)
     {
-        $research->delete();
+        $unit->delete();
         return response()->json('OK', 204);
     }
 }

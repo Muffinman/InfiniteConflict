@@ -2,57 +2,70 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Planet;
-use App\PlanetStartingBuilding;
-use Auth;
+use App\Http\Resources\RulerResource;
+use App\Ruler;
 use Illuminate\Http\Request;
-use Validator;
+use App\Http\Controllers\Controller;
 
-class RulerController extends ApiController
+class RulerController extends Controller
 {
-    public function createEmpire(Request $request)
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     */
+    public function index()
     {
-        return view('rulers/create', [
-            'data' => [
-                'ruler_name'       => $request->input('ruler_name'),
-                'home_planet_name' => $request->input('home_planet_name'),
-            ],
-        ]);
+        return RulerResource::collection(Ruler::paginate());
     }
 
-    public function storeEmpire(Request $request)
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     */
+    public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'ruler_name'       => 'required|unique:rulers,name,'.Auth::user()->id.'|max:32',
-            'home_planet_name' => 'required|max:32',
-        ]);
+        $ruler = new Ruler;
+        $ruler->fill($request->all());
+        return new RulerResource($ruler);
+    }
 
-        if ($validator->fails()) {
-            return redirect()->route('ruler.create')->withInput()->withErrors($validator);
-        }
+    /**
+     * Display the specified resource.
+     *
+     * @param  Ruler $ruler
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     */
+    public function show(Ruler $ruler)
+    {
+        return new RulerResource($ruler);
+    }
 
-        $home_planet = Planet::homePlanets()->unpopulated()->first();
-        if (!$home_planet) {
-            return redirect()->route('ruler.create')->withInput()->withErrors(['home_planet_name' => 'Sorry, there are no home planets left!']);
-        }
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  Ruler $ruler
+     * @return \Illuminate\Http\Resources\Json\JsonResource
+     */
+    public function update(Request $request, Ruler $ruler)
+    {
+        $ruler->fill($request->all());
+        return new RulerResource($ruler);
+    }
 
-        $home_planet->name = $request->input('home_planet_name');
-        $home_planet->ruler_id = Auth::user()->id;
-        $home_planet->save();
-
-        $starting_buildings = PlanetStartingBuilding::all()->toArray();
-        $rekey = [];
-        foreach ($starting_buildings as $b) {
-            $rekey[$b['building_id']] = ['qty' => $b['qty']];
-        }
-        $starting_buildings = $rekey;
-
-        $home_planet->buildings()->sync($starting_buildings);
-
-        $user = Auth::user();
-        $user->name = $request->input('ruler_name');
-        $user->save();
-
-        return redirect()->route('planets.index');
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  Ruler $ruler
+     * @return \Illuminate\Support\Facades\Response
+     * @throws \Exception;
+     */
+    public function destroy(Ruler $ruler)
+    {
+        $ruler->delete();
+        return response()->json('OK', 204);
     }
 }

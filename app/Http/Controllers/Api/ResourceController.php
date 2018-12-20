@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\ResearchResource;
-use App\Research;
+use App\Http\Resources\ResourceResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Resource;
 
-class ResearchController extends Controller
+class ResourceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class ResearchController extends Controller
      */
     public function index()
     {
-        return ResearchResource::collection(Research::paginate());
+        return ResourceResource::collection(Resource::paginate());
     }
 
     /**
@@ -27,45 +27,45 @@ class ResearchController extends Controller
      */
     public function store(Request $request)
     {
-        $research = new Research;
-        $research->fill($request->all());
-        return new ResearchResource($research);
+        $resource = new Resource;
+        $resource->fill($request->all());
+        return new ResourceResource($resource);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Research $research
+     * @param  Resource $resource
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    public function show(Research $research)
+    public function show(Resource $resource)
     {
-        return new ResearchResource($research);
+        return new ResourceResource($resource);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  Research $research
+     * @param  \App\Resource $resource
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    public function update(Request $request, Research $research)
+    public function update(Request $request, Resource $resource)
     {
-        $research->fill($request->all());
-        return new ResearchResource($research);
+        $resource->fill($request->all());
+        return new ResourceResource($resource);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Research $research
+     * @param  Resource $resource
      * @return \Illuminate\Support\Facades\Response
      * @throws \Exception;
      */
-    public function destroy(Research $research)
+    public function destroy(Resource $resource)
     {
-        $research->delete();
+        $resource->delete();
         return response()->json('OK', 204);
     }
 }

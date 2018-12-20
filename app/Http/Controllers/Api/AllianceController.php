@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\ResearchResource;
-use App\Research;
+use App\Alliance;
+use App\Http\Resources\AllianceResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class ResearchController extends Controller
+class AllianceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class ResearchController extends Controller
      */
     public function index()
     {
-        return ResearchResource::collection(Research::paginate());
+        return AllianceResource::collection(Alliance::paginate());
     }
 
     /**
@@ -27,45 +27,45 @@ class ResearchController extends Controller
      */
     public function store(Request $request)
     {
-        $research = new Research;
-        $research->fill($request->all());
-        return new ResearchResource($research);
+        $alliance = new Alliance;
+        $alliance->fill($request->all());
+        return new AllianceResource($alliance);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Research $research
+     * @param  Alliance $alliance
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    public function show(Research $research)
+    public function show(Alliance $alliance)
     {
-        return new ResearchResource($research);
+        return new AllianceResource($alliance);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  Research $research
+     * @param  Alliance $alliance
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    public function update(Request $request, Research $research)
+    public function update(Request $request, Alliance $alliance)
     {
-        $research->fill($request->all());
-        return new ResearchResource($research);
+        $alliance->fill($request->all());
+        return new AllianceResource($alliance);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Research $research
+     * @param  Alliance $alliance
      * @return \Illuminate\Support\Facades\Response
      * @throws \Exception;
      */
-    public function destroy(Research $research)
+    public function destroy(Alliance $alliance)
     {
-        $research->delete();
+        $alliance->delete();
         return response()->json('OK', 204);
     }
 }

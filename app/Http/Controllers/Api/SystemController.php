@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\ResearchResource;
-use App\Research;
+use App\Http\Resources\SystemResource;
+use App\System;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class ResearchController extends Controller
+class SystemController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class ResearchController extends Controller
      */
     public function index()
     {
-        return ResearchResource::collection(Research::paginate());
+        return SystemResource::collection(System::paginate());
     }
 
     /**
@@ -27,45 +27,45 @@ class ResearchController extends Controller
      */
     public function store(Request $request)
     {
-        $research = new Research;
-        $research->fill($request->all());
-        return new ResearchResource($research);
+        $system = new System;
+        $system->fill($request->all());
+        return new SystemResource($system);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Research $research
+     * @param  System $system
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    public function show(Research $research)
+    public function show(System $system)
     {
-        return new ResearchResource($research);
+        return new SystemResource($system);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  Research $research
+     * @param  System $system
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    public function update(Request $request, Research $research)
+    public function update(Request $request, System $system)
     {
-        $research->fill($request->all());
-        return new ResearchResource($research);
+        $system->fill($request->all());
+        return new SystemResource($system);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Research $research
+     * @param  System $system
      * @return \Illuminate\Support\Facades\Response
      * @throws \Exception;
      */
-    public function destroy(Research $research)
+    public function destroy(System $system)
     {
-        $research->delete();
+        $system->delete();
         return response()->json('OK', 204);
     }
 }

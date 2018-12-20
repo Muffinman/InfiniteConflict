@@ -8,7 +8,7 @@
     export default {
         data() {
           return {
-              welcome: '',
+              welcome: 'Welcome!',
           }
         },
         mounted() {

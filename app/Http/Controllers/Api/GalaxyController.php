@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\ResearchResource;
-use App\Research;
+use App\Galaxy;
+use App\Http\Resources\GalaxyResource;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-class ResearchController extends Controller
+class GalaxyController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class ResearchController extends Controller
      */
     public function index()
     {
-        return ResearchResource::collection(Research::paginate());
+        return GalaxyResource::collection(Galaxy::paginate());
     }
 
     /**
@@ -27,45 +27,45 @@ class ResearchController extends Controller
      */
     public function store(Request $request)
     {
-        $research = new Research;
-        $research->fill($request->all());
-        return new ResearchResource($research);
+        $galaxy = new Galaxy;
+        $galaxy->fill($request->all());
+        return new GalaxyResource($galaxy);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Research $research
+     * @param  Galaxy $allia$galaxynce
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    public function show(Research $research)
+    public function show(Galaxy $galaxy)
     {
-        return new ResearchResource($research);
+        return new GalaxyResource($galaxy);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  Research $research
+     * @param  Galaxy $galaxy
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
-    public function update(Request $request, Research $research)
+    public function update(Request $request, Galaxy $galaxy)
     {
-        $research->fill($request->all());
-        return new ResearchResource($research);
+        $galaxy->fill($request->all());
+        return new GalaxyResource($galaxy);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Research $research
+     * @param  Galaxy $galaxy
      * @return \Illuminate\Support\Facades\Response
      * @throws \Exception;
      */
-    public function destroy(Research $research)
+    public function destroy(Galaxy $galaxy)
     {
-        $research->delete();
+        $galaxy->delete();
         return response()->json('OK', 204);
     }
 }
