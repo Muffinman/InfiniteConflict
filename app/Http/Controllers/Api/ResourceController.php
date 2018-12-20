@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\ResourceResource;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ResourceResource;
 use App\Resource;
+use Illuminate\Http\Request;
 
 class ResourceController extends Controller
 {
@@ -22,20 +22,23 @@ class ResourceController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function store(Request $request)
     {
-        $resource = new Resource;
+        $resource = new Resource();
         $resource->fill($request->all());
+
         return new ResourceResource($resource);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Resource $resource
+     * @param resource $resource
+     *
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function show(Resource $resource)
@@ -46,26 +49,31 @@ class ResourceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Resource $resource
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Resource            $resource
+     *
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function update(Request $request, Resource $resource)
     {
         $resource->fill($request->all());
+
         return new ResourceResource($resource);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Resource $resource
-     * @return \Illuminate\Support\Facades\Response
+     * @param resource $resource
+     *
      * @throws \Exception;
+     *
+     * @return \Illuminate\Support\Facades\Response
      */
     public function destroy(Resource $resource)
     {
         $resource->delete();
+
         return response()->json('OK', 204);
     }
 }

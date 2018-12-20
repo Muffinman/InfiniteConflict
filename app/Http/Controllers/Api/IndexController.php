@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
-use Illuminate\Http\Request;
-use App\PlanetStartingBuilding;
 use App\Planet;
+use App\PlanetStartingBuilding;
+use Illuminate\Http\Request;
 
 class IndexController extends ApiController
 {
@@ -12,7 +12,6 @@ class IndexController extends ApiController
     {
         return response()->json('ok');
     }
-
 
     public function createEmpire(Request $request)
     {
@@ -56,6 +55,5 @@ class IndexController extends ApiController
         $user = Auth::user();
         $user->name = $request->input('ruler_name');
         $user->save();
-
     }
 }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\RulerResource;
 use App\Ruler;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class RulerController extends Controller
 {
@@ -22,20 +22,23 @@ class RulerController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function store(Request $request)
     {
-        $ruler = new Ruler;
+        $ruler = new Ruler();
         $ruler->fill($request->all());
+
         return new RulerResource($ruler);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Ruler $ruler
+     * @param Ruler $ruler
+     *
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function show(Ruler $ruler)
@@ -46,26 +49,31 @@ class RulerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Ruler $ruler
+     * @param \Illuminate\Http\Request $request
+     * @param Ruler                    $ruler
+     *
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function update(Request $request, Ruler $ruler)
     {
         $ruler->fill($request->all());
+
         return new RulerResource($ruler);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Ruler $ruler
-     * @return \Illuminate\Support\Facades\Response
+     * @param Ruler $ruler
+     *
      * @throws \Exception;
+     *
+     * @return \Illuminate\Support\Facades\Response
      */
     public function destroy(Ruler $ruler)
     {
         $ruler->delete();
+
         return response()->json('OK', 204);
     }
 }
