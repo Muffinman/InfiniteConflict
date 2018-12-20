@@ -34,7 +34,5 @@ Route::group(['namespace' => 'Api'], function () {
         Route::apiResource('rulers', RulerController::class);
         Route::apiResource('systems', SystemController::class);
         Route::apiResource('units', UnitController::class);
-
     });
-
 });

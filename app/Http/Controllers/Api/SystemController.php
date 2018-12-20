@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\SystemResource;
 use App\System;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class SystemController extends Controller
 {
@@ -22,20 +22,23 @@ class SystemController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function store(Request $request)
     {
-        $system = new System;
+        $system = new System();
         $system->fill($request->all());
+
         return new SystemResource($system);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  System $system
+     * @param System $system
+     *
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function show(System $system)
@@ -46,26 +49,31 @@ class SystemController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  System $system
+     * @param \Illuminate\Http\Request $request
+     * @param System                   $system
+     *
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function update(Request $request, System $system)
     {
         $system->fill($request->all());
+
         return new SystemResource($system);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  System $system
-     * @return \Illuminate\Support\Facades\Response
+     * @param System $system
+     *
      * @throws \Exception;
+     *
+     * @return \Illuminate\Support\Facades\Response
      */
     public function destroy(System $system)
     {
         $system->delete();
+
         return response()->json('OK', 204);
     }
 }

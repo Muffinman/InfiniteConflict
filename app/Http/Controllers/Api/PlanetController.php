@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Resources\PlanetResource;
 use App\Planet;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class PlanetController extends Controller
 {
@@ -22,20 +22,23 @@ class PlanetController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function store(Request $request)
     {
-        $planet = new Planet;
+        $planet = new Planet();
         $planet->fill($request->all());
+
         return new PlanetResource($planet);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Planet $planet
+     * @param Planet $planet
+     *
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function show(Planet $planet)
@@ -46,26 +49,31 @@ class PlanetController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Planet $planet
+     * @param \Illuminate\Http\Request $request
+     * @param Planet                   $planet
+     *
      * @return \Illuminate\Http\Resources\Json\JsonResource
      */
     public function update(Request $request, Planet $planet)
     {
         $planet->fill($request->all());
+
         return new PlanetResource($planet);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Planet $planet
-     * @return \Illuminate\Support\Facades\Response
+     * @param Planet $planet
+     *
      * @throws \Exception;
+     *
+     * @return \Illuminate\Support\Facades\Response
      */
     public function destroy(Planet $planet)
     {
         $planet->delete();
+
         return response()->json('OK', 204);
     }
 }
