@@ -17,7 +17,7 @@ class CreateBuildingResourceTable extends Migration
             $table->integer('resource_id')->unsigned();
             $table->integer('cost');
             $table->integer('output');
-            $table->integer('single_output');
+            $table->integer('single_output')->nullable();
             $table->integer('stores');
             $table->double('interest', 15, 8);
             $table->integer('abundance');
