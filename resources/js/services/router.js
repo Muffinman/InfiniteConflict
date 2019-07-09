@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router';
 
 import Index from '@/Index';
-import Login from '@/components/Login'
+import Login from '@/auth/Login'
 
 Vue.use(VueRouter);
 
