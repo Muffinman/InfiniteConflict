@@ -1,0 +1,11 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "indentation": 4,
+    "at-rule-no-unknown": null,
+    "color-hex-case": "lower",
+    "no-descending-specificity": null,
+    "max-empty-lines": 2,
+    "no-eol-whitespace": null
+  }
+}

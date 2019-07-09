@@ -8,16 +8,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="//fonts.googleapis.com/css?family=Play:400,700" rel="stylesheet" type="text/css">
-    <link href="{{ mix('/css/app.css') }}" rel="stylesheet" type="text/css">
+
+    <!-- Styles -->
+    @if (in_array(env('APP_ENV'), ['production', 'stage']))
+        <link href="{{ mix('css/app.prod.css') }}" rel="stylesheet">
+    @else
+        <link href="{{ mix('css/app.dev.css') }}" rel="stylesheet">
+    @endif
+
 </head>
 <body>
+    <div id="app">
+        <router-view></router-view>
+    </div>
 
-<div id="app">
-    <router-view></router-view>
-</div>
-
-<script src="{{ mix('/js/manifest.js') }}"></script>
-<script src="{{ mix('/js/vendor.js') }}"></script>
-<script src="{{ mix('/js/app.js') }}"></script>
+    <!-- Scripts -->
+    <script src="{{ mix('js/manifest.js') }}"></script>
+    @if (in_array(env('APP_ENV'), ['production', 'stage']))
+        <script src="{{ mix('js/vendor.prod.js') }}"></script>
+        <script src="{{ mix('js/app.prod.js') }}"></script>
+    @else
+        <script src="{{ mix('js/vendor.dev.js') }}"></script>
+        <script src="{{ mix('js/app.dev.js') }}"></script>
+    @endif
 </body>
 </html>

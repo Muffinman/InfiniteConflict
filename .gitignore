@@ -13,3 +13,7 @@ yarn-error.log
 .env
 _ide_helper.php
 .DS_Store
+
+/public/css/app.dev.css
+/public/js/vendor.dev.js
+/public/js/app.dev.js

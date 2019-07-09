@@ -1,4 +1,5 @@
 let mix = require('laravel-mix');
+let StyleLintPlugin = require('stylelint-webpack-plugin');
 
 /*
  |--------------------------------------------------------------------------
@@ -11,18 +12,41 @@ let mix = require('laravel-mix');
  |
  */
 
-if (mix.inProduction()) {
-    mix.version();
+mix.webpackConfig({
+    resolve: {
+        extensions: ['js', 'vue'],
+        alias: {
+            '@': path.resolve(__dirname, 'resources/js')
+        },
+    },
+    plugins: [
+        new StyleLintPlugin({
+            files: './resources/sass/**/*.scss',
+            configFile: './.stylelintrc'
+        }),
+    ]
+});
+
+var outName = 'dev';
+
+if (process.env.NODE_ENV == 'production') {
+    outName = 'prod';
 }
 
-mix.js('resources/assets/js/app.js', 'public/js')
+mix.js('resources/js/app.js', 'public/js/app.' + outName + '.js')
     .extract([
+        'axios',
+        'lodash',
+        'moment',
+        'sweetalert',
         'vue',
         'vuex',
         'vue-router',
-    ]);
+    ], 'public/js/vendor.' + outName + '.js');
 
-mix.sass('resources/assets/sass/app.scss', 'public/css')
-    .options({
-        processCssUrls: false
-    });
+mix.sass('resources/sass/app.scss', 'public/css/app.' + outName + '.css');
+
+
+if (mix.inProduction()) {
+    mix.version();
+}

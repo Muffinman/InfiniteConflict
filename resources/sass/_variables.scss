@@ -1,0 +1,30 @@
+// Typography
+$base-font-family: 'Helvetica', sans-serif;
+$heading-font-family: $base-font-family;
+
+// Font Sizes
+$base-font-size: 0.9em;
+
+// Line height
+$base-line-height: 1.5;
+$heading-line-height: 1.2;
+
+// Other Sizes
+$base-border-radius: 3px;
+$base-spacing: $base-line-height * 1em;
+$small-spacing: $base-spacing / 2;
+$base-z-index: 0;
+
+// Colors
+$dark-grey: rgb(50, 50, 50);
+$mid-grey: rgb(65, 65, 65);
+$light-grey: rgb(80, 80, 80);
+
+// Font Colors
+$base-background-color: #000;
+$base-font-color: white;
+$action-color: white;
+
+// Border
+$base-border-color: $mid-grey;
+$base-border: 1px solid $base-border-color;
