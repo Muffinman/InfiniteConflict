@@ -1,12 +1,23 @@
 <template>
-    <div>
-        <h1>Login</h1>
-        <div>
-            <p><input type="email" v-model="email"></p>
-            <p><input type="password" v-model="password"></p>
-            <p><input type="button" value="Login" @click="login"></p>
-        </div>
-    </div>
+
+    <b-modal :active="true">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Login</p>
+        </header>
+        <section class="modal-card-body">
+            <b-field label="Email">
+                <b-input type="email" v-model="email"></b-input>
+            </b-field>
+
+            <b-field label="Password">
+                <b-input v-model="password" type="password" value="" password-reveal></b-input>
+            </b-field>
+        </section>
+        <footer class="modal-card-foot justify-content-between">
+            <button class="button" type="button">Forgot your password?</button>
+            <button class="button is-primary" @click="login">Login</button>
+        </footer>
+    </b-modal>
 </template>
 
 <script>

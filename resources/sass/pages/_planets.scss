@@ -3,7 +3,6 @@
         float: left;
         margin: 0;
         margin-right: 2em;
-        line-height: $base-line-height;
         font-size: 1.1em;
         text-shadow: 1px 1px 2px black;
     }
@@ -44,7 +43,6 @@
                 float: left;
                 margin: 0;
                 margin-right: 2em;
-                line-height: $base-line-height;
             }
 
             img {
@@ -104,13 +102,13 @@
     }
 
     .planet-static-resources {
-        @include grey-box(0.75em, $mid-grey, 1);
+        @include grey-box(0.75em, $grey, 1);
 
         margin-bottom: 0.75em;
     }
 
     .planet-production-resources {
-        @include grey-box(0.75em, $mid-grey, 1);
+        @include grey-box(0.75em, $grey, 1);
 
         margin-bottom: 0.75em;
     }
@@ -122,7 +120,7 @@
             display: block;
 
             a {
-                @include grey-box(0.4em, $mid-grey);
+                @include grey-box(0.4em, $grey);
 
                 display: block;
                 text-align: center;
@@ -131,7 +129,7 @@
                 text-shadow: 1px 1px 2px black;
 
                 &:hover {
-                    background-color: $light-grey;
+                    background-color: $grey-light;
                 }
             }
         }
@@ -140,10 +138,10 @@
     .completed-list {
         li {
             padding: 0.5em;
-            background: $mid-grey;
+            background: $grey;
 
             &:nth-child(2n) {
-                background: darken($mid-grey, 3%);
+                background: darken($grey, 3%);
             }
         }
 

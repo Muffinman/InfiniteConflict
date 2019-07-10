@@ -8,7 +8,6 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    color: $base-font-color;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -210,17 +209,17 @@ table.striped {
     }
 
     th {
-        background: linear-gradient(darken($dark-grey, 5%), $mid-grey);
-        border-bottom: 2px solid $light-grey;
+        background: linear-gradient(darken($grey-dark, 5%), $grey-dark);
+        border-bottom: 2px solid $grey-light;
     }
 
     td {
-        background-color: $mid-grey;
+        background-color: $grey;
     }
 
     tr:nth-child(2n) {
         td {
-            background-color: darken($mid-grey, 3%);
+            background-color: darken($grey, 3%);
         }
     }
 }

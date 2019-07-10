@@ -35,6 +35,7 @@
     },
     "dependencies": {
         "babel-plugin-webpack-alias": "^2.1.2",
+        "buefy": "^0.7.10",
         "vuex-persist": "^2.0.1"
     }
 }

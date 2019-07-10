@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="//fonts.googleapis.com/css?family=Play:400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/2.5.94/css/materialdesignicons.min.css">
 
     <!-- Styles -->
     @if (in_array(env('APP_ENV'), ['production', 'stage']))

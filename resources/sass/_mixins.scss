@@ -1,5 +1,5 @@
-@mixin grey-box($padding:0.75em, $background:$dark-grey, $opactity:0.9, $border:$light-grey) {
-    background: rgba($background, $opactity);
+@mixin grey-box($padding:0.75em, $background:$grey-dark, $opacity:0.9, $border:$grey-light) {
+    background: rgba($background, $opacity);
     padding: $padding;
     border: 1px solid $border;
 }
