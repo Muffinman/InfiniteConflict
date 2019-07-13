@@ -1,5 +1,9 @@
 @import "~bulma/sass/utilities/initial-variables";
 
+// Spacing
+$base-spacing: 1rem;
+$content-heading-weight: normal;
+
 // Text colours
 $text: $white;
 $text-light: $white-ter !default;
@@ -8,9 +12,30 @@ $title-color: $white;
 $label-color: $white;
 
 // Other colours
-$primary: $orange;
+$blue: #6ddbf5;
+$blue-dark: #163a65;
+$blue-glow: #168ca0;
+$primary: $blue;
 
 // Borders and backgrounds
 $border: $grey;
-$background: $grey-dark;
-$modal-card-body-background-color: $grey-darker;
+$background: #0a2129;
+
+// Corners
+$radius: 0;
+$radius-large: 0;
+$radius-rounded: 0;
+
+// Modals
+$modal-background-background-color: rgba($black, 0.6);
+
+$modal-card-head-background-color: rgba($background, 0.9);
+$modal-card-head-border-bottom: 1px solid $border;
+$modal-card-foot-border-top: 1px solid $border;
+
+$modal-card-body-background-color: rgba($grey-darker, 0.8);
+
+
+// Forms
+$input-background-color: rgba($white, 0.4);
+$input-border-color: $grey;

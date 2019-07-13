@@ -1,5 +1,4 @@
 <template>
-
     <b-modal :active="true">
         <header class="modal-card-head">
             <p class="modal-card-title">Login</p>
@@ -29,7 +28,7 @@
           }
         },
         mounted() {
-            if (this.$store.state.auth.access_token) {
+            if (this.$store.getters.getAuth.access_token) {
                 this.$router.replace('/');
             }
         },

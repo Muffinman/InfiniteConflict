@@ -1,22 +1,28 @@
 <template>
     <div>
-        {{ welcome }}
-        <router-view></router-view>
+        <main-menu></main-menu>
+        <div class="content">
+            <router-view></router-view>
+        </div>
     </div>
 </template>
 
 <script>
+
+    import MainMenu from '@/templates/shared/MainMenu';
+
     export default {
+        components: {
+            MainMenu,
+        },
         data() {
             return {
-                welcome: 'Welcome!',
+
             }
         },
         mounted() {
-            let that = this;
             axios.get('/api/index')
                 .then(function(response){
-                    that.welcome = response.data;
                 });
         }
     }

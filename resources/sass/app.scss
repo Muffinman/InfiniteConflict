@@ -1,12 +1,17 @@
 @charset "utf-8";
 
-// General files and mixins
+// Fonts
 @import "~font-awesome/scss/font-awesome";
-@import "mixins";
-@import "helpers";
+
 // Bulma stuff
 @import "variables";
 @import "~bulma/bulma.sass";
-// Custom template styles
-@import "template";
+
+// Helpers
+@import "mixins";
+@import "helpers";
+
+// Template styles
+@import "template/shared";
+@import "template/main-menu";
 @import "pages/planets";

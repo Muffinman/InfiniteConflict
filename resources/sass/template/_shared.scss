@@ -1,0 +1,120 @@
+html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: black url(/images/background.jpg) 50% 50% no-repeat;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+
+    @include font-body;
+}
+
+a {
+    color: $blue;
+
+    &:hover {
+        background-color: $blue-dark;
+        color: $white;
+    }
+}
+
+img {
+    vertical-align: middle;
+}
+
+h1,
+h2,
+h3 {
+    @include font-heading;
+}
+
+h1 {
+    font-size: 2rem;
+    padding-top: 5px;
+}
+
+h2 {
+    font-size: 1.5rem;
+    padding-top: 4px;
+}
+
+h3 {
+    font-size: 1.2rem;
+    padding-top: 3px;
+}
+
+.content {
+    padding: $base-spacing * 2;
+}
+
+.box-content {
+    padding: $base-spacing;
+}
+
+.resource-metal {
+    color: white;
+}
+
+.resource-mineral {
+    color: #e94021;
+}
+
+.resource-food {
+    color: #73aa35;
+}
+
+.resource-energy {
+    color: #4884d8;
+}
+
+table.collapsed {
+    border: none;
+    margin: 0;
+    border-collapse: collapsed;
+    table-layout: auto;
+
+    td,
+    th {
+        border: none;
+        padding: 0.22em;
+    }
+}
+
+table.striped {
+    table-layout: auto;
+    margin: 0;
+
+    th,
+    td {
+        padding: 0.3em 0.8em;
+        line-height: 28px;
+
+        &:first-child {
+            padding-left: 0.5em;
+        }
+    }
+
+    th {
+        background: linear-gradient(darken($grey-dark, 5%), $grey-dark);
+        border-bottom: 2px solid $grey-light;
+    }
+
+    td {
+        background-color: $grey;
+    }
+
+    tr:nth-child(2n) {
+        td {
+            background-color: darken($grey, 3%);
+        }
+    }
+}

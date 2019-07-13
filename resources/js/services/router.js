@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router';
 
-import Index from '@/Index';
-import Login from '@/auth/Login'
+import Index from '@/templates/Index';
+import Login from '@/templates/auth/Login'
 
 Vue.use(VueRouter);
 

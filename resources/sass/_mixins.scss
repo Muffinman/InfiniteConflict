@@ -3,3 +3,11 @@
     padding: $padding;
     border: 1px solid $border;
 }
+
+@mixin font-heading() {
+    font-family: Orbitron, monospace;
+}
+
+@mixin font-body() {
+    font-family: 'Open Sans', sans-serif;
+}

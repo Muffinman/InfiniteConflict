@@ -1,0 +1,36 @@
+nav.main-menu {
+    @include font-heading;
+
+    background: $background;
+    border-bottom: 1px solid $blue;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    padding: 0 $base-spacing;
+
+    ul {
+        display: flex;
+        justify-content: space-around;
+        align-items: stretch;
+    }
+
+    li {
+        display: flex;
+        align-items: stretch;
+    }
+
+    a {
+        padding: $base-spacing / 2;
+        display: flex;
+        align-items: center;
+        color: $white;
+    }
+
+    span {
+        display: block;
+    }
+
+    h1 {
+        margin-right: $base-spacing * 2;
+    }
+}

@@ -11,6 +11,7 @@ window.Vue = require('vue');
 
 import Vue from 'vue'
 import Buefy from 'buefy'
+import App from '@/App.vue'
 
 Vue.use(Buefy)
 
@@ -26,6 +27,7 @@ import store from '@/services/store.js'
 const app = new Vue({
     router,
     store,
+    render: h => h(App),
     mounted() {
         window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$store.getters.getAuth.access_token;
 
