@@ -1,172 +1,22 @@
-.planet-static-resources {
-    h2 {
-        float: left;
-        margin: 0;
-        margin-right: 2em;
-        font-size: 1.1em;
-        text-shadow: 1px 1px 2px black;
+.planets-menu {
+    max-width: 180px;
+    height: 100%;
+    max-height: 100%;
+    display: flex;
+    flex-direction: row;
+    background: black;
+    overflow: scroll;
+    border-right: 1px solid $blue;
+
+    .planet {
+        text-align: center;
+        font-size: 0.8em;
+        padding: $base-spacing/2 $base-spacing;
     }
 
     img {
-        vertical-align: middle;
-    }
-
-    ul {
-        li {
-            float: left;
-            margin: 0;
-            margin-right: 1em;
-
-            img {
-                margin-right: 3px;
-            }
-        }
-    }
-}
-
-.planet-list {
-    .planet {
-        @include grey-box;
-
-        .planet-image {
-            img {
-                width: 100px;
-                height: 100px;
-                display: block;
-            }
-        }
-
-        .planet-static-resources {
-            margin-bottom: 1em;
-
-            h2 {
-                float: left;
-                margin: 0;
-                margin-right: 2em;
-            }
-
-            img {
-                vertical-align: middle;
-            }
-
-            ul {
-                li {
-                    float: left;
-                    margin: 0;
-                    margin-right: 1em;
-
-                    img {
-                        margin-right: 3px;
-                    }
-                }
-            }
-        }
-
-        .planet-production-resources {
-            margin-bottom: 1em;
-
-            ul {
-                li {
-                    float: left;
-                    margin: 0;
-                    margin-right: 1em;
-
-                    img {
-                        margin-right: 3px;
-                        vertical-align: middle;
-                    }
-                }
-            }
-        }
-
-        .planet-production {
-            ul {
-                display: flex;
-            }
-        }
-    }
-}
-
-
-.planet-view {
-    .planet-header {
-        @include grey-box;
-
-        margin-bottom: 0.75em;
-    }
-
-    .planet-image {
-        img {
-            display: block;
-        }
-    }
-
-    .planet-static-resources {
-        @include grey-box(0.75em, $grey, 1);
-
-        margin-bottom: 0.75em;
-    }
-
-    .planet-production-resources {
-        @include grey-box(0.75em, $grey, 1);
-
-        margin-bottom: 0.75em;
-    }
-
-    ul.planet-menu {
-        display: flex;
-
-        li {
-            display: block;
-
-            a {
-                @include grey-box(0.4em, $grey);
-
-                display: block;
-                text-align: center;
-                color: white;
-                font-size: 1.3em;
-                text-shadow: 1px 1px 2px black;
-
-                &:hover {
-                    background-color: $grey-light;
-                }
-            }
-        }
-    }
-
-    .completed-list {
-        li {
-            padding: 0.5em;
-            background: $grey;
-
-            &:nth-child(2n) {
-                background: darken($grey, 3%);
-            }
-        }
-
-        img.built {
-            width: 45px;
-            height: 45px;
-            float: left;
-            margin-right: 0.5em;
-        }
-
-        .resources {
-            text-align: right;
-
-            img {
-                margin-left: 0.5em;
-            }
-        }
-    }
-
-    .building-queue {
-        img {
-            width: 28px;
-            height: 28px;
-            display: inline-block;
-            margin-right: 5px;
-        }
+        display: block;
+        width: 80px;
+        height: auto;
     }
 }

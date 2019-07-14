@@ -54,6 +54,14 @@ h3 {
 
 .content {
     padding: $base-spacing * 2;
+    flex-grow: 1;
+}
+
+.lower {
+    display: flex;
+    justify-content: stretch;
+    padding-top: 54px;
+    height: 100vh;
 }
 
 .box-content {

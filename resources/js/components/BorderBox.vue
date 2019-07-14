@@ -1,20 +1,9 @@
 <template>
     <div>
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" :style="styles" :viewBox="viewBox" preserveAspectRatio="none">
-            <defs>
-                <linearGradient x1="11.8748878%" y1="0%" x2="88.1251154%" y2="100%" id="linearGradient-1">
-                    <stop stop-color="#6ddbf5" offset="20%" />
-                    <stop stop-color="#ffffff" offset="50%" />
-                    <stop stop-color="#6ddbf5" offset="100%" />
-                </linearGradient>
-            </defs>
-            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                <g stroke="url(#linearGradient-1)" :stroke-width="strokeSize" stroke-location="outside">
-                    <path vector-effect="non-scaling-stroke" fill="#0a2129CC" :d="path"></path>
-                </g>
-            </g>
+        <svg width="100%" height="100%" :viewBox="viewBox" version="1.1" xmlns="http://www.w3.org/2000/svg" :style="styles">
+            <path :d="path" style="fill:#0a2129; fill-opacity:0.85; stroke:#6ddbf5; stroke-width:1px;" />
+            <path :d="buttonPath" style="fill:#6ddbf5; fill-opacity:1;" />
         </svg>
-
         <div ref="boxContent" class="box-content" style="position: relative; z-index: 1">
             <slot></slot>
         </div>
@@ -26,11 +15,12 @@
         data() {
             return {
                 width: 600,
-                height: 100,
+                height: 200,
                 strokeSize: 2,
-                chunkWidth: 80,
-                chunkHeight: 50,
-                chunkSlopeWidth: 50,
+                chunkWidth: 120,
+                chunkHeight: 30,
+                chunkSlopeWidth: 30,
+                bezel: 15,
             }
         },
         computed: {
@@ -44,25 +34,46 @@
                 return {
                     width: this.width,
                     height: this.height,
-                    position: "absolute",
+                    position: 'absolute',
                     zIndex: 0,
+                    fillRule: 'evenodd',
+                    clipRule: 'evenodd',
+                    strokeLinejoin: 'round',
+                    StrokeMiterLimit: 2,
                 }
             },
             viewBox() {
                 return `0 0 ${this.bounds.width} ${this.bounds.height}`
             },
             path() {
-                return `M${this.bounds.width - this.strokeSize},${this.strokeSize}
-                  L${this.strokeSize},${this.strokeSize}
-                  L${this.strokeSize},${this.bounds.height - this.strokeSize}
-                  L${this.bounds.width - this.chunkSlopeWidth - this.chunkWidth},${this.bounds.height - this.strokeSize}
-                  L${this.bounds.width - this.chunkWidth},${this.bounds.height - this.chunkHeight}
-                  L${this.bounds.width - this.strokeSize},${this.bounds.height - this.chunkHeight}
-                  Z`;
+                return `M ${this.bounds.width - this.bezel},0
+                    l -${this.bounds.width - (this.bezel * 2)},0
+                    l -${this.bezel},${this.bezel}
+                    l 0,${this.bounds.height - (this.bezel * 2)}
+                    l ${this.bezel},${this.bezel}
+                    l ${this.bounds.width - this.chunkSlopeWidth - this.chunkWidth - this.bezel},0
+                    l ${this.chunkSlopeWidth},-${this.chunkHeight}
+                    l ${this.chunkWidth},0
+                    l 0,-${this.bounds.height - this.chunkHeight - this.bezel}
+                    Z`;
+            },
+            buttonPath() {
+                return `M ${this.bounds.width - this.chunkSlopeWidth},${this.bounds.height}
+                    l ${this.chunkSlopeWidth},-${this.chunkHeight - 3}
+                    l -${this.chunkWidth - 3},0
+                    l -${this.chunkSlopeWidth},${this.chunkHeight}
+                    Z`
             }
         },
         mounted() {
-            this.height = this.$refs.boxContent.clientHeight;
+            this.updateDimensions();
+            window.onresize = this.updateDimensions;
+        },
+        methods: {
+            updateDimensions() {
+                this.height = this.$refs.boxContent.clientHeight;
+                this.width = this.$refs.boxContent.clientWidth;
+            }
         }
     }
 </script>
