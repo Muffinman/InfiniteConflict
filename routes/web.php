@@ -11,9 +11,8 @@
 |
 */
 
-Route::group(['namespace' => 'Web', 'middleware' => 'web'], function() {
-    Route::any('/{any}', function(){
+Route::group(['namespace' => 'Web', 'middleware' => 'web'], function () {
+    Route::any('/{any}', function () {
         return view('index');
     })->where('any', '.*');
 });
-
