@@ -14,7 +14,7 @@
 Route::group(['namespace' => 'Api'], function () {
     Route::get('index', 'IndexController@index');
 
-    /**
+    /*
      * Auth routes
      */
     Route::group(['prefix' => 'auth'], function () {
@@ -23,7 +23,7 @@ Route::group(['namespace' => 'Api'], function () {
 
     Route::group(['middleware' => 'auth:api'], function () {
 
-        /**
+        /*
          * Auth routes
          */
         Route::group(['prefix' => 'auth'], function () {
