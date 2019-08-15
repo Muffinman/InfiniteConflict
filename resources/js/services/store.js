@@ -17,9 +17,7 @@ export default new Vuex.Store({
             expires_in: null,
             token_type: null,
         },
-        user: {
-
-        }
+        user: null
     },
     getters: {
         getAuth: state => {
@@ -34,7 +32,17 @@ export default new Vuex.Store({
             Object.assign(state.auth, authValue);
         },
         setUser: (state, userValue) => {
-            Object.assign(state.user, userValue);
-        }
+            state.user = userValue;
+        },
+        removeAuth: (state) => {
+            Object.assign(state.auth, {
+                access_token: null,
+                expires_in: null,
+                token_type: null,
+            });
+        },
+        removeUser: (state) => {
+            state.user = null;
+        },
     }
 })

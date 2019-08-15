@@ -11,15 +11,19 @@
             <b-field label="Password">
                 <b-input v-model="password" type="password" value="" password-reveal></b-input>
             </b-field>
+
+            <button class="button is-primary pull-right" @click="login">Login</button>
         </section>
-        <footer class="modal-card-foot justify-content-between">
+        <footer class="modal-card-foot">
+            <button class="button" type="button">Register</button>
             <button class="button" type="button">Forgot your password?</button>
-            <button class="button is-primary" @click="login">Login</button>
         </footer>
     </b-modal>
 </template>
 
 <script>
+    import Swal from 'sweetalert2/src/sweetalert2.js'
+
     export default {
         data() {
           return {
@@ -34,10 +38,17 @@
         },
         methods: {
             login() {
-                let that = this;
-                axios.post('/api/login', { email: this.email, password: this.password}).then(response => {
-                    that.$store.commit('setAuth', response.data);
-                    that.$router.replace('/');
+                axios.post('/api/auth/login', { email: this.email, password: this.password}).then(response => {
+                    this.$store.commit('setAuth', response.data);
+                    this.$root.updateRequestHeaders();
+                    this.$root.updateUser();
+                    this.$router.replace('/');
+                }).catch(error => {
+                    Swal.fire({
+                        title: 'Login error',
+                        text: 'The details you entered were not correct, please try again.',
+                        type: 'error',
+                    })
                 })
             }
         }

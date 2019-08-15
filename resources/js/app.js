@@ -29,13 +29,29 @@ const app = new Vue({
     store,
     render: h => h(App),
     mounted() {
-        window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$store.getters.getAuth.access_token;
+        this.updateRequestHeaders();
+        this.updateUser();
 
-        let that = this;
-        axios.get('/api/ping').catch(error => {
-            that.$store.commit('setUser', {});
-            that.$store.commit('setAuth', {});
-            that.$router.replace('/login');
-        });
+        window.setInterval(this.updateUser, 30000);
+    },
+    computed: {
+        user() {
+            return this.$store.getters.getUser;
+        }
+    },
+    methods: {
+        updateRequestHeaders() {
+            window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.$store.getters.getAuth.access_token;
+        },
+        updateUser() {
+            axios.get('/api/auth/me').then(response => {
+                this.$store.commit('setUser', response.data.data);
+            })
+            .catch(error => {
+                this.$store.commit('removeUser');
+                this.$store.commit('removeAuth');
+                this.$router.replace({ name: 'auth.login' });
+            });
+        }
     }
 }).$mount('#app');

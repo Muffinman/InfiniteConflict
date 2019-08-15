@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 
 import Index from '@/templates/Index';
 import Login from '@/templates/auth/Login'
+import Register from '@/templates/auth/Register'
 
 Vue.use(VueRouter);
 
@@ -13,12 +14,17 @@ export default new VueRouter({
         {
             path: '/',
             component: Index,
-            name: 'index'
+            name: 'index',
         },
         {
-            path: '/login',
+            path: '/auth/login',
             component: Login,
-            name: 'login'
+            name: 'auth.login',
+        },
+        {
+            path: '/auth/register',
+            component: Register,
+            name: 'auth.register',
         },
     ]
 });

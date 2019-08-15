@@ -38,7 +38,7 @@ mix.js('resources/js/app.js', 'public/js/app.' + outName + '.js')
         'axios',
         'lodash',
         'moment',
-        'sweetalert',
+        'sweetalert2',
         'vue',
         'vuex',
         'vue-router',

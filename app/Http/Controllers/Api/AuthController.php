@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\RulerResource;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class AuthController extends ApiController
 {
@@ -27,11 +29,11 @@ class AuthController extends ApiController
     /**
      * Get the authenticated User.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResource
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        return new RulerResource(auth()->user());
     }
 
     /**

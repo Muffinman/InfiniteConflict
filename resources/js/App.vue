@@ -1,8 +1,8 @@
 <template>
-    <div>
-        <main-menu></main-menu>
+    <div id="main">
+        <main-menu v-if="$root.user"></main-menu>
         <div class="lower">
-            <planets-menu></planets-menu>
+            <planets-menu v-if="$root.user"></planets-menu>
             <div class="content">
                 <router-view></router-view>
             </div>

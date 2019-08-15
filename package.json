@@ -26,7 +26,7 @@
         "stylelint": "^9.10.1",
         "stylelint-config-standard": "^18.3.0",
         "stylelint-webpack-plugin": "^0.10.5",
-        "sweetalert": "^2.1.2",
+        "sweetalert2": "^8.15.3",
         "vue": "^2.6.10",
         "vue-numeral-filter": "^1.1.1",
         "vue-router": "^3.0.6",
@@ -34,6 +34,7 @@
         "vuex": "^3.1.1"
     },
     "dependencies": {
+        "@sweetalert2/theme-dark": "^2.1.0",
         "babel-plugin-webpack-alias": "^2.1.2",
         "buefy": "^0.7.10",
         "vuex-persist": "^2.0.1"

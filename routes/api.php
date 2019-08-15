@@ -13,12 +13,25 @@
 
 Route::group(['namespace' => 'Api'], function () {
     Route::get('index', 'IndexController@index');
-    Route::post('login', 'AuthController@login');
+
+    /**
+     * Auth routes
+     */
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('login', 'AuthController@login');
+    });
 
     Route::group(['middleware' => 'auth:api'], function () {
-        Route::post('refresh', 'AuthController@refresh');
-        Route::post('logout', 'AuthController@logout');
-        Route::get('me', 'AuthController@me');
+
+        /**
+         * Auth routes
+         */
+        Route::group(['prefix' => 'auth'], function () {
+            Route::post('refresh', 'AuthController@refresh');
+            Route::post('logout', 'AuthController@logout');
+            Route::get('me', 'AuthController@me');
+        });
+
         Route::get('ping', 'PingController@ping');
 
         Route::get('ruler/create', 'IndexController@createEmpire');
