@@ -13,13 +13,19 @@ $label-color: $white;
 
 // Other colours
 $blue: #6ddbf5;
-$blue-dark: #163a65;
-$blue-glow: #168ca0;
-$primary: $blue;
+$grey-darker:  hsl(0, 0%, 5%);
+$grey-dark:    hsl(0, 0%, 10%);
+$grey:         hsl(0, 0%, 15%);
+$grey-light:   hsl(0, 0%, 20%);
+$grey-lighter: hsl(0, 0%, 25%);
+
+// Primary colours
+$primary: $grey-dark;
+
 
 // Borders and backgrounds
-$border: $grey;
-$background: #0a2129;
+$border: $grey-light;
+$background: $grey;
 
 // Corners
 $radius: 0;
@@ -27,7 +33,7 @@ $radius-large: 0;
 $radius-rounded: 0;
 
 // Modals
-$modal-background-background-color: rgba($black, 0.6);
+$modal-background-background-color: rgba($black, 0.8);
 
 $modal-card-head-background-color: rgba($background, 0.9);
 $modal-card-head-border-bottom: 1px solid $border;
@@ -39,3 +45,16 @@ $modal-card-body-background-color: rgba($grey-darker, 0.8);
 // Forms
 $input-background-color: rgba($white, 0.4);
 $input-border-color: $grey;
+
+// Cards
+$card-background-color: $background;
+$card-header-background-color: $grey-dark;
+$card-header-padding: $base-spacing;
+//$card-header-weight: $weight-bold !default
+//
+//$card-content-background-color: transparent !default
+//$card-content-padding: 1.5rem !default
+//
+//$card-footer-background-color: transparent !default
+//$card-footer-border-top: 1px solid $border !default
+$card-footer-padding: $base-spacing;

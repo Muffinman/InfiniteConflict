@@ -1,0 +1,9 @@
+.card {
+    @include border;
+
+    .card-header {
+        h2 {
+            margin: 0;
+        }
+    }
+}

@@ -1,24 +1,15 @@
 nav.main-menu {
     @include font-heading;
 
-    background: $background;
-    border-style: solid;
-    border-width: 0;
-    border-image:
-        repeating-linear-gradient(
-            -45deg,
-            $blue,
-            $blue 5px,
-            $white 5px,
-            $white 10px
-        ) 10;
-    border-bottom-width: 5px;
+    background: $grey-dark;
     display: flex;
     align-items: stretch;
     justify-content: space-between;
     padding: 0 $base-spacing;
     position: fixed;
     width: 100vw;
+
+    @include border(bottom, 2);
 
     ul {
         display: flex;
@@ -36,6 +27,10 @@ nav.main-menu {
         display: flex;
         align-items: center;
         color: $white;
+
+        &:hover {
+            color: $black;
+        }
     }
 
     span {

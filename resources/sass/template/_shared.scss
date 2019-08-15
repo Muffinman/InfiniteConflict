@@ -18,12 +18,16 @@ body {
     @include font-body;
 }
 
+#main {
+    background: rgba($background, 0.6);
+}
+
 a {
     color: $blue;
 
     &:hover {
-        background-color: $blue-dark;
-        color: $white;
+        background-color: $white;
+        color: $black;
     }
 }
 
@@ -65,7 +69,7 @@ h3 {
 }
 
 .box-content {
-    padding: $base-spacing;
+    padding: $base-spacing * 2;
 }
 
 .resource-metal {
@@ -124,5 +128,13 @@ table.striped {
         td {
             background-color: darken($grey, 3%);
         }
+    }
+}
+
+path.button {
+    fill: $blue;
+
+    &:hover {
+        fill: #fff;
     }
 }

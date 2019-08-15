@@ -2,6 +2,8 @@
 
 // Fonts
 @import "~font-awesome/scss/font-awesome";
+@import '~@sweetalert2/theme-dark/dark.scss';
+
 
 // Bulma stuff
 @import "variables";
@@ -14,4 +16,10 @@
 // Template styles
 @import "template/shared";
 @import "template/main-menu";
+@import "template/planets-menu";
+
+// Components
+@import "components/border-box";
+
+// Page styles
 @import "pages/planets";

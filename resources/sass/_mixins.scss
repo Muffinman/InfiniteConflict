@@ -1,13 +1,28 @@
-@mixin grey-box($padding:0.75em, $background:$grey-dark, $opacity:0.9, $border:$grey-light) {
-    background: rgba($background, $opacity);
-    padding: $padding;
-    border: 1px solid $border;
-}
-
 @mixin font-heading() {
     font-family: Orbitron, monospace;
 }
 
 @mixin font-body() {
     font-family: 'Open Sans', sans-serif;
+}
+
+@mixin border($side: 'all', $width: 2) {
+    border-style: solid;
+    border-width: 0;
+    border-image:
+        repeating-linear-gradient(
+            -45deg,
+            $grey-lighter,
+            $grey-lighter 5px,
+            $grey-light 5px,
+            $grey-light 10px
+        ) $width;
+
+    @if $side == 'all' {
+        border-width: #{$width}px;
+    }
+
+    @else {
+        border-#{$side}-width: #{$width}px;
+    }
 }
