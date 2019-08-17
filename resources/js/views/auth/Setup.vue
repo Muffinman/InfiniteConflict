@@ -25,6 +25,11 @@
                 ruler_name: '',
             }
         },
+        mounted() {
+            if (this.$store.getters.getUser.planet_count > 0) {
+                this.$router.replace({ name: 'index' });
+            }
+        },
         methods: {
             save() {
                 axios.post('/auth/setup', { home_planet_name: this.home_planet_name, ruler_name: this.ruler_name}).then(response => {
