@@ -1,19 +1,18 @@
 <?php
+
 namespace App\Exceptions;
 
 use Illuminate\Support\MessageBag;
 
 /**
- * This class handles API authentication exceptions
+ * This class handles API authentication exceptions.
  *
  * Class ApiMethodNotAllowedHttpException
- * @package App\Exceptions
  */
 class ApiValidationHttpException extends ApiException
 {
-
     /**
-     * Status code for the response
+     * Status code for the response.
      *
      * @var int
      */
@@ -22,8 +21,9 @@ class ApiValidationHttpException extends ApiException
     /**
      * Create a new API exception.
      *
-     * @param  string  $message
-     * @param  \Illuminate\Support\MessageBag $errors;
+     * @param string                         $message
+     * @param \Illuminate\Support\MessageBag $errors;
+     *
      * @return void
      */
     public function __construct($message, MessageBag $errors)

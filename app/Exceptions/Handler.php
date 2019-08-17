@@ -34,9 +34,11 @@ class Handler extends ExceptionHandler
     /**
      * Report or log an exception.
      *
-     * @param  Exception  $exception
-     * @return void
+     * @param Exception $exception
+     *
      * @throws Exception
+     *
+     * @return void
      */
     public function report(Exception $exception)
     {
@@ -46,8 +48,9 @@ class Handler extends ExceptionHandler
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Exception  $exception
+     * @param \Illuminate\Http\Request $request
+     * @param \Exception               $exception
+     *
      * @return \Illuminate\Http\Response
      */
     public function render($request, Exception $exception)
@@ -60,15 +63,15 @@ class Handler extends ExceptionHandler
     }
 
     /**
-     * Handle an API exception
+     * Handle an API exception.
      *
      * @param $request
      * @param Exception $exception
+     *
      * @return mixed
      */
     private function handleApiException($request, Exception $exception)
     {
-
         $originalException = $exception;
 
         // Rewrite some of the Laravel default exceptions so that we can add our own error codes
@@ -82,17 +85,17 @@ class Handler extends ExceptionHandler
             $exception = new ApiRateLimitException($exception->getMessage());
         } elseif ($exception instanceof  ValidationException) {
             $exception = new ApiValidationHttpException($exception->getMessage(), $exception->validator->errors());
-        }  elseif (!$exception instanceof ApiException) { // Anything else, make sure we only return ApiExceptions
+        } elseif (!$exception instanceof ApiException) { // Anything else, make sure we only return ApiExceptions
             $exception = new ApiException($exception->getMessage());
         }
 
         $output = [
             'statusCode' => $exception->getStatusCode(),
-            'message' => $exception->getMessage(),
-            'data' => [
-                'code' => $exception->getCode(),
+            'message'    => $exception->getMessage(),
+            'data'       => [
+                'code'   => $exception->getCode(),
                 'errors' => $exception->getErrors(),
-            ]
+            ],
         ];
 
         if (config('app.debug') && $originalException) {
