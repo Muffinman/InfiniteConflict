@@ -2,7 +2,7 @@
     <section class="planets-menu">
         <nav>
             <div v-for="planet in planets" :key="planet.id" class="planet">
-                <router-link to="/">
+                <router-link :to="{ name: 'planets.view', params: { id: planet.id } }">
                     <img :src="planet.src" width="150">
                     <span>{{ planet.name }}</span>
                 </router-link>
@@ -15,22 +15,21 @@
 export default {
     data() {
         return {
-            planets: [
-                {
-                    name: 'Muffins',
-                    id: 1,
-                    src: '/images/planets/1.jpg',
-                }
-            ],
+            planets: [],
         }
     },
     mounted() {
-        for (let i=2; i<=25; i++) {
-            this.planets.push({
-                name: `Planet ${i}`,
-                id: i,
-                src: `/images/planets/${i}.jpg`,
+        axios.get('/planets')
+            .then(response => {
+                this.planets = response.data.data;
+                this.updatePlanetImages();
             });
+    },
+    methods: {
+        updatePlanetImages() {
+            this.planets.forEach(planet => {
+                planet.src = `/images/planets/${planet.type}.jpg`;
+            })
         }
     }
 }

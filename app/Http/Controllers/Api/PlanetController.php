@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\PlanetResource;
 use App\Planet;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class PlanetController extends Controller
 {
@@ -16,7 +17,15 @@ class PlanetController extends Controller
      */
     public function index()
     {
-        return PlanetResource::collection(Planet::paginate());
+        $planets = QueryBuilder::for(auth()->user()->planets()->getQuery())
+            ->allowedFilters([
+                'name',
+            ])
+            ->allowedSorts([
+                'name',
+            ]);
+
+        return PlanetResource::collection($planets->jsonPaginate());
     }
 
     /**

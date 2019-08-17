@@ -2,9 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\ApiAuthenticationException;
+use App\Exceptions\ApiNotFoundHttpException;
+use App\Http\Requests\SetupEmpire;
 use App\Http\Resources\RulerResource;
+use App\Planet;
+use App\PlanetStartingBuilding;
+use App\Ruler;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Laravel\Socialite\Facades\Socialite;
+use Carbon\Carbon;
 
 class AuthController extends ApiController
 {
@@ -15,12 +23,12 @@ class AuthController extends ApiController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function loginWithPassword()
     {
         $credentials = request(['email', 'password']);
 
         if (!$token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            throw new ApiAuthenticationException('Incorrect login details', 'api');
         }
 
         return $this->respondWithToken($token);
@@ -33,7 +41,11 @@ class AuthController extends ApiController
      */
     public function me()
     {
-        return new RulerResource(auth()->user());
+        $user = auth()->user();
+        $user['planet_count'] = $user->planets()->count();
+        $user['fleet_count'] = $user->fleets()->count();
+
+        return new RulerResource($user);
     }
 
     /**
@@ -73,4 +85,86 @@ class AuthController extends ApiController
             'expires_in'   => auth()->factory()->getTTL() * 60,
         ]);
     }
+
+    /**
+     * Redirect the user to the GitHub authentication page.
+     *
+     * @param boolean $withPrompt
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function redirectToGoogle()
+    {
+
+        $with = [
+            'access_type' => 'offline',
+            // 'prompt' => 'consent select_account',
+        ];
+
+        /** @var \Symfony\Component\HttpFoundation\RedirectResponse $response */
+        $response = Socialite::driver('google')
+            ->with($with)
+            ->stateless()
+            ->redirect();
+        return response()->json(['redirect' => $response->getTargetUrl()], 200);
+    }
+
+    /**
+     * Obtain the user information from Google.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws ApiAuthenticationException
+     */
+    public function loginWithGoogle()
+    {
+        try {
+            $googleUser = Socialite::driver('google')
+                ->stateless()
+                ->user();
+
+            $ruler = Ruler::firstOrCreate([
+                'email' => $googleUser->email,
+            ], [
+                'name' => $googleUser->name,
+            ]);
+
+            $ruler->social_provider = 'Google';
+            $ruler->social_token = $googleUser->token;
+            $ruler->social_refresh_token = $googleUser->refreshToken;
+            $ruler->social_expires_at = Carbon::now()->addSeconds($googleUser->expiresIn);
+            $ruler->social_avatar = $googleUser->avatar;
+            $ruler->save();
+
+            $token = auth('api')->fromUser($ruler);
+        } catch (\Exception $e) {
+            throw new ApiAuthenticationException($e->getMessage(), 'api');
+        }
+
+        return $this->respondWithToken($token);
+    }
+
+
+    /**
+     * @param SetupEmpire $request
+     * @throws ApiNotFoundHttpException
+     */
+    public function setupEmpire(SetupEmpire $request)
+    {
+        /**
+         * @var Planet $home_planet
+         */
+        $home_planet = Planet::homePlanets()->unpopulated()->first();
+        if (!$home_planet) {
+            throw new ApiNotFoundHttpException('Sorry there are no home planets left!');
+        }
+
+        $home_planet->name = $request->input('home_planet_name');
+        $home_planet->ruler_id = auth()->user()->id;
+        $home_planet->save();
+        $home_planet->populateStartingBuildings();
+
+        $user = auth()->user();
+        $user->name = $request->input('ruler_name');
+        $user->save();
+    }
+
 }

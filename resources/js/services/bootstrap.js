@@ -1,4 +1,8 @@
 
+import store from '@/services/store';
+import qs from 'qs';
+
+window.moment = require('moment');
 window._ = require('lodash');
 
 /**
@@ -10,6 +14,30 @@ window._ = require('lodash');
 window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+window.axios.defaults.headers.common['Content-Type'] = 'application/json';
+window.axios.defaults.headers.common['Accept'] = 'application/json';
+window.axios.defaults.baseURL = '/api';
+
+// Disable query parameter encoding, otherwise axios ends up encoding
+// array parameters twice
+window.axios.defaults.paramsSerializer = params => {
+    return qs.stringify(params, {arrayFormat: 'brackets', encode: false});
+};
+
+window.axios.defaults.transformRequest.unshift((data, headers) => {
+    if (data && data.data) {
+        for (let key in data.data) {
+            // skip loop if the property is from prototype
+            if (!data.data.hasOwnProperty(key)) continue;
+
+            if (data.data[key] instanceof Date) {
+                data.data[key] = moment(data.data[key]).format();
+            }
+        }
+    }
+    return data;
+});
+
 
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
@@ -23,6 +51,10 @@ if (token) {
     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
+}
+
+if (store.getters.getAuth.access_token) {
+    window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + store.getters.getAuth.access_token;
 }
 
 /**

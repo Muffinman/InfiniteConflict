@@ -18,7 +18,10 @@ Route::group(['namespace' => 'Api'], function () {
      * Auth routes
      */
     Route::group(['prefix' => 'auth'], function () {
-        Route::post('login', 'AuthController@login');
+        Route::post('login/password', 'AuthController@loginWithPassword');
+
+        Route::get('login/google', 'AuthController@redirectToGoogle');
+        Route::post('login/google', 'AuthController@loginWithGoogle');
     });
 
     Route::group(['middleware' => 'auth:api'], function () {
@@ -30,12 +33,10 @@ Route::group(['namespace' => 'Api'], function () {
             Route::post('refresh', 'AuthController@refresh');
             Route::post('logout', 'AuthController@logout');
             Route::get('me', 'AuthController@me');
+            Route::post('setup', 'AuthController@setupEmpire');
         });
 
         Route::get('ping', 'PingController@ping');
-
-        Route::get('ruler/create', 'IndexController@createEmpire');
-        Route::post('ruler/create', 'IndexController@storeEmpire');
 
         Route::apiResource('alliances', AllianceController::class);
         Route::apiResource('buildings', BuildingController::class);

@@ -2,6 +2,7 @@
     <b-modal :active="true">
         <header class="modal-card-head">
             <p class="modal-card-title">Login</p>
+            <button class="button is-primary pull-right" @click="loginWithGoogle">Login With Google</button>
         </header>
         <section class="modal-card-body">
             <b-field label="Email">
@@ -38,9 +39,8 @@
         },
         methods: {
             login() {
-                axios.post('/api/auth/login', { email: this.email, password: this.password}).then(response => {
+                axios.post('/auth/login/password', { email: this.email, password: this.password}).then(response => {
                     this.$store.commit('setAuth', response.data);
-                    this.$root.updateRequestHeaders();
                     this.$root.updateUser();
                     this.$router.replace('/');
                 }).catch(error => {
@@ -50,6 +50,13 @@
                         type: 'error',
                     })
                 })
+            },
+            loginWithGoogle() {
+                axios.get('/auth/login/google').then((response) => {
+                    if (response.data.redirect) {
+                        window.location = response.data.redirect;
+                    }
+                });
             }
         }
     }

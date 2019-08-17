@@ -17,6 +17,7 @@
             $grey-light 5px,
             $grey-light 10px
         ) $width;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 
     @if $side == 'all' {
         border-width: #{$width}px;

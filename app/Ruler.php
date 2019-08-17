@@ -58,36 +58,57 @@ class Ruler extends Authenticatable implements AuthenticatableContract, CanReset
         return [];
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Relations\HasMany|object|null
+     */
     public function homePlanet()
     {
         return $this->hasMany(Planet::class)->where('home', 1)->first();
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function planets()
     {
         return $this->hasMany(Planet::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function fleets()
     {
         return $this->hasMany(Fleet::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function research()
     {
         return $this->belongsToMany(Research::class, 'ruler_research');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function resources()
     {
         return $this->hasMany(Resource::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function alliance()
     {
         return $this->belongsTo(Alliance::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
     public function researchedBuildings()
     {
         return $this->hasManyThrough(Building::class, Research::class);

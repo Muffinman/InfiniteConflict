@@ -12,8 +12,8 @@
 
 <script>
 
-    import MainMenu from '@/templates/shared/MainMenu';
-    import PlanetsMenu from '@/templates/planets/Menu';
+    import MainMenu from '@/views/shared/MainMenu';
+    import PlanetsMenu from '@/views/planets/Menu';
 
     export default {
         components: {
@@ -26,7 +26,7 @@
             }
         },
         mounted() {
-            axios.get('/api/index')
+            window.axios.get('/index')
                 .then(function(response){
                 });
         }

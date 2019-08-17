@@ -140,6 +140,24 @@ class Planet extends Model
         return $this->galaxy_id.'/'.$this->system_id;
     }
 
+
+    /**
+     * Populate current planet with starting buildings
+     * @return array
+     */
+    public function populateStartingBuildings()
+    {
+        $starting_buildings = PlanetStartingBuilding::all()->toArray();
+        $rekey = [];
+        foreach ($starting_buildings as $b) {
+            $rekey[$b['building_id']] = ['qty' => $b['qty']];
+        }
+        $starting_buildings = $rekey;
+
+        return $this->buildings()->sync($starting_buildings);
+    }
+
+
     /**
      * Calculated the resource output of this planet.
      */

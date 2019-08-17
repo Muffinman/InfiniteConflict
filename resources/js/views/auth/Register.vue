@@ -34,7 +34,7 @@
         methods: {
             login() {
                 let that = this;
-                axios.post('/api/login', { email: this.email, password: this.password}).then(response => {
+                axios.post('/login', { email: this.email, password: this.password}).then(response => {
                     that.$store.commit('setAuth', response.data);
                     that.$router.replace('/');
                 })
