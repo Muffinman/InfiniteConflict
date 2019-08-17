@@ -28,7 +28,7 @@
         methods: {
             save() {
                 axios.post('/auth/setup', { home_planet_name: this.home_planet_name, ruler_name: this.ruler_name}).then(response => {
-                    //this.$router.replace('/');
+                    this.$router.replace({ name: 'index' });
                 })
             }
         }
