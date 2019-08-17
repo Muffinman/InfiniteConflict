@@ -1,12 +1,12 @@
 <?php
+
 namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\MessageBag;
 
 /**
- * This class handles API exceptions and error codes
+ * This class handles API exceptions and error codes.
  *
  * Format for error codes is as follows:
  *
@@ -15,11 +15,9 @@ use Illuminate\Support\MessageBag;
  *   400xx - for 400 'Bad data' errors
  *
  * Class ApiException
- * @package App\Exceptions
  */
 class ApiException extends Exception
 {
-
     /**
      * All of the guards that were checked.
      *
@@ -28,14 +26,14 @@ class ApiException extends Exception
     protected $guards;
 
     /**
-     * Error data given by the exception
+     * Error data given by the exception.
      *
      * @var \Illuminate\Support\MessageBag
      */
     protected $errors;
 
     /**
-     * Status code for the response
+     * Status code for the response.
      *
      * @var int
      */
@@ -49,55 +47,57 @@ class ApiException extends Exception
     const ERR_AUTH_TOKEN = 40101;
 
     /**
-     * Bad authentication data - user details given were incorrect
+     * Bad authentication data - user details given were incorrect.
      *
      * @var int
      */
     const ERR_AUTH_ATTEMPT_INCORRECT = 40102;
 
     /**
-     * Account not allowed to access this endpoint
+     * Account not allowed to access this endpoint.
      *
      * @var int
      */
     const ERR_AUTH_ACCESS_ENDPOINT = 40102;
 
     /**
-     * Account not allowed due to suspension
+     * Account not allowed due to suspension.
      *
      * @var int
      */
     const ERR_AUTH_ACCESS_SUSPENDED = 40302;
 
     /**
-     * Request method not available for this endpoint
+     * Request method not available for this endpoint.
      *
      * @var int
      */
     const ERR_ENDPOINT_NOT_FOUND = 40401;
 
     /**
-     * Endpoint not found
+     * Endpoint not found.
      *
      * @var int
      */
     const ERR_METHOD_NOT_ALLOWED = 40501;
 
     /**
-     * Date is not in ISO 8601 standard
+     * Date is not in ISO 8601 standard.
      *
      * @var int
      */
     const ERR_DATA_DATE_FORMAT = 40005;
 
     /**
-     * Bad data
+     * Bad data.
+     *
      * @var int
      */
     const ERR_BAD_DATA = 40001;
 
     /**
-     * API Rate limit exception
+     * API Rate limit exception.
+     *
      * @var int
      */
     const ERR_RATE_LIMIT = 50001;
@@ -105,8 +105,9 @@ class ApiException extends Exception
     /**
      * Create a new API exception.
      *
-     * @param  string  $message
+     * @param string     $message
      * @param array|null $guards
+     *
      * @return void
      */
     public function __construct($message, $guards = null)
@@ -118,7 +119,7 @@ class ApiException extends Exception
     }
 
     /**
-     * Get the status code of the exception
+     * Get the status code of the exception.
      *
      * @return int
      */
@@ -127,9 +128,8 @@ class ApiException extends Exception
         return $this->statusCode;
     }
 
-
     /**
-     * Get the status code of the exception
+     * Get the status code of the exception.
      *
      * @return \Illuminate\Support\MessageBag;
      */
@@ -139,7 +139,7 @@ class ApiException extends Exception
     }
 
     /**
-     * Render the exception method
+     * Render the exception method.
      *
      * @return JsonResponse
      */
@@ -147,8 +147,8 @@ class ApiException extends Exception
     {
         return response()->json([
             'message' => $this->getMessage(),
-            'errors' => $this->errors,
-            'code' => $this->getCode(),
+            'errors'  => $this->errors,
+            'code'    => $this->getCode(),
         ]);
     }
 }

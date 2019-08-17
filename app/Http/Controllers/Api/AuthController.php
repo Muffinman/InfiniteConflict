@@ -7,12 +7,11 @@ use App\Exceptions\ApiNotFoundHttpException;
 use App\Http\Requests\SetupEmpire;
 use App\Http\Resources\RulerResource;
 use App\Planet;
-use App\PlanetStartingBuilding;
 use App\Ruler;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Laravel\Socialite\Facades\Socialite;
-use Carbon\Carbon;
 
 class AuthController extends ApiController
 {
@@ -89,12 +88,12 @@ class AuthController extends ApiController
     /**
      * Redirect the user to the GitHub authentication page.
      *
-     * @param boolean $withPrompt
+     * @param bool $withPrompt
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function redirectToGoogle()
     {
-
         $with = [
             'access_type' => 'offline',
             // 'prompt' => 'consent select_account',
@@ -105,14 +104,16 @@ class AuthController extends ApiController
             ->with($with)
             ->stateless()
             ->redirect();
+
         return response()->json(['redirect' => $response->getTargetUrl()], 200);
     }
 
     /**
      * Obtain the user information from Google.
      *
-     * @return \Illuminate\Http\JsonResponse
      * @throws ApiAuthenticationException
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
     public function loginWithGoogle()
     {
@@ -142,15 +143,15 @@ class AuthController extends ApiController
         return $this->respondWithToken($token);
     }
 
-
     /**
      * @param SetupEmpire $request
+     *
      * @throws ApiNotFoundHttpException
      */
     public function setupEmpire(SetupEmpire $request)
     {
         /**
-         * @var Planet $home_planet
+         * @var Planet
          */
         $home_planet = Planet::homePlanets()->unpopulated()->first();
         if (!$home_planet) {
@@ -166,5 +167,4 @@ class AuthController extends ApiController
         $user->name = $request->input('ruler_name');
         $user->save();
     }
-
 }
