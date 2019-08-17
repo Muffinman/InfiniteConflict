@@ -140,9 +140,9 @@ class Planet extends Model
         return $this->galaxy_id.'/'.$this->system_id;
     }
 
-
     /**
-     * Populate current planet with starting buildings
+     * Populate current planet with starting buildings.
+     *
      * @return array
      */
     public function populateStartingBuildings()
@@ -156,7 +156,6 @@ class Planet extends Model
 
         return $this->buildings()->sync($starting_buildings);
     }
-
 
     /**
      * Calculated the resource output of this planet.

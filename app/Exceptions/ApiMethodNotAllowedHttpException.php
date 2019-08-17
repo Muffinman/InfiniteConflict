@@ -1,17 +1,16 @@
 <?php
+
 namespace App\Exceptions;
 
 /**
- * This class handles API authentication exceptions
+ * This class handles API authentication exceptions.
  *
  * Class ApiMethodNotAllowedHttpException
- * @package App\Exceptions
  */
 class ApiMethodNotAllowedHttpException extends ApiException
 {
-
     /**
-     * Status code for the response
+     * Status code for the response.
      *
      * @var int
      */
@@ -20,7 +19,8 @@ class ApiMethodNotAllowedHttpException extends ApiException
     /**
      * Create a new API exception.
      *
-     * @param  string  $message
+     * @param string $message
+     *
      * @return void
      */
     public function __construct($message)
