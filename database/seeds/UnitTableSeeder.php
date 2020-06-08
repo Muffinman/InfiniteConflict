@@ -62,7 +62,8 @@ class UnitTableSeeder extends Seeder
             ],
             [
                 'name'           => 'Cruiser',
-                'drive'          => 3, 'turns' => 20,
+                'drive'          => 3,
+                'turns'          => 20,
                 'max_per_ruler'  => null,
                 'max_per_fleet'  => null,
                 'max_per_planet' => null,
