@@ -34,8 +34,8 @@ const app = new Vue({
         // Intercept requests to add Authorisation tokens
         axios.interceptors.request.use((config) => {
             this.ajaxRequests++;
-            if (this.$store.getters.getAuth.access_token) {
-                config.headers['Authorization'] = 'Bearer ' + this.$store.getters.getAuth.access_token
+            if (this.$store.getters.getAccessToken) {
+                config.headers['Authorization'] = 'Bearer ' + this.$store.getters.getAccessToken
             }
             return config;
         }, (error) => {
@@ -82,11 +82,11 @@ const app = new Vue({
             ajaxRequests: 0,
             refreshingToken: false,
             keepAliveTimer: null,
+            csrf: false,
         }
     },
     mounted() {
-        this.updateUser();
-        window.setInterval(this.updateUser, 30000);
+        this.initializeCSRF();
     },
     computed: {
         user() {
@@ -94,6 +94,11 @@ const app = new Vue({
         }
     },
     methods: {
+        initializeCSRF() {
+            axios.get('/sanctum/csrf-cookie').then(response => {
+                this.updateUser();
+            });
+        },
         updateUser() {
             axios.get('/auth/me').then(response => {
                 this.$store.commit('setUser', response.data.data);
@@ -102,27 +107,8 @@ const app = new Vue({
                     this.$router.replace({ name: 'auth.setup' });
                 }
             }).catch((error) => {
-                this.refreshToken();
+                this.$router.replace({name: 'auth.login'});
             });
-        },
-        refreshToken() {
-            if (!this.refreshingToken) {
-                this.refreshingToken = true;
-
-                window.axios.post('/auth/refresh').then((response) => {
-                    this.refreshingToken = false;
-                    if (response.data) {
-                        this.$store.commit('setAuth', response.data);
-                        this.$root.updateUser();
-                    }
-                })
-                .catch(error => {
-                    this.refreshingToken = false;
-                    this.$store.commit('removeUser');
-                    this.$store.commit('removeAuth');
-                    this.$router.replace({ name: 'auth.login' });
-                });
-            }
         },
     }
 }).$mount('#app');

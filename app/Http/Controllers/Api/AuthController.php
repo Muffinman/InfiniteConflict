@@ -6,11 +6,13 @@ use App\Exceptions\ApiAuthenticationException;
 use App\Exceptions\ApiNotFoundHttpException;
 use App\Http\Requests\SetupEmpire;
 use App\Http\Resources\RulerResource;
-use App\Planet;
-use App\Ruler;
+use App\Models\Planet;
+use App\Models\Ruler;
 use Carbon\Carbon;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends ApiController
@@ -20,17 +22,25 @@ class AuthController extends ApiController
     /**
      * Get a JWT via given credentials.
      *
+     * @param Request $request
      * @return \Illuminate\Http\JsonResponse
+     * @throws ApiAuthenticationException
      */
-    public function loginWithPassword()
+    public function loginWithPassword(Request $request)
     {
-        $credentials = request(['email', 'password']);
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+            'device_name' => 'required',
+        ]);
 
-        if (!$token = auth()->attempt($credentials)) {
-            throw new ApiAuthenticationException('Incorrect login details', 'api');
+        $user = Ruler::where('email', $request->email)->first();
+
+        if (! $user || ! Hash::check($request->password, $user->password)) {
+            throw new ApiAuthenticationException('Incorrect login details');
         }
 
-        return $this->respondWithToken($token);
+        return $user->createToken($request->device_name)->plainTextToken;
     }
 
     /**
@@ -59,31 +69,6 @@ class AuthController extends ApiController
         return response()->json(['message' => 'Successfully logged out']);
     }
 
-    /**
-     * Refresh a token.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function refresh()
-    {
-        return $this->respondWithToken(auth()->refresh());
-    }
-
-    /**
-     * Get the token array structure.
-     *
-     * @param string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondWithToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'token_type'   => 'bearer',
-            'expires_in'   => auth()->factory()->getTTL() * 60,
-        ]);
-    }
 
     /**
      * Redirect the user to the GitHub authentication page.
@@ -115,7 +100,7 @@ class AuthController extends ApiController
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function loginWithGoogle()
+    public function loginWithGoogle(Request $request)
     {
         try {
             $googleUser = Socialite::driver('google')
@@ -134,13 +119,11 @@ class AuthController extends ApiController
             $ruler->social_expires_at = Carbon::now()->addSeconds($googleUser->expiresIn);
             $ruler->social_avatar = $googleUser->avatar;
             $ruler->save();
-
-            $token = auth('api')->fromUser($ruler);
         } catch (\Exception $e) {
-            throw new ApiAuthenticationException($e->getMessage(), 'api');
+            throw new ApiAuthenticationException($e->getMessage());
         }
 
-        return $this->respondWithToken($token);
+        return $ruler->createToken($request->device_name)->plainTextToken;
     }
 
     /**
@@ -163,8 +146,8 @@ class AuthController extends ApiController
         $home_planet->save();
         $home_planet->populateStartingBuildings();
 
-        $user = auth()->user();
-        $user->name = $request->input('ruler_name');
-        $user->save();
+        $ruler = auth()->user();
+        $ruler->name = $request->input('ruler_name');
+        $ruler->save();
     }
 }

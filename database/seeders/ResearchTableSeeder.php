@@ -1,0 +1,103 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+
+class ResearchTableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        DB::table('research')->insert([
+            ['name' => 'Resource Collection Research', 'turns' => 24, 'given' => 0],
+            ['name' => 'Fleet Technology Research', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Management Research', 'turns' => 24, 'given' => 0],
+            ['name' => 'Core Metal Mine Research', 'turns' => 48, 'given' => 0],
+            ['name' => 'Core Mineral Extractor Research', 'turns' => 48, 'given' => 0],
+            ['name' => 'Hydroponics Lab Research', 'turns' => 48, 'given' => 0],
+            ['name' => 'Solar Array Research', 'turns' => 48, 'given' => 0],
+            ['name' => 'Mass Production Research', 'turns' => 48, 'given' => 0],
+            ['name' => 'Land Enhancement Research', 'turns' => 24, 'given' => 0],
+            ['name' => 'Strip Metal Mine Research', 'turns' => 96, 'given' => 0],
+            ['name' => 'Strip Mineral Extractor Research', 'turns' => 96, 'given' => 0],
+            ['name' => 'Hydroponics Dome Research', 'turns' => 96, 'given' => 0],
+            ['name' => 'Solar Station Research', 'turns' => 96, 'given' => 0],
+            ['name' => 'Metal Refinery Research', 'turns' => 24, 'given' => 0],
+            ['name' => 'Mineral Processor Research', 'turns' => 24, 'given' => 0],
+            ['name' => 'Food Purifier Research', 'turns' => 24, 'given' => 0],
+            ['name' => 'Energy Booster Research', 'turns' => 24, 'given' => 0],
+            ['name' => 'Merchant Research', 'turns' => 48, 'given' => 0],
+            ['name' => 'Trader Research', 'turns' => 72, 'given' => 0],
+            ['name' => 'Hulk Research', 'turns' => 96, 'given' => 0],
+            ['name' => 'War Ship Design Research', 'turns' => 48, 'given' => 0],
+            ['name' => 'Destroyer Research', 'turns' => 96, 'given' => 0],
+            ['name' => 'Cruiser Research', 'turns' => 96, 'given' => 0],
+            ['name' => 'Battleship Research', 'turns' => 144, 'given' => 0],
+            ['name' => 'Warp Theory Research', 'turns' => 48, 'given' => 0],
+            ['name' => 'Hyperspace Beacon Research', 'turns' => 96, 'given' => 0],
+            ['name' => 'Jump Gate Research', 'turns' => 96, 'given' => 0],
+            ['name' => 'Queue Length 3', 'turns' => 0, 'given' => 1],
+            ['name' => 'Queue Length 4', 'turns' => 24, 'given' => 0],
+            ['name' => 'Queue Length 5', 'turns' => 24, 'given' => 0],
+            ['name' => 'Queue Length 6', 'turns' => 24, 'given' => 0],
+            ['name' => 'Queue Length 7', 'turns' => 24, 'given' => 0],
+            ['name' => 'Queue Length 8', 'turns' => 24, 'given' => 0],
+            ['name' => 'Queue Length 9', 'turns' => 24, 'given' => 0],
+            ['name' => 'Queue Length 10', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 4', 'turns' => 0, 'given' => 1],
+            ['name' => 'Planet Limit 6', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 8', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 10', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 12', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 14', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 16', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 18', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 20', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 22', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 24', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 26', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 28', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 30', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 32', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 34', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 36', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 38', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 40', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 42', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 44', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 46', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 48', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 50', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 52', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 54', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 56', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 58', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 60', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 62', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 64', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 66', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 68', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 70', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 72', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 74', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 76', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 78', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 80', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 82', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 84', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 86', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 88', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 90', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 92', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 94', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 96', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 98', 'turns' => 24, 'given' => 0],
+            ['name' => 'Planet Limit 100', 'turns' => 24, 'given' => 0],
+        ]);
+    }
+}

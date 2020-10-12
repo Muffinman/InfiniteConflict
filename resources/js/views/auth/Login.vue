@@ -33,14 +33,14 @@
           }
         },
         mounted() {
-            if (this.$store.getters.getAuth.access_token) {
+            if (this.$store.getters.getAccessToken) {
                 this.$router.replace('/');
             }
         },
         methods: {
             login() {
-                axios.post('/auth/login/password', { email: this.email, password: this.password}).then(response => {
-                    this.$store.commit('setAuth', response.data);
+                axios.post('/auth/login/password', { email: this.email, password: this.password, device_name: 'ic_web_ui'}).then(response => {
+                    this.$store.commit('setAccessToken', response.data);
                     this.$root.updateUser();
                     this.$router.replace('/');
                 }).catch(error => {

@@ -27,7 +27,7 @@
           }
         },
         mounted() {
-            if (this.$store.getters.getAuth.access_token) {
+            if (this.$store.getters.getAccessToken) {
                 this.$router.replace('/');
             }
         },

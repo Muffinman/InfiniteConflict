@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PlanetResource;
-use App\Planet;
+use App\Models\Planet;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 

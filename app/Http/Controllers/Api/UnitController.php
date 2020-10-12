@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UnitResource;
-use App\Unit;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 
 class UnitController extends Controller

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ResourceResource;
-use App\Resource;
+use App\Models\Resource;
 use Illuminate\Http\Request;
 
 class ResourceController extends Controller

@@ -20,10 +20,11 @@ class ApiAuthenticationException extends ApiException
      * Create a new API exception.
      *
      * @param string $message
+     * @param string $guards
      *
      * @return void
      */
-    public function __construct($message, $guards, $authAttempted = false)
+    public function __construct($message, $guards = '', $authAttempted = false)
     {
         if ($authAttempted) {
             $this->statusCode = 400;

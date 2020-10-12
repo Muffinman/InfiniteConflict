@@ -17,6 +17,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.axios.defaults.headers.common['Content-Type'] = 'application/json';
 window.axios.defaults.headers.common['Accept'] = 'application/json';
 window.axios.defaults.baseURL = '/api';
+window.axios.defaults.withCredentials = true;
 
 // Disable query parameter encoding, otherwise axios ends up encoding
 // array parameters twice
@@ -53,8 +54,8 @@ if (token) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
-if (store.getters.getAuth.access_token) {
-    window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + store.getters.getAuth.access_token;
+if (store.getters.getAccessToken) {
+    window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + store.getters.getAccessToken;
 }
 
 /**

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Alliance;
+use App\Models\Alliance;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\AllianceResource;
 use Illuminate\Http\Request;

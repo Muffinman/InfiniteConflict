@@ -12,34 +12,26 @@ const vuexPersist = new VuexPersist({
 export default new Vuex.Store({
     plugins: [vuexPersist.plugin],
     state: {
-        auth: {
-            access_token: null,
-            expires_in: null,
-            token_type: null,
-        },
+        accessToken: null,
         user: null
     },
     getters: {
-        getAuth: state => {
-            return state.auth
+        getAccessToken: state => {
+            return state.accessToken
         },
         getUser: state => {
             return state.user
         }
     },
     mutations: {
-        setAuth: (state, authValue) => {
-            Object.assign(state.auth, authValue);
+        setAccessToken: (state, tokenValue) => {
+            state.accessToken = tokenValue;
         },
         setUser: (state, userValue) => {
             state.user = userValue;
         },
         removeAuth: (state) => {
-            Object.assign(state.auth, {
-                access_token: null,
-                expires_in: null,
-                token_type: null,
-            });
+            state.token = null;
         },
         removeUser: (state) => {
             state.user = null;

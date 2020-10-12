@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SystemResource;
-use App\System;
+use App\Models\System;
 use Illuminate\Http\Request;
 
 class SystemController extends Controller
