@@ -9,6 +9,16 @@ import Setup from '@/views/auth/Setup'
 import Register from '@/views/auth/Register'
 import GoogleCallback from '@/views/auth/GoogleCallback'
 
+import PlanetView from '@/views/planets/PlanetView'
+import PlanetIndex from '@/views/planets/PlanetIndex'
+import FleetIndex from "@/views/fleets/FleetIndex";
+import NavIndex from "@/views/nav/NavIndex";
+import ResearchIndex from "@/views/research/ResearchIndex";
+import AllianceIndex from "@/views/alliances/AllianceIndex";
+import NavGalaxyView from "@/views/nav/NavGalaxyView";
+import FleetView from "@/views/fleets/FleetView";
+import AllianceView from "@/views/alliances/AllianceView";
+
 Vue.use(VueRouter);
 
 export default new VueRouter({
@@ -51,13 +61,77 @@ export default new VueRouter({
             children: [
                 {
                     path: '',
-                    component: Index,
+                    component: PlanetIndex,
                     name: 'planets.index',
                 },
                 {
                     path: '/planets/:id',
-                    component: Index,
+                    component: PlanetView,
                     name: 'planets.view',
+                },
+            ],
+        },
+        {
+            path: '/fleets',
+            component: Parent,
+            children: [
+                {
+                    path: '',
+                    component: FleetIndex,
+                    name: 'fleets.index',
+                },
+                {
+                    path: '/fleets/:id',
+                    component: FleetView,
+                    name: 'fleets.view',
+                },
+            ],
+        },
+        {
+            path: '/nav',
+            component: Parent,
+            children: [
+                {
+                    path: '',
+                    component: NavIndex,
+                    name: 'nav.index',
+                },
+                {
+                    path: '/nav/:galaxy',
+                    component: NavGalaxyView,
+                    name: 'nav.galaxy.view',
+                },
+                {
+                    path: '/nav/:galaxy/:system',
+                    component: NavGalaxyView,
+                    name: 'nav.system.view',
+                },
+            ],
+        },
+        {
+            path: '/research',
+            component: Parent,
+            children: [
+                {
+                    path: '',
+                    component: ResearchIndex,
+                    name: 'research.index',
+                },
+            ],
+        },
+        {
+            path: '/alliances',
+            component: Parent,
+            children: [
+                {
+                    path: '',
+                    component: AllianceIndex,
+                    name: 'alliances.index',
+                },
+                {
+                    path: '/alliances/:id',
+                    component: AllianceView,
+                    name: 'alliances.view',
                 },
             ],
         },

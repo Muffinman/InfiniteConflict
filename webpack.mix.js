@@ -16,7 +16,8 @@ mix.webpackConfig({
     resolve: {
         extensions: ['js', 'vue'],
         alias: {
-            '@': path.resolve(__dirname, 'resources/js')
+            'vue$': 'vue/dist/vue.runtime.esm.js',
+            '@': path.resolve('./resources/js')
         },
     },
     plugins: [

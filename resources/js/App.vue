@@ -13,7 +13,7 @@
 <script>
 
     import MainMenu from '@/views/shared/MainMenu';
-    import PlanetsMenu from '@/views/planets/Menu';
+    import PlanetsMenu from '@/views/shared/PlanetsMenu';
 
     export default {
         components: {
