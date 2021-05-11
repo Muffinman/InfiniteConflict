@@ -20,15 +20,22 @@
             MainMenu,
             PlanetsMenu,
         },
-        data() {
-            return {
-
-            }
-        },
         mounted() {
-            window.axios.get('/index')
-                .then(function(response){
-                });
+            this.getIndex()
+            this.getPlanets()
+        },
+        methods: {
+            getIndex() {
+                window.axios.get('/index')
+                    .then(response => {
+                    });
+            },
+            getPlanets() {
+                axios.get('/planets')
+                    .then(response => {
+                        this.$store.commit('setPlanets', response.data.data);
+                    });
+            }
         }
     }
 </script>

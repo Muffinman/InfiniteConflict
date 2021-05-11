@@ -5,9 +5,9 @@ namespace Database\Seeders;
 use App\Models\Config;
 use App\Models\GalaxyStartingResource;
 use App\Models\PlanetStartingResource;
-use App\Models\Resource;
 use App\Models\System;
 use Illuminate\Database\Seeder;
+use DB;
 
 class PlanetTableSeeder extends Seeder
 {
@@ -25,20 +25,6 @@ class PlanetTableSeeder extends Seeder
 
         $free_sys_cols = Config::find('free_sys_cols')->value;
         $free_sys_rows = Config::find('free_sys_rows')->value;
-
-        $resources = Resource::all();
-
-        $galaxy_starting_resources = GalaxyStartingResource::all();
-        $galaxy_resources = [];
-        foreach ($galaxy_starting_resources as $res) {
-            $galaxy_resources[$res['resource_id']] = $res;
-        }
-
-        $planet_starting_resources = PlanetStartingResource::all();
-        $planet_resources = [];
-        foreach ($planet_starting_resources as $res) {
-            $planet_resources[$res['resource_id']] = $res;
-        }
 
         $this->command->getOutput()->writeln('<info>Seeding planets</info>...');
         $this->command->getOutput()->progressStart(System::count());

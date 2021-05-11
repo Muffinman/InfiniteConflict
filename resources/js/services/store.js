@@ -13,7 +13,8 @@ export default new Vuex.Store({
     plugins: [vuexPersist.plugin],
     state: {
         accessToken: null,
-        user: null
+        user: null,
+        planets: [],
     },
     getters: {
         getAccessToken: state => {
@@ -21,7 +22,10 @@ export default new Vuex.Store({
         },
         getUser: state => {
             return state.user
-        }
+        },
+        getPlanets: state => {
+            return state.planets
+        },
     },
     mutations: {
         setAccessToken: (state, tokenValue) => {
@@ -30,11 +34,14 @@ export default new Vuex.Store({
         setUser: (state, userValue) => {
             state.user = userValue;
         },
-        removeAuth: (state) => {
-            state.token = null;
+        removeAccessToken: (state) => {
+            state.accessToken = null;
         },
         removeUser: (state) => {
             state.user = null;
+        },
+        setPlanets: (state, planets) => {
+            state.planets = planets;
         },
     }
 })

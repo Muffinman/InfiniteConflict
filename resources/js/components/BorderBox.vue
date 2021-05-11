@@ -3,6 +3,7 @@
         <header class="card-header">
             <slot name="header"></slot>
         </header>
+        <div class="stripe"></div>
         <div class="card-content">
             <slot></slot>
         </div>

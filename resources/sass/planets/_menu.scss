@@ -1,5 +1,5 @@
 .planets-menu {
-    width: 150px;
+    min-width: 150px;
     height: 100%;
     max-height: 100%;
     display: flex;
@@ -7,10 +7,8 @@
     background: $background;
     overflow: hidden;
     overflow-y: auto;
-    padding-top: $base-spacing;
+    padding-top: $base-spacing * 2;
     justify-content: center;
-
-    @include border(right, 2);
 
     .planet {
         text-align: center;

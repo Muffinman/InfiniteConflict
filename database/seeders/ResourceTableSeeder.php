@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use DB;
 
 class ResourceTableSeeder extends Seeder
 {
@@ -21,7 +22,7 @@ class ResourceTableSeeder extends Seeder
                 'creatable'           => 0,
                 'transferable'        => 1,
                 'turns'               => 0,
-                'interest'            => 0,
+                'interest'            => NULL,
                 'requires_storage'    => 0,
                 'global'              => 0,
                 'production_resource' => 1,
@@ -33,7 +34,7 @@ class ResourceTableSeeder extends Seeder
                 'creatable'           => 0,
                 'transferable'        => 1,
                 'turns'               => 0,
-                'interest'            => 0,
+                'interest'            => NULL,
                 'requires_storage'    => 0,
                 'global'              => 0,
                 'production_resource' => 1,
@@ -45,7 +46,7 @@ class ResourceTableSeeder extends Seeder
                 'creatable'           => 0,
                 'transferable'        => 1,
                 'turns'               => 0,
-                'interest'            => 0,
+                'interest'            => NULL,
                 'requires_storage'    => 0,
                 'global'              => 0,
                 'production_resource' => 1,
@@ -57,7 +58,7 @@ class ResourceTableSeeder extends Seeder
                 'creatable'           => 0,
                 'transferable'        => 1,
                 'turns'               => 0,
-                'interest'            => 0,
+                'interest'            => NULL,
                 'requires_storage'    => 0,
                 'global'              => 0,
                 'production_resource' => 1,
@@ -69,7 +70,7 @@ class ResourceTableSeeder extends Seeder
                 'creatable'           => 0,
                 'transferable'        => 0,
                 'turns'               => 0,
-                'interest'            => 0,
+                'interest'            => NULL,
                 'requires_storage'    => 0,
                 'global'              => 0,
                 'production_resource' => 0,
@@ -81,7 +82,7 @@ class ResourceTableSeeder extends Seeder
                 'creatable'           => 0,
                 'transferable'        => 0,
                 'turns'               => 0,
-                'interest'            => 0,
+                'interest'            => NULL,
                 'requires_storage'    => 0,
                 'global'              => 0,
                 'production_resource' => 0,
@@ -105,7 +106,7 @@ class ResourceTableSeeder extends Seeder
                 'creatable'           => 1,
                 'transferable'        => 1,
                 'turns'               => 4,
-                'interest'            => 0,
+                'interest'            => NULL,
                 'requires_storage'    => 0,
                 'global'              => 0,
                 'production_resource' => 0,
@@ -117,7 +118,7 @@ class ResourceTableSeeder extends Seeder
                 'creatable'           => 1,
                 'transferable'        => 1,
                 'turns'               => 8,
-                'interest'            => 0,
+                'interest'            => NULL,
                 'requires_storage'    => 1,
                 'global'              => 0,
                 'production_resource' => 0,
@@ -129,7 +130,7 @@ class ResourceTableSeeder extends Seeder
                 'creatable'           => 0,
                 'transferable'        => 0,
                 'turns'               => 0,
-                'interest'            => 0,
+                'interest'            => NULL,
                 'requires_storage'    => 0,
                 'global'              => 1,
                 'production_resource' => 0,

@@ -1,7 +1,10 @@
 .card {
-    @include border;
+    border-radius: 5px;
+    border: 1px solid $yellow;
 
     .card-header {
+        background: $yellow;
+
         h2 {
             margin: 0;
         }

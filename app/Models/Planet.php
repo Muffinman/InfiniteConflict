@@ -2,9 +2,65 @@
 
 namespace App\Models;
 
+use App\Models\Pivots\PlanetBuilding;
+use App\Models\Pivots\PlanetResource;
+use App\Scopes\PlanetPopulated;
+use App\Scopes\PlanetUnpopulated;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
+/**
+ * App\Models\Planet
+ *
+ * @property int $id
+ * @property string|null $name
+ * @property int|null $ruler_id
+ * @property int $galaxy_id
+ * @property int $system_id
+ * @property int $col
+ * @property int $row
+ * @property int $home
+ * @property int $type
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Building[] $buildingQueue
+ * @property-read int|null $building_queue_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Building[] $buildings
+ * @property-read int|null $buildings_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Resource[] $conversionQueue
+ * @property-read int|null $conversion_queue_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Fleet[] $fleets
+ * @property-read int|null $fleets_count
+ * @property-read \App\Models\Galaxy $galaxy
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Resource[] $productionResources
+ * @property-read int|null $production_resources_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Resource[] $resources
+ * @property-read int|null $resources_count
+ * @property-read \App\Models\Ruler|null $ruler
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Resource[] $staticResources
+ * @property-read int|null $static_resources_count
+ * @property-read \App\Models\System $system
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Unit[] $unitQueue
+ * @property-read int|null $unit_queue_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Unit[] $units
+ * @property-read int|null $units_count
+ * @method static \Database\Factories\PlanetFactory factory(...$parameters)
+ * @method static Builder|Planet homePlanets()
+ * @method static Builder|Planet newModelQuery()
+ * @method static Builder|Planet newQuery()
+ * @method static Builder|Planet query()
+ * @method static Builder|Planet unpopulated()
+ * @method static Builder|Planet whereCol($value)
+ * @method static Builder|Planet whereGalaxyId($value)
+ * @method static Builder|Planet whereHome($value)
+ * @method static Builder|Planet whereId($value)
+ * @method static Builder|Planet whereName($value)
+ * @method static Builder|Planet whereRow($value)
+ * @method static Builder|Planet whereRulerId($value)
+ * @method static Builder|Planet whereSystemId($value)
+ * @method static Builder|Planet whereType($value)
+ * @mixin \Eloquent
+ */
 class Planet extends Model
 {
     use HasFactory;
@@ -14,6 +70,16 @@ class Planet extends Model
     // Cache var for output and storage
     protected $output = [];
     protected $storage = [];
+
+    /**
+     * @inheritDoc
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope(new PlanetPopulated);
+    }
 
     /**
      * Get the system for this planet.
@@ -44,7 +110,9 @@ class Planet extends Model
      */
     public function buildings()
     {
-        return $this->belongsToMany(Building::class, 'planet_building')->withPivot('qty');
+        return $this->belongsToMany(Building::class, 'planet_building')
+            ->withPivot('qty')
+            ->using(PlanetBuilding::class);
     }
 
     /**
@@ -68,7 +136,9 @@ class Planet extends Model
      */
     public function resources()
     {
-        return $this->belongsToMany(Resource::class)->withPivot(['stored', 'output', 'abundance', 'storage', 'busy']);
+        return $this->belongsToMany(Resource::class)
+            ->withPivot(['stored', 'output', 'abundance', 'storage', 'busy'])
+            ->using(PlanetResource::class);
     }
 
     /**
@@ -76,7 +146,10 @@ class Planet extends Model
      */
     public function productionResources()
     {
-        return $this->belongsToMany(Resource::class)->withPivot(['stored', 'output', 'abundance', 'storage', 'busy'])->where('production_resource', 1);
+        return $this->belongsToMany(Resource::class)
+            ->withPivot(['stored', 'output', 'abundance', 'storage', 'busy'])
+            ->where('production_resource', 1)
+            ->using(PlanetResource::class);
     }
 
     /**
@@ -84,7 +157,10 @@ class Planet extends Model
      */
     public function staticResources()
     {
-        return $this->belongsToMany(Resource::class)->withPivot(['stored', 'output', 'abundance', 'storage', 'busy'])->where('production_resource', 0);
+        return $this->belongsToMany(Resource::class)
+            ->withPivot(['stored', 'output', 'abundance', 'storage', 'busy'])
+            ->where('production_resource', 0)
+            ->using(PlanetResource::class);
     }
 
     /**
@@ -92,15 +168,19 @@ class Planet extends Model
      */
     public function buildingQueue()
     {
-        return $this->belongsToMany(Building::class, 'planet_building_queue')->withPivot(['turns', 'started', 'rank', 'demolish'])->orderBy('rank', 'asc');
+        return $this->belongsToMany(Building::class, 'planet_building_queue')
+            ->withPivot(['turns', 'started', 'rank', 'demolish'])
+            ->orderBy('rank', 'asc');
     }
+
 
     /**
      * Get the unit queue.
      */
     public function unitQueue()
     {
-        return $this->belongsToMany(Unit::class, 'planet_unit_queue')->withPivot(['qty', 'turns', 'started', 'rank']);
+        return $this->belongsToMany(Unit::class, 'planet_unit_queue')
+            ->withPivot(['qty', 'turns', 'started', 'rank']);
     }
 
     /**
@@ -108,7 +188,8 @@ class Planet extends Model
      */
     public function conversionQueue()
     {
-        return $this->belongsToMany(Resource::class, 'planet_conversion_queue')->withPivot(['qty', 'turns', 'started', 'rank']);
+        return $this->belongsToMany(Resource::class, 'planet_conversion_queue')
+            ->withPivot(['qty', 'turns', 'started', 'rank']);
     }
 
     /**
@@ -116,15 +197,23 @@ class Planet extends Model
      */
     public function availableBuildings()
     {
-        return Building::query()->researched()->prerequisitesMet($this)->belowMax($this)->get();
+        return Building::query()
+            ->researched()
+            ->prerequisitesMet($this)
+            ->belowMax($this)
+            ->get();
     }
 
     /**
      * Filter by only populated planets.
+     *
+     * @param Builder
+     * @return Builder
      */
-    public function scopeUnpopulated()
+    public function scopeUnpopulated(Builder $builder)
     {
-        return $this->whereNull('ruler_id');
+        return $builder->withoutGlobalScope(PlanetPopulated::class)
+            ->withGlobalScope(PlanetUnpopulated::class, new PlanetUnpopulated);
     }
 
     /**
@@ -163,7 +252,7 @@ class Planet extends Model
     /**
      * Calculated the resource output of this planet.
      */
-    public function output($resource_id, $cached = true, $rebuild = false)
+    public function output(int $resource_id, bool $cached = true, bool $rebuild = false): int
     {
 
         // Use model cache if available and allowed
@@ -217,7 +306,10 @@ class Planet extends Model
         foreach ($this->buildings as $building) {
             if (isset($building->pivot)) {
                 $qty = $building->pivot->qty;
-                $resource = $building->resources()->wherePivot('resource_id', $resource_id)->wherePivot('stores', '>', 0)->first();
+                $resource = $building->resources()
+                    ->wherePivot('resource_id', $resource_id)
+                    ->wherePivot('stores', '>', 0)
+                    ->first();
                 if ($resource) {
                     $stores = $resource->pivot->stores;
                     $total += $qty * $stores;
@@ -239,6 +331,68 @@ class Planet extends Model
     {
         $output = $this->output($resource, $cached, $rebuild);
 
-        return ($output >= 1 ? '+' : '').number_format($output);
+        return ($output >= 1 ? '+' : '') . number_format($output);
+    }
+
+    /**
+     * @param Collection $resources
+     * @param array $galaxy_resources
+     * @param array $planet_resources
+     */
+    public function attachStartingResources(Collection $resources, array $galaxy_resources, array $planet_resources)
+    {
+        $attached_resources = [];
+        foreach ($resources as $resource) {
+            $storage = $stored = $abundance = 0;
+
+            // Home planet in home gal
+            if ($this->home && isset($planet_resources[$resource->id])) {
+                $stored = $planet_resources[$resource->id]['stored'];
+                $abundance = $planet_resources[$resource->id]['abundance'];
+            }
+
+            // Normal planet in home gal
+            elseif ($this->galaxy->home && isset($galaxy_resources[$resource->id])) {
+                $stored = rand($galaxy_resources[$resource->id]['home_min_stored'], $galaxy_resources[$resource->id]['home_max_stored']);
+                $abundance = rand($galaxy_resources[$resource->id]['home_min_abundance'], $galaxy_resources[$resource->id]['home_max_abundance']);
+            }
+
+            // Normal planet in free gal
+            elseif (isset($galaxy_resources[$resource->id])) {
+                $stored = 0;
+                $abundance = rand($galaxy_resources[$resource->id]['free_min_abundance'], $galaxy_resources[$resource->id]['free_max_abundance']);
+            }
+
+            if ($resource->requires_storage) {
+                $storage = $this->calcResourceStorage($resource);
+            }
+
+            if ($storage !== 0 || $stored !== 0 || $abundance !== 0) {
+                $attached_resources[$resource->id] = [
+                    'storage' => $storage,
+                    'stored' => $stored,
+                    'abundance' => $abundance,
+                ];
+            }
+        }
+        $this->resources()->sync($attached_resources);
+    }
+
+
+    /**
+     * @param \App\Models\Resource $resource
+     * @return int|mixed
+     */
+    public function calcResourceStorage(\App\Models\Resource $resource)
+    {
+        return $this->buildings()->with([
+                'resources' => function ($q) use ($resource) {
+                    $q->where('id', $resource->id);
+                }
+            ])
+            ->get()
+            ->sum(function ($item) use ($resource) {
+                return $item->pivot->qty * $item->resources->where('id', $resource->id)->first()->pivot->stores;
+            });
     }
 }

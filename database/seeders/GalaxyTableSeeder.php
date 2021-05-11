@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Config;
 use Illuminate\Database\Seeder;
+use DB;
 
 class GalaxyTableSeeder extends Seeder
 {

@@ -7,6 +7,7 @@ import Login from '@/views/auth/Login'
 import Logout from '@/views/auth/Logout'
 import Setup from '@/views/auth/Setup'
 import Register from '@/views/auth/Register'
+import Forgot from '@/views/auth/Forgot'
 import GoogleCallback from '@/views/auth/GoogleCallback'
 
 import PlanetView from '@/views/planets/PlanetView'
@@ -54,6 +55,11 @@ export default new VueRouter({
             path: '/auth/setup',
             component: Setup,
             name: 'auth.setup',
+        },
+        {
+            path: '/auth/forgot',
+            component: Forgot,
+            name: 'auth.forgot',
         },
         {
             path: '/planets',

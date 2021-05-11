@@ -181,7 +181,6 @@ return [
          * Custom classes
          */
         Laravel\Socialite\SocialiteServiceProvider::class,
-        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
     ],
 
     /*

@@ -2,11 +2,41 @@
 
 namespace App\Models;
 
+use App\Models\Pivots\BuildingResource;
 use Auth;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+/**
+ * App\Models\Building
+ *
+ * @property int $id
+ * @property string $name
+ * @property int|null $turns
+ * @property int|null $max
+ * @property int|null $demolish_turns
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Planet[] $planets
+ * @property-read int|null $planets_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Building[] $requiredBuildings
+ * @property-read int|null $required_buildings_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Research[] $requiredResearch
+ * @property-read int|null $required_research_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Resource[] $resources
+ * @property-read int|null $resources_count
+ * @method static \Illuminate\Database\Eloquent\Builder|Building belowMax(\App\Models\Planet $planet)
+ * @method static \Illuminate\Database\Eloquent\Builder|Building newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Building newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Building prerequisitesMet(\App\Models\Planet $planet)
+ * @method static \Illuminate\Database\Eloquent\Builder|Building query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Building researched()
+ * @method static \Illuminate\Database\Eloquent\Builder|Building whereDemolishTurns($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Building whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Building whereMax($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Building whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Building whereTurns($value)
+ * @mixin \Eloquent
+ */
 class Building extends Model
 {
     use HasFactory;
@@ -29,7 +59,9 @@ class Building extends Model
      */
     public function resources()
     {
-        return $this->belongsToMany(Resource::class)->withPivot('cost', 'output', 'single_output', 'stores', 'interest', 'abundance', 'refund_on_completion');
+        return $this->belongsToMany(Resource::class)
+            ->withPivot('cost', 'output', 'single_output', 'stores', 'interest', 'abundance', 'refund_on_completion')
+            ->using(BuildingResource::class);
     }
 
     /**

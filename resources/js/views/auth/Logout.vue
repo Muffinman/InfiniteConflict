@@ -6,7 +6,7 @@
     export default {
         mounted() {
             this.$store.commit('removeUser');
-            this.$store.commit('removeAuth');
+            this.$store.commit('removeAccessToken');
             this.$router.replace({ name: 'auth.login' });
         }
     }

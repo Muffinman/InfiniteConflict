@@ -1,29 +1,25 @@
 @mixin font-heading() {
     font-family: Orbitron, monospace;
+
+    strong {
+        color: inherit;
+    }
 }
 
 @mixin font-body() {
     font-family: 'Open Sans', sans-serif;
 }
 
-@mixin border($side: 'all', $width: 2) {
-    border-style: solid;
-    border-width: 0;
-    border-image:
+@mixin stripe($height: 6px, $repeat: 20px, $gap: 10px) {
+    min-height: $height;
+    border-top: 1px solid darken($yellow, 10%);
+    border-bottom: 1px solid darken($yellow, 40%);
+    background-image:
         repeating-linear-gradient(
             -45deg,
-            $grey-lighter,
-            $grey-lighter 5px,
-            $grey-light 5px,
-            $grey-light 10px
-        ) $width;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-
-    @if $side == 'all' {
-        border-width: #{$width}px;
-    }
-
-    @else {
-        border-#{$side}-width: #{$width}px;
-    }
+            darken($yellow, 10%) 0,
+            darken($yellow, 10%) $repeat - $gap,
+            $grey-dark $repeat - $gap,
+            $grey-dark $repeat
+        );
 }

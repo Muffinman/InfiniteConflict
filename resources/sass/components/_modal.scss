@@ -1,0 +1,25 @@
+.modal-content {
+    border: 1px solid darken($yellow, 5%);
+    border-radius: 5px;
+}
+
+.modal-card-head {
+    border: none;
+
+    h2 {
+        flex-grow: 1;
+        margin: 0;
+    }
+
+    a {
+        margin-left: 1em;
+    }
+}
+
+.modal-card-foot {
+    background-color: $modal-card-foot-background-color;
+}
+
+.stripe {
+    @include stripe;
+}

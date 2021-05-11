@@ -1,15 +1,21 @@
+.menu-container {
+    background: $grey-dark;
+    position: fixed;
+    width: 100vw;
+
+    .stripe {
+        border-bottom: 1px solid darken($yellow, 20%);
+    }
+}
+
 nav.main-menu {
     @include font-heading;
 
-    background: $grey-dark;
     display: flex;
     align-items: stretch;
     justify-content: space-between;
     padding: 0 $base-spacing;
-    position: fixed;
     width: 100vw;
-
-    @include border(bottom, 2);
 
     ul {
         display: flex;
@@ -27,9 +33,11 @@ nav.main-menu {
         display: flex;
         align-items: center;
         color: $white;
+        font-size: 0.9em;
 
         &:hover {
             color: $black;
+            background: $yellow;
         }
     }
 

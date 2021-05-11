@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use DB;
 
 class BuildingResourceTableSeeder extends Seeder
 {
@@ -101,7 +102,7 @@ class BuildingResourceTableSeeder extends Seeder
             ['building_id' => 17, 'resource_id' => 2, 'cost' => 20000,  'output' => 200,    'single_output' => null, 'stores' => 0, 'interest' => 0, 'abundance' => 0, 'refund_on_completion' => 0],
             ['building_id' => 17, 'resource_id' => 3, 'cost' => 0,      'output' => 100,    'single_output' => null, 'stores' => 0, 'interest' => 0, 'abundance' => 0, 'refund_on_completion' => 0],
             ['building_id' => 17, 'resource_id' => 4, 'cost' => 0,      'output' => 100,    'single_output' => null, 'stores' => 0, 'interest' => 0, 'abundance' => 0, 'refund_on_completion' => 0],
-            ['building_id' => 17, 'resource_id' => 7, 'cost' => 50000,  'output' => 0,      'single_output' => null, 'stores' => 50000, 'interest' => 1, 'abundance' => 0, 'refund_on_completion' => 1],
+            ['building_id' => 17, 'resource_id' => 7, 'cost' => 50000,  'output' => 0,      'single_output' => null, 'stores' => 50000, 'interest' => 0, 'abundance' => 0, 'refund_on_completion' => 1],
             ['building_id' => 18, 'resource_id' => 1, 'cost' => 60000,  'output' => 0,      'single_output' => null, 'stores' => 0, 'interest' => 0, 'abundance' => 0, 'refund_on_completion' => 0],
             ['building_id' => 18, 'resource_id' => 2, 'cost' => 40000,  'output' => 0,      'single_output' => null, 'stores' => 0, 'interest' => 0, 'abundance' => 0, 'refund_on_completion' => 0],
             ['building_id' => 18, 'resource_id' => 5, 'cost' => 2,      'output' => 0,      'single_output' => null, 'stores' => 0, 'interest' => 0, 'abundance' => 0, 'refund_on_completion' => 0],

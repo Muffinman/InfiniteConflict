@@ -2,12 +2,12 @@
 
 namespace Database\Seeders;
 
-use App\Models\Config;
 use App\Models\GalaxyStartingResource;
 use App\Models\Planet;
 use App\Models\PlanetStartingResource;
 use App\Models\Resource;
 use Illuminate\Database\Seeder;
+use DB;
 
 class PlanetResourceTableSeeder extends Seeder
 {
@@ -18,60 +18,19 @@ class PlanetResourceTableSeeder extends Seeder
      */
     public function run()
     {
-        $planet_types = Config::find('planet_types')->value;
-
-        $home_sys_cols = Config::find('home_sys_cols')->value;
-        $home_sys_rows = Config::find('home_sys_rows')->value;
-
-        $free_sys_cols = Config::find('free_sys_cols')->value;
-        $free_sys_rows = Config::find('free_sys_rows')->value;
-
         $resources = Resource::all();
-
-        $galaxy_starting_resources = GalaxyStartingResource::all();
-        $galaxy_resources = [];
-        foreach ($galaxy_starting_resources as $res) {
-            $galaxy_resources[$res['resource_id']] = $res;
-        }
-
-        $planet_starting_resources = PlanetStartingResource::all();
-        $planet_resources = [];
-        foreach ($planet_starting_resources as $res) {
-            $planet_resources[$res['resource_id']] = $res;
-        }
+        $galaxy_resources = GalaxyStartingResource::allAsResourceArray();
+        $planet_resources = PlanetStartingResource::allAsResourceArray();
 
         $this->command->getOutput()->writeln('<info>Seeding planet resources</info>...');
-        $this->command->getOutput()->progressStart(Planet::count());
+        $this->command->getOutput()->progressStart(Planet::withoutGlobalScopes()->count());
 
-        Planet::chunk(200, function ($planets) use ($resources, $galaxy_resources, $planet_resources) {
+        Planet::withoutGlobalScopes()->chunk(200, function ($planets) use ($resources, $galaxy_resources, $planet_resources) {
+            /**
+             * @var Planet $planet
+             */
             foreach ($planets as $planet) {
-                $attached_resources = [];
-                foreach ($resources as $resource) {
-                    $stored = $abundance = 0;
-
-                    // Home planet in home gal
-                    if ($planet->home && isset($planet_resources[$resource->id])) {
-                        $stored = $planet_resources[$resource->id]['stored'];
-                        $abundance = $planet_resources[$resource->id]['abundance'];
-                    }
-
-                    // Normal planet in home gal
-                    elseif ($planet->galaxy->home && isset($galaxy_resources[$resource->id])) {
-                        $stored = rand($galaxy_resources[$resource->id]['home_min_stored'], $galaxy_resources[$resource->id]['home_max_stored']);
-                        $abundance = rand($galaxy_resources[$resource->id]['home_min_abundance'], $galaxy_resources[$resource->id]['home_max_abundance']);
-                    }
-
-                    // Normal planet in free gal
-                    elseif (isset($galaxy_resources[$resource->id])) {
-                        $stored = 0;
-                        $abundance = rand($galaxy_resources[$resource->id]['free_min_abundance'], $galaxy_resources[$resource->id]['free_max_abundance']);
-                    }
-
-                    if ($stored !== 0 || $abundance !== 0) {
-                        $attached_resources[$resource->id] = ['stored' => $stored, 'abundance' => $abundance];
-                    }
-                }
-                $planet->resources()->attach($attached_resources);
+                $planet->attachStartingResources($resources, $galaxy_resources, $planet_resources);
             }
             $this->command->getOutput()->progressAdvance(count($planets));
         });

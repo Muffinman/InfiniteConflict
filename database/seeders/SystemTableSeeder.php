@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Config;
 use App\Models\Galaxy;
 use Illuminate\Database\Seeder;
+use DB;
 
 class SystemTableSeeder extends Seeder
 {

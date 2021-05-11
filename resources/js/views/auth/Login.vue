@@ -1,9 +1,11 @@
 <template>
     <b-modal :active="true">
         <header class="modal-card-head">
-            <p class="modal-card-title">Login</p>
-            <button class="button is-primary pull-right" @click="loginWithGoogle">Login With Google</button>
+            <h2 class="modal-card-title">Login</h2>
+            <router-link class="button is-primary" :to="{ name: 'auth.register' }">Register</router-link>
+            <router-link class="button is-primary" :to="{ name: 'auth.forgot' }">Forgot your password?</router-link>
         </header>
+        <div class="stripe"></div>
         <section class="modal-card-body">
             <b-field label="Email">
                 <b-input type="email" v-model="email"></b-input>
@@ -13,11 +15,10 @@
                 <b-input v-model="password" type="password" value="" password-reveal></b-input>
             </b-field>
 
-            <button class="button is-primary pull-right" @click="login">Login</button>
+            <p class="is-clearfix"><button class="button is-primary pull-right" @click="login">Login</button></p>
         </section>
         <footer class="modal-card-foot">
-            <button class="button" type="button">Register</button>
-            <button class="button" type="button">Forgot your password?</button>
+            <a @click="loginWithGoogle"><img src="https://developers.google.com/identity/images/btn_google_signin_light_normal_web.png"></a>
         </footer>
     </b-modal>
 </template>
