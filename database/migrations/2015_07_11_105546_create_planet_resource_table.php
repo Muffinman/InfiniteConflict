@@ -15,11 +15,13 @@ class CreatePlanetResourceTable extends Migration
         Schema::create('planet_resource', function (Blueprint $table) {
             $table->integer('planet_id')->unsigned();
             $table->integer('resource_id')->unsigned();
-            $table->integer('stored')->unsigned()->default(0);
-            $table->integer('storage')->unsigned()->default(0);
-            $table->integer('busy')->unsigned()->default(0);
-            $table->integer('output')->default(0);
-            $table->smallInteger('abundance');
+            $table->bigInteger('stored')->unsigned()->default(0);
+            $table->smallInteger('abundance')->unsigned()->default(0);
+            $table->integer('storage_cache')->unsigned()->default(0);
+            $table->integer('busy_cache')->unsigned()->default(0);
+            $table->integer('output_cache')->default(0);
+            $table->smallInteger('abundance_cache')->unsigned()->default(0);
+
 
             $table->primary(['planet_id', 'resource_id']);
             $table->foreign('planet_id')->references('id')->on('planets')->onDelete('cascade')->onUpdate('cascade');

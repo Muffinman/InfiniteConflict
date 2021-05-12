@@ -67,18 +67,24 @@ class LocalInterest implements ShouldQueue
                 /**
                  * @var PlanetResource $planetResource
                  */
-                $planetResource = $this->planet->resources->where('id', $resource->id)->first()->pivot;
-                $original = $planetResource->stored;
-                $planetResource->stored *= 1 + $baseInterest/100;
+                $original = 0;
+                if ($planetResource = $this->planet->resources()->where('id', $resource->id)->first()) {
+                    $original = $planetResource->pivot->stored;
+                }
+                $stored = $original * (1 + $baseInterest/100);
 
                 // Cap at storage limit
                 if ($resource->requires_storage) {
-                    $planetResource->stored = round(min($planetResource->stored, $planetResource->storage));
+                    $stored = round(min($stored, $planetResource->pivot->storage_cache));
                 }
 
-                $planetResource->save();
+                $this->planet->resources()->syncWithoutDetaching([
+                    $resource->id => [
+                        'stored' => $stored,
+                    ],
+                ]);
 
-                echo $this->planet->id . ": Resource {$resource->id} changed from {$original} to {$planetResource->stored} at rate {$baseInterest}%." . PHP_EOL;
+                //echo self::class . ": ({$this->planet->id}) Planet Resource {$resource->name} changed from {$original} to {$stored} at rate {$baseInterest}%." . PHP_EOL;
             }
         }
     }

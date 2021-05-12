@@ -67,10 +67,6 @@ class Planet extends Model
 
     public $timestamps = false;
 
-    // Cache var for output and storage
-    protected $output = [];
-    protected $storage = [];
-
     /**
      * @inheritDoc
      */
@@ -137,7 +133,7 @@ class Planet extends Model
     public function resources()
     {
         return $this->belongsToMany(Resource::class)
-            ->withPivot(['stored', 'output', 'abundance', 'storage', 'busy'])
+            ->withPivot(['stored', 'abundance', 'output_cache', 'storage_cache', 'busy_cache', 'abundance_cache'])
             ->using(PlanetResource::class);
     }
 
@@ -147,7 +143,7 @@ class Planet extends Model
     public function productionResources()
     {
         return $this->belongsToMany(Resource::class)
-            ->withPivot(['stored', 'output', 'abundance', 'storage', 'busy'])
+            ->withPivot(['stored', 'abundance', 'output_cache', 'storage_cache', 'busy_cache', 'abundance_cache'])
             ->where('production_resource', 1)
             ->using(PlanetResource::class);
     }
@@ -158,7 +154,7 @@ class Planet extends Model
     public function staticResources()
     {
         return $this->belongsToMany(Resource::class)
-            ->withPivot(['stored', 'output', 'abundance', 'storage', 'busy'])
+            ->withPivot(['stored', 'abundance', 'output_cache', 'storage_cache', 'busy_cache', 'abundance_cache'])
             ->where('production_resource', 0)
             ->using(PlanetResource::class);
     }
@@ -210,18 +206,18 @@ class Planet extends Model
      * @param Builder
      * @return Builder
      */
-    public function scopeUnpopulated(Builder $builder)
+    public function scopeUnpopulated(Builder $query)
     {
-        return $builder->withoutGlobalScope(PlanetPopulated::class)
+        return $query->withoutGlobalScope(PlanetPopulated::class)
             ->withGlobalScope(PlanetUnpopulated::class, new PlanetUnpopulated);
     }
 
     /**
      * Filter by only home planets.
      */
-    public function scopeHomePlanets()
+    public function scopeHomePlanets(Builder $query)
     {
-        return $this->where('home', 1);
+        return $query->where('home', 1);
     }
 
     /**
@@ -249,20 +245,19 @@ class Planet extends Model
         return $this->buildings()->sync($starting_buildings);
     }
 
+
     /**
      * Calculated the resource output of this planet.
+     *
+     * @param Resource $resource
+     * @param bool $useCache
+     * @return int
      */
-    public function output(int $resource_id, bool $cached = true, bool $rebuild = false): int
+    public function calcResourceOutput(\App\Models\Resource $resource, bool $useCache = true): int
     {
-
-        // Use model cache if available and allowed
-        if ($cached === true && $rebuild === false && isset($this->output[$resource_id])) {
-            return $this->output[$resource_id];
-        }
-
         // Use DB cache is allowed
-        if ($cached === true && $rebuild === false) {
-            return $this->resources()->wherePivot('resource_id', $resource_id)->first()->pivot->output;
+        if ($useCache === true) {
+            return $this->resources()->wherePivot('resource_id', $resource->id)->first()->pivot->output_cache;
         }
 
         // Else rebuild the cache and return
@@ -270,68 +265,91 @@ class Planet extends Model
         foreach ($this->buildings as $building) {
             if (isset($building->pivot)) {
                 $qty = $building->pivot->qty;
-                $resource = $building->resources()->wherePivot('resource_id', $resource_id)->first();
-                if ($resource) {
-                    $output = $resource->pivot->output;
+                $buildingResource = $building->resources()->wherePivot('resource_id', $resource->id)->first();
+                if ($buildingResource) {
+                    $output = $buildingResource->pivot->output;
                     $total += $qty * $output;
                 }
             }
 
             // Update caches
-            $this->resources()->syncWithoutDetaching([$resource_id => ['output' => $total]]);
-            $this->output[$resource_id] = $total;
+            $this->resources()->syncWithoutDetaching([$resource->id => ['output_cache' => $total]]);
         }
 
         return $total;
     }
 
+
     /**
-     * Calculated the resource storage of this planet.
+     * @param \App\Models\Resource $resource
+     * @param bool $useCache
+     * @return int|mixed
      */
-    public function storage($resource_id, $cached = true, $rebuild = false)
+    public function calcResourceStorage(\App\Models\Resource $resource, bool $useCache = true): int
     {
-
-        // Use model cache if available and allowed
-        if ($cached === true && $rebuild === false && isset($this->storage[$resource_id])) {
-            return $this->storage[$resource_id];
+        if ($useCache === true) {
+            return $this->resources()->wherePivot('resource_id', $resource->id)->first()->pivot->storage_cache;
         }
 
-        // Use DB cache is allowed
-        if ($cached === true && $rebuild === false) {
-            return $this->resources()->wherePivot('resource_id', $resource_id)->first()->pivot->storage;
-        }
-
-        // Else rebuild the cache and return
-        $total = 0;
-        foreach ($this->buildings as $building) {
-            if (isset($building->pivot)) {
-                $qty = $building->pivot->qty;
-                $resource = $building->resources()
-                    ->wherePivot('resource_id', $resource_id)
-                    ->wherePivot('stores', '>', 0)
-                    ->first();
-                if ($resource) {
-                    $stores = $resource->pivot->stores;
-                    $total += $qty * $stores;
-                }
+        $storage = $this->buildings()->with([
+            'resources' => function ($q) use ($resource) {
+                $q->where('id', $resource->id);
             }
+        ])
+        ->get()
+        ->sum(function ($item) use ($resource) {
+            $buildingResource = $item->resources->where('id', $resource->id)->first();
+            return $item->pivot->qty * ($buildingResource ? $buildingResource->pivot->stores : 0);
+        });
 
-            // Update caches
-            $this->resources()->syncWithoutDetaching([$resource_id => ['storage' => $total]]);
-            $this->storage[$resource_id] = $total;
+        $this->resources()->syncWithoutDetaching([$resource->id => ['storage_cache' => $storage]]);
+
+        return $storage;
+    }
+
+    /**
+     * @param \App\Models\Resource $resource
+     * @param bool $useCache
+     * @return int|mixed
+     */
+    public function calcResourceAbundance(\App\Models\Resource $resource, bool $useCache = true): int
+    {
+        if ($useCache === true) {
+            return $this->resources()->wherePivot('resource_id', $resource->id)->first()->pivot->abundance_cache;
         }
 
-        return $total;
+        $baseAbundance = $this->resources()
+            ->where('id', $resource->id)
+            ->first()
+            ->pivot
+            ->abundance;
+
+        $buildingAbundance = $this->buildings()->with([
+            'resources' => function ($q) use ($resource) {
+                $q->where('id', $resource->id);
+            }
+        ])
+        ->get()
+        ->sum(function ($item) use ($resource) {
+            $buildingResource = $item->resources->where('id', $resource->id)->first();
+            return $item->pivot->qty * ($buildingResource ? $buildingResource->pivot->abundance : 0);
+        });
+
+        $abundance = $baseAbundance + $buildingAbundance;
+
+        $this->resources()->syncWithoutDetaching([$resource->id => ['abundance_cache' => $abundance]]);
+
+        return $abundance;
     }
 
     /**
      * Formatted output.
      */
-    public function outputFormatted($resource, $cached = true, $rebuild = false)
+    public function outputFormatted(\App\Models\Resource $resource, bool $useCache = true)
     {
-        $output = $this->output($resource, $cached, $rebuild);
+        $output = $this->calcResourceOutput($resource, $useCache);
 
-        return ($output >= 1 ? '+' : '') . number_format($output);
+        return ($output >= 1 ? '+' : '-') . number_format($output);
     }
 
     /**
@@ -363,36 +381,19 @@ class Planet extends Model
                 $abundance = rand($galaxy_resources[$resource->id]['free_min_abundance'], $galaxy_resources[$resource->id]['free_max_abundance']);
             }
 
-            if ($resource->requires_storage) {
-                $storage = $this->calcResourceStorage($resource);
-            }
+            //if ($resource->requires_storage) {
+            //    $storage = $this->calcResourceStorage($resource, false);
+            //}
 
             if ($storage !== 0 || $stored !== 0 || $abundance !== 0) {
                 $attached_resources[$resource->id] = [
-                    'storage' => $storage,
                     'stored' => $stored,
                     'abundance' => $abundance,
+                    //'storage_cache' => $storage,
                 ];
             }
         }
-        $this->resources()->sync($attached_resources);
-    }
 
-
-    /**
-     * @param \App\Models\Resource $resource
-     * @return int|mixed
-     */
-    public function calcResourceStorage(\App\Models\Resource $resource)
-    {
-        return $this->buildings()->with([
-                'resources' => function ($q) use ($resource) {
-                    $q->where('id', $resource->id);
-                }
-            ])
-            ->get()
-            ->sum(function ($item) use ($resource) {
-                return $item->pivot->qty * $item->resources->where('id', $resource->id)->first()->pivot->stores;
-            });
+        $this->resources()->syncWithoutDetaching($attached_resources);
     }
 }

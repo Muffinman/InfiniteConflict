@@ -138,11 +138,11 @@ class Ruler extends Authenticatable implements AuthenticatableContract, CanReset
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function resources()
     {
-        return $this->hasMany(Resource::class);
+        return $this->belongsToMany(Resource::class, 'ruler_resource');
     }
 
     /**

@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
  * App\Models\Resource
@@ -21,29 +24,29 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $production_resource
  * @property-read \App\Models\GalaxyStartingResource|null $galaxyStartingResources
  * @property-read \App\Models\PlanetStartingResource|null $planetStartingResources
- * @method static \Illuminate\Database\Eloquent\Builder|Resource newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Resource newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Resource onlyCreatable()
- * @method static \Illuminate\Database\Eloquent\Builder|Resource onlyGlobal()
- * @method static \Illuminate\Database\Eloquent\Builder|Resource onlyHasInterest()
- * @method static \Illuminate\Database\Eloquent\Builder|Resource onlyLocal()
- * @method static \Illuminate\Database\Eloquent\Builder|Resource onlyNotHasInterest()
- * @method static \Illuminate\Database\Eloquent\Builder|Resource onlyNotRequiringStorage()
- * @method static \Illuminate\Database\Eloquent\Builder|Resource onlyProduction()
- * @method static \Illuminate\Database\Eloquent\Builder|Resource onlyRequiringStorage()
- * @method static \Illuminate\Database\Eloquent\Builder|Resource onlyTransferable()
- * @method static \Illuminate\Database\Eloquent\Builder|Resource query()
- * @method static \Illuminate\Database\Eloquent\Builder|Resource whereAp($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Resource whereCreatable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Resource whereGlobal($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Resource whereHp($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Resource whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Resource whereInterest($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Resource whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Resource whereProductionResource($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Resource whereRequiresStorage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Resource whereTransferable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Resource whereTurns($value)
+ * @method static Builder|Resource newModelQuery()
+ * @method static Builder|Resource newQuery()
+ * @method static Builder|Resource onlyCreatable()
+ * @method static Builder|Resource onlyGlobal()
+ * @method static Builder|Resource onlyHasInterest()
+ * @method static Builder|Resource onlyLocal()
+ * @method static Builder|Resource onlyNotHasInterest()
+ * @method static Builder|Resource onlyNotRequiringStorage()
+ * @method static Builder|Resource onlyProduction()
+ * @method static Builder|Resource onlyRequiringStorage()
+ * @method static Builder|Resource onlyTransferable()
+ * @method static Builder|Resource query()
+ * @method static Builder|Resource whereAp($value)
+ * @method static Builder|Resource whereCreatable($value)
+ * @method static Builder|Resource whereGlobal($value)
+ * @method static Builder|Resource whereHp($value)
+ * @method static Builder|Resource whereId($value)
+ * @method static Builder|Resource whereInterest($value)
+ * @method static Builder|Resource whereName($value)
+ * @method static Builder|Resource whereProductionResource($value)
+ * @method static Builder|Resource whereRequiresStorage($value)
+ * @method static Builder|Resource whereTransferable($value)
+ * @method static Builder|Resource whereTurns($value)
  * @mixin \Eloquent
  */
 class Resource extends Model
@@ -54,108 +57,142 @@ class Resource extends Model
 
     /**
      * Galaxy Starting Resources.
+     *
+     * @return HasOne
      */
-    public function galaxyStartingResources()
+    public function galaxyStartingResources(): HasOne
     {
         return $this->hasOne(GalaxyStartingResource::class, 'resource_id');
     }
 
     /**
      * Planet Starting Resources.
+     *
+     * @return HasOne
      */
-    public function planetStartingResources()
+    public function planetStartingResources(): HasOne
     {
         return $this->hasOne(PlanetStartingResource::class, 'resource_id');
     }
 
     /**
+     * Taxes on resources
+     *
+     * @return HasMany
+     */
+    public function taxes(): HasMany
+    {
+        return $this->hasMany(ResourceTax::class, 'resource_id');
+    }
+
+    /**
+     * Taxable resources
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeOnlyTaxable(Builder $query): Builder
+    {
+        return $query->whereHas('taxes');
+    }
+
+    /**
      * Global resources
      *
-     * @return mixed
+     * @param Builder $query
+     * @return Builder
      */
-    public function scopeOnlyGlobal()
+    public function scopeOnlyGlobal(Builder $query): Builder
     {
-        return $this->where('global', 1);
+        return $query->where('global', 1);
     }
 
     /**
      * Local resources
      *
-     * @return mixed
+     * @param Builder $query
+     * @return Builder
      */
-    public function scopeOnlyLocal()
+    public function scopeOnlyLocal(Builder $query): Builder
     {
-        return $this->where('global', 0);
+        return $query->where('global', 0);
     }
 
     /**
      * Resources with interest
      *
-     * @return mixed
+     * @param Builder $query
+     * @return Builder
      */
-    public function scopeOnlyHasInterest()
+    public function scopeOnlyHasInterest(Builder $query): Builder
     {
-        return $this->whereNotNull('interest');
+        return $query->whereNotNull('interest');
     }
 
     /**
      * Resources with no interest
      *
-     * @return mixed
+     * @param Builder $query
+     * @return Builder
      */
-    public function scopeOnlyNotHasInterest()
+    public function scopeOnlyNotHasInterest(Builder $query): Builder
     {
-        return $this->whereNull('interest');
+        return $query->whereNull('interest');
     }
 
     /**
      * Transferable resources
      *
-     * @return mixed
+     * @param Builder $query
+     * @return Builder
      */
-    public function scopeOnlyTransferable()
+    public function scopeOnlyTransferable(Builder $query): Builder
     {
-        return $this->where('transferable', 1);
+        return $query->where('transferable', 1);
     }
 
     /**
      * Creatable resources
      *
-     * @return mixed
+     * @param Builder $query
+     * @return Builder
      */
-    public function scopeOnlyCreatable()
+    public function scopeOnlyCreatable(Builder $query): Builder
     {
-        return $this->where('creatable', 1);
+        return $query->where('creatable', 1);
     }
 
     /**
      * Production resources
      *
-     * @return mixed
+     * @param Builder $query
+     * @return Builder
      */
-    public function scopeOnlyProduction()
+    public function scopeOnlyProduction(Builder $query): Builder
     {
-        return $this->where('production', 1);
+        return $query->where('production_resource', 1);
     }
 
 
     /**
      * Resources which require storage
      *
-     * @return mixed
+     * @param Builder $query
+     * @return Builder
      */
-    public function scopeOnlyRequiringStorage()
+    public function scopeOnlyRequiringStorage(Builder $query): Builder
     {
-        return $this->where('requires_storage', 1);
+        return $query->where('requires_storage', 1);
     }
 
     /**
      * Resources which do not require storage
      *
-     * @return mixed
+     * @param Builder $query
+     * @return Builder
      */
-    public function scopeOnlyNotRequiringStorage()
+    public function scopeOnlyNotRequiringStorage(Builder $query): Builder
     {
-        return $this->where('requires_storage', 0);
+        return $query->where('requires_storage', 0);
     }
 }

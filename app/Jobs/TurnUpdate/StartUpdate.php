@@ -20,6 +20,5 @@ class StartUpdate implements ShouldQueue
      */
     public function handle()
     {
-        //$users = Ruler::factory()->count(10)->create();
     }
 }

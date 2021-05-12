@@ -10,6 +10,8 @@ use App\Jobs\TurnUpdate\Planet\BuildingQueue;
 use App\Jobs\TurnUpdate\Planet\ConversionQueue;
 use App\Jobs\TurnUpdate\Planet\LocalInterest;
 use App\Jobs\TurnUpdate\Planet\LocalOutput;
+use App\Jobs\TurnUpdate\Planet\ResourceCache;
+use App\Jobs\TurnUpdate\Planet\LocalTaxes;
 use App\Jobs\TurnUpdate\Planet\ProductionQueue;
 use App\Jobs\TurnUpdate\PlanetsUpdate;
 use App\Jobs\TurnUpdate\ResearchQueues;
@@ -66,8 +68,10 @@ class TurnUpdate implements ShouldQueue
                     new BuildingQueue($planet),
                     new ProductionQueue($planet),
                     new ConversionQueue($planet),
+                    new ResourceCache($planet),
                     new LocalInterest($planet),
                     new LocalOutput($planet),
+                    new LocalTaxes($planet),
                 ]);
             }
         });
@@ -80,6 +84,7 @@ class TurnUpdate implements ShouldQueue
                 GlobalOutput::dispatchSync();
 
                 $fleetsUpdateBatch = Bus::batch([]);
+
                 Fleet::query()->chunk(200, function ($fleets) use ($fleetsUpdateBatch) {
                     foreach ($fleets as $fleet) {
                         $fleetsUpdateBatch->jobs->add([
@@ -88,19 +93,17 @@ class TurnUpdate implements ShouldQueue
                     }
                 });
 
-                $fleetsUpdateBatch
-                    ->name('fleets')
-                    ->allowFailures()
-                    ->finally(function (Batch $batch) {
-                        EndUpdate::dispatchSync();
-                    })
-                    ->catch(function (\Throwable $e) {
-
-                    })
-                    ->dispatch();
-
-            })
-            ->catch(function (\Throwable $e) {
+                if ($fleetsUpdateBatch->jobs->count()) {
+                    $fleetsUpdateBatch
+                        ->name('fleets')
+                        ->allowFailures()
+                        ->finally(function (Batch $batch) {
+                            EndUpdate::dispatchSync();
+                        })
+                        ->dispatch();
+                } else {
+                    EndUpdate::dispatchSync();
+                }
 
             })
             ->dispatch();

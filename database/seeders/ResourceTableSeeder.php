@@ -107,7 +107,7 @@ class ResourceTableSeeder extends Seeder
                 'transferable'        => 1,
                 'turns'               => 4,
                 'interest'            => NULL,
-                'requires_storage'    => 0,
+                'requires_storage'    => 1,
                 'global'              => 0,
                 'production_resource' => 0,
             ],

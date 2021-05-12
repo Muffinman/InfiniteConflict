@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Pivots\BuildingResource;
 use Auth;
 use DB;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -77,50 +78,14 @@ class Building extends Model
      */
     public function requiredBuildings()
     {
-        return $this->belongsToMany(self::class, 'building_required_buildings', 'requirement_id')->withPivot(['qty']);
-    }
-
-    /**
-     * Calculated the resource output of this planet.
-     */
-    public function output($planet_id, $resource_id, $cached = true)
-    {
-
-        // Use model cache if available and allowed
-        if ($cached === true && isset($this->output[$planet_id][$resource_id])) {
-            return $this->output[$planet_id][$resource_id];
-        }
-
-        // Else rebuild the cache and return
-        $qty = $this->planets()->wherePivot('planet_id', $planet_id)->first()->pivot->qty;
-        $resources = $this->resources()->wherePivot('resource_id', $resource_id)->first();
-        $total = 0;
-        if ($resources) {
-            $output = $resources->pivot->output;
-            $total += $qty * $output;
-            // Update cache
-            $this->output[$planet_id][$resource_id] = $total;
-
-            return $total;
-        }
-
-        return 0;
-    }
-
-    /**
-     * Formatted output.
-     */
-    public function outputFormatted($planet_id, $resource, $cached = true)
-    {
-        $output = $this->output($planet_id, $resource, $cached);
-
-        return ($output >= 1 ? '+' : '').number_format($output);
+        return $this->belongsToMany(self::class, 'building_required_buildings', 'requirement_id')
+            ->withPivot(['qty']);
     }
 
     /**
      * Limit to researched techs.
      */
-    public function scopeResearched($query)
+    public function scopeResearched(Builder $query): Builder
     {
         return $query->whereHas('requiredResearch', function ($query) {
             $query->whereIn('id', Auth::user()->research->modelKeys());
@@ -131,7 +96,7 @@ class Building extends Model
     /**
      * Limit to buildings with prerequisites met.
      */
-    public function scopePrerequisitesMet($query, Planet $planet)
+    public function scopePrerequisitesMet(Builder $query, Planet $planet): Builder
     {
         $buildings = $planet->buildings->modelKeys();
 
@@ -145,7 +110,7 @@ class Building extends Model
     /**
      * Limit to buildings below max qty.
      */
-    public function scopeBelowMax($query, Planet $planet)
+    public function scopeBelowMax(Builder $query, Planet $planet): Builder
     {
         $query->whereHas('planets', function ($query) use ($planet) {
             $query->where('planet_id', $planet->id);

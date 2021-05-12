@@ -25,7 +25,7 @@ class PlanetResourceTableSeeder extends Seeder
         $this->command->getOutput()->writeln('<info>Seeding planet resources</info>...');
         $this->command->getOutput()->progressStart(Planet::withoutGlobalScopes()->count());
 
-        Planet::withoutGlobalScopes()->chunk(200, function ($planets) use ($resources, $galaxy_resources, $planet_resources) {
+        Planet::withoutGlobalScopes()->chunk(500, function ($planets) use ($resources, $galaxy_resources, $planet_resources) {
             /**
              * @var Planet $planet
              */
