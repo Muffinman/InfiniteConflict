@@ -6,6 +6,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * App\Models\ResourceTax
+ *
+ * @property int $resource_id
+ * @property int $output_resource
+ * @property float $rate
+ * @property-read \App\Models\Resource $outputResource
+ * @property-read \App\Models\Resource $taxedResource
+ * @method static \Illuminate\Database\Eloquent\Builder|ResourceTax newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ResourceTax newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ResourceTax query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ResourceTax whereOutputResource($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ResourceTax whereRate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ResourceTax whereResourceId($value)
+ * @mixin \Eloquent
+ */
 class ResourceTax extends Model
 {
     use HasFactory;

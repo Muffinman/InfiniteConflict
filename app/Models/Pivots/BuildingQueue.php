@@ -3,13 +3,12 @@
 namespace App\Models\Pivots;
 
 use App\Models\Building;
-use App\Models\Resource;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\Planet;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * App\Models\Pivots\BuildingResource
+ * App\Models\Pivots\BuildingQueue
  *
  * @property int $building_id
  * @property int $resource_id
@@ -35,9 +34,32 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder|BuildingResource whereSingleOutput($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BuildingResource whereStores($value)
  * @mixin \Eloquent
+ * @property int $id
+ * @property int $planet_id
+ * @property int $turns
+ * @property int $started
+ * @property int $rank
+ * @property int $demolish
+ * @property-read Planet $planet
+ * @method static \Illuminate\Database\Eloquent\Builder|BuildingQueue whereDemolish($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BuildingQueue whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BuildingQueue wherePlanetId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BuildingQueue whereRank($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BuildingQueue whereStarted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|BuildingQueue whereTurns($value)
  */
-class BuildingResource extends Pivot
+class BuildingQueue extends Pivot
 {
+    /**
+     * @var string
+     */
+    protected $table = 'planet_building_queue';
+
+    /**
+     * @var bool
+     */
+    public $timestamps = false;
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -49,8 +71,8 @@ class BuildingResource extends Pivot
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function resource(): BelongsTo
+    public function planet(): BelongsTo
     {
-        return $this->belongsTo(Resource::class);
+        return $this->belongsTo(Planet::class);
     }
 }

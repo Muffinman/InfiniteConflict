@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Pivots\BuildingQueue;
+use App\Models\Pivots\ConversionQueue;
 use App\Models\Pivots\PlanetBuilding;
 use App\Models\Pivots\PlanetResource;
+use App\Models\Pivots\UnitQueue;
 use App\Scopes\PlanetPopulated;
 use App\Scopes\PlanetUnpopulated;
 use Illuminate\Database\Eloquent\Builder;
@@ -60,6 +63,12 @@ use Illuminate\Support\Collection;
  * @method static Builder|Planet whereSystemId($value)
  * @method static Builder|Planet whereType($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Building[] $buildingsInQueue
+ * @property-read int|null $buildings_in_queue_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Resource[] $conversionsInQueue
+ * @property-read int|null $conversions_in_queue_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Unit[] $unitsInQueue
+ * @property-read int|null $units_in_queue_count
  */
 class Planet extends Model
 {
@@ -116,7 +125,9 @@ class Planet extends Model
      */
     public function units()
     {
-        return $this->hasMany(Unit::class);
+        return $this->belongsToMany(Unit::class, 'planet_unit')
+            ->withPivot('qty')
+            ->using(PlanetBuilding::class);
     }
 
     /**
@@ -144,7 +155,7 @@ class Planet extends Model
     {
         return $this->belongsToMany(Resource::class)
             ->withPivot(['stored', 'abundance', 'output_cache', 'storage_cache', 'busy_cache', 'abundance_cache'])
-            ->where('production_resource', 1)
+            ->where('production_resource', '=', 1)
             ->using(PlanetResource::class);
     }
 
@@ -155,7 +166,7 @@ class Planet extends Model
     {
         return $this->belongsToMany(Resource::class)
             ->withPivot(['stored', 'abundance', 'output_cache', 'storage_cache', 'busy_cache', 'abundance_cache'])
-            ->where('production_resource', 0)
+            ->where('production_resource', '=', 0)
             ->using(PlanetResource::class);
     }
 
@@ -164,28 +175,59 @@ class Planet extends Model
      */
     public function buildingQueue()
     {
-        return $this->belongsToMany(Building::class, 'planet_building_queue')
-            ->withPivot(['turns', 'started', 'rank', 'demolish'])
+        return $this->hasMany(BuildingQueue::class)
             ->orderBy('rank', 'asc');
     }
 
+    /**
+     * Get the building queue.
+     */
+    public function buildingsInQueue()
+    {
+        return $this->belongsToMany(Building::class, 'planet_building_queue')
+            ->using(BuildingQueue::class)
+            ->withPivot(['turns', 'started', 'rank', 'demolish'])
+            ->orderByPivot('rank', 'asc');
+    }
 
     /**
      * Get the unit queue.
      */
     public function unitQueue()
     {
+        return $this->hasMany(UnitQueue::class)
+            ->orderBy('rank', 'asc');
+    }
+
+    /**
+     * Get the unit queue.
+     */
+    public function unitsInQueue()
+    {
         return $this->belongsToMany(Unit::class, 'planet_unit_queue')
-            ->withPivot(['qty', 'turns', 'started', 'rank']);
+            ->using(UnitQueue::class)
+            ->withPivot(['qty', 'turns', 'started', 'rank'])
+            ->orderByPivot('rank', 'asc');
+    }
+
+    /**
+     * Get the unit queue.
+     */
+    public function conversionQueue()
+    {
+        return $this->hasMany(ConversionQueue::class)
+            ->orderBy('rank', 'asc');
     }
 
     /**
      * Get the conversion queue.
      */
-    public function conversionQueue()
+    public function conversionsInQueue()
     {
         return $this->belongsToMany(Resource::class, 'planet_conversion_queue')
-            ->withPivot(['qty', 'turns', 'started', 'rank']);
+            ->using(ConversionQueue::class)
+            ->withPivot(['qty', 'turns', 'started', 'rank'])
+            ->orderByPivot('rank', 'asc');
     }
 
     /**
@@ -194,6 +236,18 @@ class Planet extends Model
     public function availableBuildings()
     {
         return Building::query()
+            ->researched()
+            ->prerequisitesMet($this)
+            ->belowMax($this)
+            ->get();
+    }
+
+    /**
+     * Get buildings available for construction.
+     */
+    public function availableUnits()
+    {
+        return Unit::query()
             ->researched()
             ->prerequisitesMet($this)
             ->belowMax($this)
@@ -217,7 +271,7 @@ class Planet extends Model
      */
     public function scopeHomePlanets(Builder $query)
     {
-        return $query->where('home', 1);
+        return $query->where('home', '=', 1);
     }
 
     /**

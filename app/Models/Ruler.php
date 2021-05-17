@@ -110,7 +110,7 @@ class Ruler extends Authenticatable implements AuthenticatableContract, CanReset
      */
     public function homePlanet()
     {
-        return $this->hasMany(Planet::class)->where('home', 1)->first();
+        return $this->hasMany(Planet::class)->where('home', '=', 1)->first();
     }
 
     /**

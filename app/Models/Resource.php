@@ -5,7 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
@@ -48,6 +50,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static Builder|Resource whereTransferable($value)
  * @method static Builder|Resource whereTurns($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ResourceTax[] $taxes
+ * @property-read int|null $taxes_count
+ * @method static Builder|Resource onlyTaxable()
  */
 class Resource extends Model
 {
@@ -73,6 +78,22 @@ class Resource extends Model
     public function planetStartingResources(): HasOne
     {
         return $this->hasOne(PlanetStartingResource::class, 'resource_id');
+    }
+
+    /**
+     * Get the resource conversion options.
+     */
+    public function conversions(): BelongsTo
+    {
+        return $this->belongsTo(ConversionResource::class);
+    }
+
+    /**
+     * Get the resource conversion resources
+     */
+    public function conversionResources(): HasManyThrough
+    {
+        return $this->hasManyThrough(self::class,ConversionResource::class);
     }
 
     /**
@@ -104,7 +125,7 @@ class Resource extends Model
      */
     public function scopeOnlyGlobal(Builder $query): Builder
     {
-        return $query->where('global', 1);
+        return $query->where('global', '=', 1);
     }
 
     /**
@@ -115,7 +136,7 @@ class Resource extends Model
      */
     public function scopeOnlyLocal(Builder $query): Builder
     {
-        return $query->where('global', 0);
+        return $query->where('global', '=', 0);
     }
 
     /**
@@ -148,7 +169,7 @@ class Resource extends Model
      */
     public function scopeOnlyTransferable(Builder $query): Builder
     {
-        return $query->where('transferable', 1);
+        return $query->where('transferable', '=', 1);
     }
 
     /**
@@ -159,7 +180,7 @@ class Resource extends Model
      */
     public function scopeOnlyCreatable(Builder $query): Builder
     {
-        return $query->where('creatable', 1);
+        return $query->where('creatable', '=', 1);
     }
 
     /**
@@ -170,7 +191,7 @@ class Resource extends Model
      */
     public function scopeOnlyProduction(Builder $query): Builder
     {
-        return $query->where('production_resource', 1);
+        return $query->where('production_resource', '=', 1);
     }
 
 
@@ -182,7 +203,7 @@ class Resource extends Model
      */
     public function scopeOnlyRequiringStorage(Builder $query): Builder
     {
-        return $query->where('requires_storage', 1);
+        return $query->where('requires_storage', '=', 1);
     }
 
     /**
@@ -193,6 +214,6 @@ class Resource extends Model
      */
     public function scopeOnlyNotRequiringStorage(Builder $query): Builder
     {
-        return $query->where('requires_storage', 0);
+        return $query->where('requires_storage', '=', 0);
     }
 }

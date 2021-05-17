@@ -4,6 +4,7 @@ namespace App\Models\Pivots;
 
 use App\Models\Planet;
 use App\Models\Resource;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
@@ -29,13 +30,21 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder|PlanetResource whereStorage($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PlanetResource whereStored($value)
  * @mixin \Eloquent
+ * @property int $storage_cache
+ * @property int $busy_cache
+ * @property int $output_cache
+ * @property int $abundance_cache
+ * @method static \Illuminate\Database\Eloquent\Builder|PlanetResource whereAbundanceCache($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PlanetResource whereBusyCache($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PlanetResource whereOutputCache($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|PlanetResource whereStorageCache($value)
  */
 class PlanetResource extends Pivot
 {
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function planet()
+    public function planet(): BelongsTo
     {
         return $this->belongsTo(Planet::class);
     }
@@ -43,7 +52,7 @@ class PlanetResource extends Pivot
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function resource()
+    public function resource(): BelongsTo
     {
         return $this->belongsTo(Resource::class);
     }

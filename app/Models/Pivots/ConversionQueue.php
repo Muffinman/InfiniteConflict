@@ -2,14 +2,12 @@
 
 namespace App\Models\Pivots;
 
-use App\Models\Building;
 use App\Models\Resource;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * App\Models\Pivots\BuildingResource
+ * App\Models\Pivots\BuildingQueue
  *
  * @property int $building_id
  * @property int $resource_id
@@ -35,21 +33,45 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder|BuildingResource whereSingleOutput($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BuildingResource whereStores($value)
  * @mixin \Eloquent
+ * @property int $id
+ * @property int $planet_id
+ * @property int $qty
+ * @property int $turns
+ * @property int $started
+ * @property int $rank
+ * @property-read Resource $convertingFromResource
+ * @property-read Resource $convertingToResource
+ * @method static \Illuminate\Database\Eloquent\Builder|ConversionQueue whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConversionQueue wherePlanetId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConversionQueue whereQty($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConversionQueue whereRank($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConversionQueue whereStarted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ConversionQueue whereTurns($value)
  */
-class BuildingResource extends Pivot
+class ConversionQueue extends Pivot
 {
+    /**
+     * @var string
+     */
+    protected $table = 'planet_conversion_queue';
+
+    /**
+     * @var bool
+     */
+    public $timestamps = false;
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function building(): BelongsTo
+    public function convertingFromResource(): BelongsTo
     {
-        return $this->belongsTo(Building::class);
+        return $this->belongsTo(Resource::class);
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function resource(): BelongsTo
+    public function convertingToResource(): BelongsTo
     {
         return $this->belongsTo(Resource::class);
     }

@@ -2,8 +2,8 @@
 
 namespace App\Models\Pivots;
 
-use App\Models\Building;
 use App\Models\Planet;
+use App\Models\Unit;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
@@ -22,15 +22,18 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder|PlanetBuilding wherePlanetId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PlanetBuilding whereQty($value)
  * @mixin \Eloquent
+ * @property int $unit_id
+ * @property-read Unit $unit
+ * @method static \Illuminate\Database\Eloquent\Builder|PlanetUnit whereUnitId($value)
  */
-class PlanetBuilding extends Pivot
+class PlanetUnit extends Pivot
 {
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function building(): BelongsTo
+    public function unit(): BelongsTo
     {
-        return $this->belongsTo(Building::class);
+        return $this->belongsTo(Unit::class);
     }
 
     /**

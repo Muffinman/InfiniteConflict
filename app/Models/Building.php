@@ -8,6 +8,7 @@ use DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Building
@@ -50,7 +51,7 @@ class Building extends Model
     /**
      * Get planets this building is built on.
      */
-    public function planets()
+    public function planets(): BelongsToMany
     {
         return $this->belongsToMany(Planet::class, 'planet_building')->withPivot('qty');
     }
@@ -58,7 +59,7 @@ class Building extends Model
     /**
      * Get building resources.
      */
-    public function resources()
+    public function resources(): BelongsToMany
     {
         return $this->belongsToMany(Resource::class)
             ->withPivot('cost', 'output', 'single_output', 'stores', 'interest', 'abundance', 'refund_on_completion')
@@ -66,9 +67,18 @@ class Building extends Model
     }
 
     /**
+     * Get refundable resources.
+     */
+    public function refundableResources(): BelongsToMany
+    {
+        return $this->resources()
+            ->wherePivot('refund_on_completion', '=', 1);
+    }
+
+    /**
      * Get the required research.
      */
-    public function requiredResearch()
+    public function requiredResearch(): BelongsToMany
     {
         return $this->belongsToMany(Research::class, 'building_required_research');
     }
@@ -76,7 +86,7 @@ class Building extends Model
     /**
      * Get the required buildings.
      */
-    public function requiredBuildings()
+    public function requiredBuildings(): BelongsToMany
     {
         return $this->belongsToMany(self::class, 'building_required_buildings', 'requirement_id')
             ->withPivot(['qty']);

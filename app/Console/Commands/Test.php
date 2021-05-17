@@ -2,11 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\TurnUpdate\Planet\ResourceCache;
-use App\Models\Ruler;
-use App\Jobs\TurnUpdate\Planet\LocalInterest;
-use App\Jobs\TurnUpdate\Planet\LocalOutput;
-use App\Jobs\TurnUpdate\Planet\LocalTaxes;
+use App\Jobs\TurnUpdate\Planet\LocalBuildingQueue;
+use App\Jobs\TurnUpdate\Planet\LocalConversionQueue;
+use App\Jobs\TurnUpdate\Planet\LocalProductionQueue;
 use App\Models\Planet;
 use Illuminate\Console\Command;
 
@@ -43,10 +41,13 @@ class Test extends Command
      */
     public function handle()
     {
-        $users = Ruler::factory()->count(500)->create();
+        //$users = Ruler::factory()->count(500)->create();
         //die;
 
-        //$planet = Planet::find(1);
+        $planet = Planet::find(1);
+        LocalBuildingQueue::dispatchSync($planet);
+        LocalProductionQueue::dispatchSync($planet);
+        LocalConversionQueue::dispatchSync($planet);
         //ResourceCache::dispatchSync($planet);
         //LocalInterest::dispatchSync($planet);
         //LocalOutput::dispatchSync($planet);

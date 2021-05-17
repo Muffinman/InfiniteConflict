@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * App\Models\Unit
@@ -58,5 +60,61 @@ class Unit extends Model
     public function resources()
     {
         return $this->hasMany(Resource::class);
+    }
+
+    /**
+     * Get the required research.
+     */
+    public function requiredResearch(): BelongsToMany
+    {
+        return $this->belongsToMany(Research::class, 'unit_required_research');
+    }
+
+    /**
+     * Get the required buildings.
+     */
+    public function requiredBuildings(): BelongsToMany
+    {
+        return $this->belongsToMany(Building::class, 'unit_required_buildings', 'requirement_id')
+            ->withPivot(['qty']);
+    }
+
+    /**
+     * Limit to researched techs.
+     */
+    public function scopeResearched(Builder $query): Builder
+    {
+        return $query->whereHas('requiredResearch', function ($query) {
+            $query->whereIn('id', Auth::user()->research->modelKeys());
+        })
+            ->doesntHave('requiredResearch', 'or');
+    }
+
+    /**
+     * Limit to buildings with prerequisites met.
+     */
+    public function scopePrerequisitesMet(Builder $query, Planet $planet): Builder
+    {
+        $buildings = $planet->buildings->modelKeys();
+
+        return $query->whereHas('planets', function ($query) use ($buildings, $planet) {
+            $query->whereIn('id', $buildings);
+            $query->where('planet_id', $planet->id);
+        })
+            ->doesntHave('requiredBuildings', 'or');
+    }
+
+    /**
+     * Limit to buildings below max qty.
+     */
+    public function scopeBelowMax(Builder $query, Planet $planet): Builder
+    {
+        $query->whereHas('planets', function ($query) use ($planet) {
+            $query->where('planet_id', $planet->id);
+            $query->where(function ($query) use ($planet) {
+                $query->where('buildings.max', '>=', DB::raw('planet_building.qty'));
+                $query->orWhere('max', null);
+            });
+        });
     }
 }

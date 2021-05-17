@@ -19,6 +19,6 @@ class GlobalOutput implements ShouldQueue
      */
     public function handle()
     {
-
+        //
     }
 }

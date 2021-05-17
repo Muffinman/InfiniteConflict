@@ -2,14 +2,13 @@
 
 namespace App\Models\Pivots;
 
-use App\Models\Building;
-use App\Models\Resource;
-use Illuminate\Database\Eloquent\Builder;
+use App\Models\Planet;
+use App\Models\Unit;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 /**
- * App\Models\Pivots\BuildingResource
+ * App\Models\Pivots\BuildingQueue
  *
  * @property int $building_id
  * @property int $resource_id
@@ -35,22 +34,48 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder|BuildingResource whereSingleOutput($value)
  * @method static \Illuminate\Database\Eloquent\Builder|BuildingResource whereStores($value)
  * @mixin \Eloquent
+ * @property int $id
+ * @property int $planet_id
+ * @property int $unit_id
+ * @property int $qty
+ * @property int $turns
+ * @property int $started
+ * @property int $rank
+ * @property-read Planet $planet
+ * @property-read Unit $unit
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitQueue whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitQueue wherePlanetId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitQueue whereQty($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitQueue whereRank($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitQueue whereStarted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitQueue whereTurns($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|UnitQueue whereUnitId($value)
  */
-class BuildingResource extends Pivot
+class UnitQueue extends Pivot
 {
+    /**
+     * @var string
+     */
+    protected $table = 'planet_unit_queue';
+
+    /**
+     * @var bool
+     */
+    public $timestamps = false;
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function building(): BelongsTo
+    public function unit(): BelongsTo
     {
-        return $this->belongsTo(Building::class);
+        return $this->belongsTo(Unit::class);
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function resource(): BelongsTo
+    public function planet(): BelongsTo
     {
-        return $this->belongsTo(Resource::class);
+        return $this->belongsTo(Planet::class);
     }
 }

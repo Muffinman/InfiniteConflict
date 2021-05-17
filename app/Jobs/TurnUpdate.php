@@ -6,13 +6,13 @@ use App\Jobs\TurnUpdate\EndUpdate;
 use App\Jobs\TurnUpdate\Fleet\FleetQueue;
 use App\Jobs\TurnUpdate\GlobalInterest;
 use App\Jobs\TurnUpdate\GlobalOutput;
-use App\Jobs\TurnUpdate\Planet\BuildingQueue;
-use App\Jobs\TurnUpdate\Planet\ConversionQueue;
+use App\Jobs\TurnUpdate\Planet\LocalBuildingQueue;
+use App\Jobs\TurnUpdate\Planet\LocalConversionQueue;
 use App\Jobs\TurnUpdate\Planet\LocalInterest;
 use App\Jobs\TurnUpdate\Planet\LocalOutput;
-use App\Jobs\TurnUpdate\Planet\ResourceCache;
+use App\Jobs\TurnUpdate\Planet\LocalResourceCache;
 use App\Jobs\TurnUpdate\Planet\LocalTaxes;
-use App\Jobs\TurnUpdate\Planet\ProductionQueue;
+use App\Jobs\TurnUpdate\Planet\LocalProductionQueue;
 use App\Jobs\TurnUpdate\PlanetsUpdate;
 use App\Jobs\TurnUpdate\ResearchQueues;
 use App\Jobs\TurnUpdate\StartUpdate;
@@ -65,10 +65,10 @@ class TurnUpdate implements ShouldQueue
         Planet::query()->chunk(200, function ($planets) use ($planetsUpdateBatch) {
             foreach ($planets as $planet) {
                 $planetsUpdateBatch->jobs->add([
-                    new BuildingQueue($planet),
-                    new ProductionQueue($planet),
-                    new ConversionQueue($planet),
-                    new ResourceCache($planet),
+                    new LocalBuildingQueue($planet),
+                    new LocalProductionQueue($planet),
+                    new LocalConversionQueue($planet),
+                    new LocalResourceCache($planet),
                     new LocalInterest($planet),
                     new LocalOutput($planet),
                     new LocalTaxes($planet),
