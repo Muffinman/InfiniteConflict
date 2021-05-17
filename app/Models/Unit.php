@@ -46,7 +46,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property-read int|null $required_research_count
  * @method static Builder|Unit belowMax(\App\Models\Planet $planet)
  * @method static Builder|Unit prerequisitesMet(\App\Models\Planet $planet)
- * @method static Builder|Unit researched()
+ * @method static Builder|Unit researched(\App\Models\Ruler $ruler)
  */
 class Unit extends Model
 {
@@ -89,10 +89,14 @@ class Unit extends Model
     /**
      * Limit to researched techs.
      */
-    public function scopeResearched(Builder $query): Builder
+    public function scopeResearched(Builder $query, ?Ruler $ruler = null): Builder
     {
-        return $query->whereHas('requiredResearch', function ($query) {
-            $query->whereIn('id', Auth::user()->research->modelKeys());
+        if (!$ruler) {
+            $ruler = Auth::user();
+        }
+
+        return $query->whereHas('requiredResearch', function ($query) use ($ruler) {
+            $query->whereIn('id', $ruler->research->modelKeys());
         })
             ->doesntHave('requiredResearch', 'or');
     }
@@ -116,7 +120,7 @@ class Unit extends Model
      */
     public function scopeBelowMax(Builder $query, Planet $planet): Builder
     {
-        $query->whereHas('planets', function ($query) use ($planet) {
+        return $query->whereHas('planets', function ($query) use ($planet) {
             $query->where('planet_id', $planet->id);
             $query->where(function ($query) use ($planet) {
                 $query->where('buildings.max', '>=', DB::raw('planet_building.qty'));

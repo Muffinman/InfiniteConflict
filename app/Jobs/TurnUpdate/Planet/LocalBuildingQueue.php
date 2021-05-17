@@ -7,6 +7,7 @@ use App\Models\Planet;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -101,6 +102,7 @@ class LocalBuildingQueue implements ShouldQueue, LocalQueueInterface
         }
 
         // Move all items up queue
+        $this->removeCompleted();
         $this->advanceQueues();
 
         // Start next item
@@ -198,11 +200,11 @@ class LocalBuildingQueue implements ShouldQueue, LocalQueueInterface
     {
         $this->nextQueueItem = $this->planet
             ->buildingQueue()
-            ->with(['building', 'building.resources'])
+            ->with(['building'])
             ->where('turns', '>', 0)
             ->where('rank', '=', 0)
             ->where('started', '=', 0)
-            ->whereIn('building_id', $this->planet->availableBuildings->modelKeys())
+            ->whereIn('building_id', $this->planet->availableBuildings()->modelKeys())
             ->first();
     }
 
@@ -215,32 +217,43 @@ class LocalBuildingQueue implements ShouldQueue, LocalQueueInterface
             return false;
         }
 
-        return $this->hasRequiredBuildings() && $this->hasRequiredResearch() && $this->hasRequiredResources();
+        return $this->nextQueueItemIsAvailable() && $this->nextQueueItemHasRequiredResources();
     }
 
     /**
      * @inheritDoc
      */
-    public function hasRequiredResources(): bool
+    public function nextQueueItemHasRequiredResources(): bool
     {
-        $resources = $this->nextQueueItem->resources;
-        return true;
+        $resources = $this->nextQueueItem
+            ->building
+            ->resources()
+            ->wherePivot('cost', '>', 0)
+            ->get();
+
+        return $this->planet
+            ->resources()
+            ->wherePivotIn('resource_id', $resources->modelKeys())
+            ->where(function (Builder $query) use ($resources) {
+                foreach ($resources as $resource) {
+                    $query->orWhere(function (Builder $query) use ($resource) {
+                        $query->where('resource_id', '=', $resource->id);
+                        $query->where('stored', '>=', $resource->pivot->cost);
+                    });
+                }
+            })
+            ->count() == $resources->count();
     }
 
     /**
      * @inheritDoc
      */
-    public function hasRequiredBuildings(): bool
+    public function nextQueueItemIsAvailable(): bool
     {
-        return true;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function hasRequiredResearch(): bool
-    {
-        return true;
+        return $this->planet
+            ->availableBuildings()
+            ->where('id', $this->nextQueueItem->building_id)
+            ->count() > 0;
     }
 
     /**

@@ -235,11 +235,12 @@ class Planet extends Model
      */
     public function availableBuildings()
     {
-        return Building::query()
-            ->researched()
+        $test = Building::query()
+            ->researched($this->ruler)
             ->prerequisitesMet($this)
             ->belowMax($this)
             ->get();
+        return $test;
     }
 
     /**
@@ -248,7 +249,7 @@ class Planet extends Model
     public function availableUnits()
     {
         return Unit::query()
-            ->researched()
+            ->researched($this->ruler)
             ->prerequisitesMet($this)
             ->belowMax($this)
             ->get();

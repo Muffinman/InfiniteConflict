@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Building newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Building prerequisitesMet(\App\Models\Planet $planet)
  * @method static \Illuminate\Database\Eloquent\Builder|Building query()
- * @method static \Illuminate\Database\Eloquent\Builder|Building researched()
+ * @method static \Illuminate\Database\Eloquent\Builder|Building researched(\App\Models\Ruler $ruler)
  * @method static \Illuminate\Database\Eloquent\Builder|Building whereDemolishTurns($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Building whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Building whereMax($value)
@@ -97,10 +97,14 @@ class Building extends Model
     /**
      * Limit to researched techs.
      */
-    public function scopeResearched(Builder $query): Builder
+    public function scopeResearched(Builder $query, ?Ruler $ruler = null): Builder
     {
-        return $query->whereHas('requiredResearch', function ($query) {
-            $query->whereIn('id', Auth::user()->research->modelKeys());
+        if (!$ruler) {
+            $ruler = Auth::user();
+        }
+
+        return $query->whereHas('requiredResearch', function ($query) use ($ruler) {
+            $query->whereIn('id', $ruler->research->modelKeys());
         })
         ->doesntHave('requiredResearch', 'or');
     }
@@ -124,10 +128,10 @@ class Building extends Model
      */
     public function scopeBelowMax(Builder $query, Planet $planet): Builder
     {
-        $query->whereHas('planets', function ($query) use ($planet) {
+        return $query->whereHas('planets', function ($query) use ($planet) {
             $query->where('planet_id', $planet->id);
             $query->where(function ($query) use ($planet) {
-                $query->where('buildings.max', '>=', DB::raw('planet_building.qty'));
+                $query->where('buildings.max', '>', DB::raw('planet_building.qty'));
                 $query->orWhere('max', null);
             });
         });

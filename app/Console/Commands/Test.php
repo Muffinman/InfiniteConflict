@@ -41,13 +41,13 @@ class Test extends Command
      */
     public function handle()
     {
-        //$users = Ruler::factory()->count(500)->create();
+        //$users = \App\Models\Ruler::factory()->count(500)->create();
         //die;
 
         $planet = Planet::find(1);
         LocalBuildingQueue::dispatchSync($planet);
-        LocalProductionQueue::dispatchSync($planet);
-        LocalConversionQueue::dispatchSync($planet);
+        //LocalProductionQueue::dispatchSync($planet);
+        //LocalConversionQueue::dispatchSync($planet);
         //ResourceCache::dispatchSync($planet);
         //LocalInterest::dispatchSync($planet);
         //LocalOutput::dispatchSync($planet);

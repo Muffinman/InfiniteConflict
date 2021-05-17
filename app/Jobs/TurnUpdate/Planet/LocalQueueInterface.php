@@ -73,17 +73,12 @@ interface LocalQueueInterface {
     /**
      * Does the item have all required resources to start?
      */
-    public function hasRequiredResources(): bool;
+    public function nextQueueItemHasRequiredResources(): bool;
 
     /**
-     * Does the item have all required buildings to start?
+     * Does the item have all requirements to start?
      */
-    public function hasRequiredBuildings(): bool;
-
-    /**
-     * Does the item have all required research to start?
-     */
-    public function hasRequiredResearch(): bool;
+    public function nextQueueItemIsAvailable(): bool;
 
     /**
      * Start next queue item
