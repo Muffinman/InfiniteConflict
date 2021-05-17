@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -107,6 +108,24 @@ class Resource extends Model
     public function taxes(): HasMany
     {
         return $this->hasMany(ResourceTax::class, 'resource_id');
+    }
+
+
+    /**
+     * Get the required research.
+     */
+    public function requiredResearch(): BelongsToMany
+    {
+        return $this->belongsToMany(Research::class, 'conversion_required_research');
+    }
+
+    /**
+     * Get the required buildings.
+     */
+    public function requiredBuildings(): BelongsToMany
+    {
+        return $this->belongsToMany(Building::class, 'conversion_required_buildings', 'building_id')
+            ->withPivot(['qty']);
     }
 
     /**
@@ -218,5 +237,48 @@ class Resource extends Model
     public function scopeOnlyNotRequiringStorage(Builder $query): Builder
     {
         return $query->where('requires_storage', '=', 0);
+    }
+
+    /**
+     * Limit to researched techs.
+     */
+    public function scopeResearched(Builder $query, ?Ruler $ruler = null): Builder
+    {
+        if (!$ruler) {
+            $ruler = Auth::user();
+        }
+
+        return $query->whereHas('requiredResearch', function ($query) use ($ruler) {
+            $query->whereIn('id', $ruler->research->modelKeys());
+        })
+            ->doesntHave('requiredResearch', 'or');
+    }
+
+    /**
+     * Limit to buildings with prerequisites met.
+     */
+    public function scopePrerequisitesMet(Builder $query, Planet $planet): Builder
+    {
+        $buildings = $planet->buildings->modelKeys();
+
+        return $query->whereHas('planets', function ($query) use ($buildings, $planet) {
+            $query->whereIn('id', $buildings);
+            $query->where('planet_id', $planet->id);
+        })
+            ->doesntHave('requiredBuildings', 'or');
+    }
+
+    /**
+     * Limit to buildings below max qty.
+     */
+    public function scopeBelowMax(Builder $query, Planet $planet): Builder
+    {
+        return $query->whereHas('planets', function ($query) use ($planet) {
+            $query->where('planet_id', $planet->id);
+            $query->where(function ($query) use ($planet) {
+                $query->where('planet_resource.stored', '<', DB::raw('planet_resource.storage'));
+                $query->orWhere('resources.requires_storage', 0);
+            });
+        });
     }
 }

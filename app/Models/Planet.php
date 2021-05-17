@@ -256,6 +256,18 @@ class Planet extends Model
     }
 
     /**
+     * Get buildings available for construction.
+     */
+    public function availableConversions()
+    {
+        return Resource::query()
+            ->researched($this->ruler)
+            ->prerequisitesMet($this)
+            ->belowMax($this)
+            ->get();
+    }
+
+    /**
      * Filter by only populated planets.
      *
      * @param Builder

@@ -6,11 +6,13 @@ use App\Models\Planet;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use DB;
+use Illuminate\Support\MessageBag;
 
 class LocalProductionQueue implements ShouldQueue, LocalQueueInterface
 {
@@ -20,6 +22,16 @@ class LocalProductionQueue implements ShouldQueue, LocalQueueInterface
      * @var Planet
      */
     protected Planet $planet;
+
+    /**
+     * @var MessageBag
+     */
+    protected MessageBag $queueErrors;
+
+    /**
+     * @var ?Model
+     */
+    protected ?Model $nextQueueItem;
 
     /**
      * Create a new job instance.
@@ -87,10 +99,14 @@ class LocalProductionQueue implements ShouldQueue, LocalQueueInterface
         }
 
         // Move all items up queue
+        $this->removeCompleted();
         $this->advanceQueues();
 
         // Start next item
-        $this->startNextQueueItem();
+        $this->getNextQueueItem();
+        if ($this->canStartNextQueueItem()) {
+            $this->startNextQueueItem();
+        }
     }
 
 
@@ -111,9 +127,9 @@ class LocalProductionQueue implements ShouldQueue, LocalQueueInterface
 
         // Handle demolishing
         if ($queueItem->demolish) {
-            $quantity -= 1;
+            $quantity -= $queueItem->qty;
         } else {
-            $quantity += 1;
+            $quantity += $queueItem->qty;
         }
 
         // Sanity check
@@ -159,7 +175,7 @@ class LocalProductionQueue implements ShouldQueue, LocalQueueInterface
      */
     public function advanceQueues()
     {
-        // Move new buildings up in queue
+        // Move new items up in queue
         $this->planet
             ->unitQueue()
             ->update([
@@ -167,54 +183,84 @@ class LocalProductionQueue implements ShouldQueue, LocalQueueInterface
             ]);
     }
 
+    public function getNextQueueItem()
+    {
+        $this->nextQueueItem = $this->planet
+            ->unitQueue()
+            ->with(['unit'])
+            ->where('turns', '>', 0)
+            ->where('rank', '=', 0)
+            ->where('started', '=', 0)
+            ->whereIn('unit_id', $this->planet->availableUnits()->modelKeys())
+            ->first();
+    }
+
+    public function canStartNextQueueItem(): bool
+    {
+        if (!$this->nextQueueItem) {
+            return false;
+        }
+
+        return $this->nextQueueItemIsAvailable() && $this->nextQueueItemHasRequiredResources();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function nextQueueItemHasRequiredResources(): bool
+    {
+        $resources = $this->nextQueueItem
+            ->unit
+            ->resources()
+            ->wherePivot('cost', '>', 0)
+            ->get();
+
+        return $this->planet
+                ->resources()
+                ->wherePivotIn('resource_id', $resources->modelKeys())
+                ->where(function (Builder $query) use ($resources) {
+                    foreach ($resources as $resource) {
+                        $query->orWhere(function (Builder $query) use ($resource) {
+                            $query->where('resource_id', '=', $resource->id);
+                            $query->where('stored', '>=', $resource->pivot->cost);
+                        });
+                    }
+                })
+                ->count() == $resources->count();
+    }
+
+    public function nextQueueItemIsAvailable(): bool
+    {
+        return $this->planet
+                ->availableUnits()
+                ->where('id', $this->nextQueueItem->unit_id)
+                ->count() > 0;
+    }
+
     /**
      * @inheritDoc
      */
     public function startNextQueueItem()
     {
-        // TODO: Take resources for new item
-        // TODO: Check prerequisites
-        // TODO: Refunds
+        $this->takeNextQueueItemResources();
 
-        // Start new unit
         $this->planet
             ->unitQueue()
-            ->orderBy('rank', 'asc')
             ->where('rank', '=', 0)
             ->where('started', '=', 0)
+            ->orderBy('rank', 'asc')
             ->limit(1)
             ->update([
                 'started' => 1,
             ]);
     }
 
-    public function getNextQueueItem()
-    {
-        // TODO: Implement getNextQueueItem() method.
-    }
-
-    public function canStartNextQueueItem(): bool
-    {
-        // TODO: Implement canStartNextQueueItem() method.
-    }
-
-    public function hasRequiredResources(): bool
-    {
-        // TODO: Implement hasRequiredResources() method.
-    }
-
-    public function hasRequiredBuildings(): bool
-    {
-        // TODO: Implement hasRequiredBuildings() method.
-    }
-
-    public function hasRequiredResearch(): bool
-    {
-        // TODO: Implement hasRequiredResearch() method.
-    }
-
+    /**
+     * @inheritDoc
+     */
     public function takeNextQueueItemResources()
     {
-        // TODO: Implement takeNextQueueItemResources() method.
+        // TODO: To follow
     }
+
 }

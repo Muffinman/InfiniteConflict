@@ -2,6 +2,7 @@
 
 namespace App\Models\Pivots;
 
+use App\Models\Planet;
 use App\Models\Resource;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -63,15 +64,15 @@ class ConversionQueue extends Pivot
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function convertingFromResource(): BelongsTo
+    public function planet(): BelongsTo
     {
-        return $this->belongsTo(Resource::class);
+        return $this->belongsTo(Planet::class);
     }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function convertingToResource(): BelongsTo
+    public function resource(): BelongsTo
     {
         return $this->belongsTo(Resource::class);
     }

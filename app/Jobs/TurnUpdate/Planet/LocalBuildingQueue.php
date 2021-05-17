@@ -2,7 +2,6 @@
 
 namespace App\Jobs\TurnUpdate\Planet;
 
-use App\Models\Pivots\BuildingQueue;
 use App\Models\Planet;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
@@ -117,7 +116,7 @@ class LocalBuildingQueue implements ShouldQueue, LocalQueueInterface
      */
     public function processRefunds(Model $queueItem)
     {
-
+        // TODO: To follow
     }
 
     /**
@@ -185,7 +184,7 @@ class LocalBuildingQueue implements ShouldQueue, LocalQueueInterface
      */
     public function advanceQueues()
     {
-        // Move new buildings up in queue
+        // Move new items up in queue
         $this->planet
             ->buildingQueue()
             ->update([
@@ -279,6 +278,6 @@ class LocalBuildingQueue implements ShouldQueue, LocalQueueInterface
      */
     public function takeNextQueueItemResources()
     {
-
+        // TODO: To follow
     }
 }

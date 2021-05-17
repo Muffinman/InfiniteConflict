@@ -6,11 +6,13 @@ use App\Models\Planet;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use DB;
+use Illuminate\Support\MessageBag;
 
 class LocalConversionQueue implements ShouldQueue, LocalQueueInterface
 {
@@ -20,6 +22,16 @@ class LocalConversionQueue implements ShouldQueue, LocalQueueInterface
      * @var Planet
      */
     protected Planet $planet;
+
+    /**
+     * @var MessageBag
+     */
+    protected MessageBag $queueErrors;
+
+    /**
+     * @var ?Model
+     */
+    protected ?Model $nextQueueItem;
 
     /**
      * Create a new job instance.
@@ -87,10 +99,14 @@ class LocalConversionQueue implements ShouldQueue, LocalQueueInterface
         }
 
         // Move all items up queue
+        $this->removeCompleted();
         $this->advanceQueues();
 
         // Start next item
-        $this->startNextQueueItem();
+        $this->getNextQueueItem();
+        if ($this->canStartNextQueueItem()) {
+            $this->startNextQueueItem();
+        }
     }
 
     /**
@@ -101,18 +117,18 @@ class LocalConversionQueue implements ShouldQueue, LocalQueueInterface
         $quantity = 0;
         $existing = $this->planet
             ->conversionQueue()
-            ->where('building_id', $queueItem->building_id)
+            ->where('resource_id', $queueItem->resource_id)
             ->first();
 
         if ($existing) {
-            $quantity = $existing->pivot->qty;
+            $quantity = $existing->pivot->stored;
         }
 
         // Handle demolishing
         if ($queueItem->demolish) {
-            $quantity -= 1;
+            $quantity -= $queueItem->qty;
         } else {
-            $quantity += 1;
+            $quantity += $queueItem->qty;
         }
 
         // Sanity check
@@ -124,10 +140,9 @@ class LocalConversionQueue implements ShouldQueue, LocalQueueInterface
      */
     public function updateItemQuantity(Model $queueItem, int $quantity)
     {
-
         $this->planet->resources()->syncWithoutDetaching([
-            $queueItem->building_id => [
-                'qty' => $quantity,
+            $queueItem->resource_id => [
+                'stored' => $quantity,
             ],
         ]);
     }
@@ -137,7 +152,7 @@ class LocalConversionQueue implements ShouldQueue, LocalQueueInterface
      */
     public function removeItem(Model $queueItem)
     {
-        $this->planet->resources()->detach($queueItem->building_id);
+        $this->planet->resources()->detach($queueItem->resource_id);
     }
 
     /**
@@ -159,7 +174,7 @@ class LocalConversionQueue implements ShouldQueue, LocalQueueInterface
      */
     public function advanceQueues()
     {
-        // Move new buildings up in queue
+        // Move new items up in queue
         $this->planet
             ->conversionQueue()
             ->update([
@@ -167,54 +182,85 @@ class LocalConversionQueue implements ShouldQueue, LocalQueueInterface
             ]);
     }
 
+    public function getNextQueueItem()
+    {
+        $this->nextQueueItem = $this->planet
+            ->conversionQueue()
+            ->with(['unit'])
+            ->where('turns', '>', 0)
+            ->where('rank', '=', 0)
+            ->where('started', '=', 0)
+            ->whereIn('resource_id', $this->planet->availableConversions()->modelKeys())
+            ->first();
+    }
+
+    public function canStartNextQueueItem(): bool
+    {
+        if (!$this->nextQueueItem) {
+            return false;
+        }
+
+        return $this->nextQueueItemIsAvailable() && $this->nextQueueItemHasRequiredResources();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function nextQueueItemHasRequiredResources(): bool
+    {
+        // TODO: Fix this eloquent relationship
+        //$resources = $this->nextQueueItem
+        //    ->convertingFromResources()
+        //    ->resources()
+        //    ->wherePivot('cost', '>', 0)
+        //    ->get();
+
+        //return $this->planet
+        //        ->resources()
+        //        ->wherePivotIn('resource_id', $resources->modelKeys())
+        //        ->where(function (Builder $query) use ($resources) {
+        //            foreach ($resources as $resource) {
+        //                $query->orWhere(function (Builder $query) use ($resource) {
+        //                    $query->where('resource_id', '=', $resource->id);
+        //                    $query->where('stored', '>=', $resource->pivot->cost);
+        //                });
+        //            }
+        //        })
+        //        ->count() == $resources->count();
+    }
+
+    public function nextQueueItemIsAvailable(): bool
+    {
+        return $this->planet
+                ->availableConversions()
+                ->where('id', $this->nextQueueItem->resource_id)
+                ->count() > 0;
+    }
+
     /**
      * @inheritDoc
      */
     public function startNextQueueItem()
     {
-        // TODO: Take resources for new item
-        // TODO: Check prerequisites
-        // TODO: Refunds
+        $this->takeNextQueueItemResources();
 
-        // Start new buildings
         $this->planet
             ->conversionQueue()
-            ->orderBy('rank', 'asc')
             ->where('rank', '=', 0)
             ->where('started', '=', 0)
+            ->orderBy('rank', 'asc')
             ->limit(1)
             ->update([
                 'started' => 1,
             ]);
     }
 
-    public function getNextQueueItem()
-    {
-        // TODO: Implement getNextQueueItem() method.
-    }
-
-    public function canStartNextQueueItem(): bool
-    {
-        // TODO: Implement canStartNextQueueItem() method.
-    }
-
-    public function hasRequiredResources(): bool
-    {
-        // TODO: Implement hasRequiredResources() method.
-    }
-
-    public function hasRequiredBuildings(): bool
-    {
-        // TODO: Implement hasRequiredBuildings() method.
-    }
-
-    public function hasRequiredResearch(): bool
-    {
-        // TODO: Implement hasRequiredResearch() method.
-    }
-
+    /**
+     * @inheritDoc
+     */
     public function takeNextQueueItemResources()
     {
-        // TODO: Implement takeNextQueueItemResources() method.
+        // TODO: To follow
     }
+
 }
