@@ -49,6 +49,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ResourceTaxesTableSeeder::class);
 
         $this->call(UnitResourceTableSeeder::class);
+        $this->call(UnitRequiredBuildingTableSeeder::class);
         $this->call(UnitRequiredResearchTableSeeder::class);
 
         $this->call(PlanetColoBuildingsTableSeeder::class);

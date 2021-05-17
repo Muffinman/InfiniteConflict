@@ -14,7 +14,7 @@ class UnitRequiredBuildingTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('unit_required_building')->insert([
+        DB::table('unit_required_buildings')->insert([
             ['unit_id' => 1, 'requirement_id' => 29, 'qty' => 1], // Fighter / Ship Yard
             ['unit_id' => 1, 'requirement_id' => 31, 'qty' => 1], // Fighter / Light Weapons Factory
             ['unit_id' => 2, 'requirement_id' => 29, 'qty' => 1], // Bomber / Ship Yard
