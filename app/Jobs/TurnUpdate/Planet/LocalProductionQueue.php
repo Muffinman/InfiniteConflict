@@ -188,16 +188,33 @@ class LocalProductionQueue implements ShouldQueue, LocalQueueInterface
             ]);
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function getStartedQueueItem()
+    public function getNextQueueItem()
     {
-        $this->planet
-            ->conversionQueue()
-            ->where('turns', '>', 0)
-            ->where('rank', '=', 0)
-            ->where('started', '=', 1)
-            ->first();
+        // TODO: Implement getNextQueueItem() method.
+    }
+
+    public function canStartNextQueueItem(): bool
+    {
+        // TODO: Implement canStartNextQueueItem() method.
+    }
+
+    public function hasRequiredResources(): bool
+    {
+        // TODO: Implement hasRequiredResources() method.
+    }
+
+    public function hasRequiredBuildings(): bool
+    {
+        // TODO: Implement hasRequiredBuildings() method.
+    }
+
+    public function hasRequiredResearch(): bool
+    {
+        // TODO: Implement hasRequiredResearch() method.
+    }
+
+    public function takeNextQueueItemResources()
+    {
+        // TODO: Implement takeNextQueueItemResources() method.
     }
 }
