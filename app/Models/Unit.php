@@ -40,6 +40,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Unit whereTurns($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Building[] $requiredBuildings
+ * @property-read int|null $required_buildings_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Research[] $requiredResearch
+ * @property-read int|null $required_research_count
+ * @method static Builder|Unit belowMax(\App\Models\Planet $planet)
+ * @method static Builder|Unit prerequisitesMet(\App\Models\Planet $planet)
+ * @method static Builder|Unit researched()
  */
 class Unit extends Model
 {

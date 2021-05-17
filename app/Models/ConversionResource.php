@@ -37,6 +37,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|PlanetResource whereBusyCache($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PlanetResource whereOutputCache($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PlanetResource whereStorageCache($value)
+ * @property-read \App\Models\Resource $fromResources
+ * @property-read \App\Models\Resource $toResource
+ * @method static Builder|ConversionResource onlyRefundable()
  */
 class ConversionResource extends Model
 {

@@ -53,6 +53,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\ResourceTax[] $taxes
  * @property-read int|null $taxes_count
  * @method static Builder|Resource onlyTaxable()
+ * @property-read \Illuminate\Database\Eloquent\Collection|Resource[] $conversionResources
+ * @property-read int|null $conversion_resources_count
+ * @property-read \App\Models\ConversionResource $conversions
  */
 class Resource extends Model
 {

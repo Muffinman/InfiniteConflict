@@ -38,6 +38,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Building whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Building whereTurns($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Resource[] $refundableResources
+ * @property-read int|null $refundable_resources_count
  */
 class Building extends Model
 {
