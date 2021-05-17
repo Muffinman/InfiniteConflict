@@ -16,7 +16,7 @@ class CreateConversionResourceTable extends Migration
             $table->integer('resource_id')->unsigned();
             $table->integer('cost_resource')->unsigned();
             $table->integer('cost');
-            $table->boolean('refund');
+            $table->boolean('refund_on_completion');
 
             $table->primary(['resource_id', 'cost_resource']);
             $table->foreign('resource_id')->references('id')->on('resources')->onDelete('cascade')->onUpdate('cascade');
