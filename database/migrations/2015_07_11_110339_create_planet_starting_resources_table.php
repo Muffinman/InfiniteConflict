@@ -14,7 +14,7 @@ class CreatePlanetStartingResourcesTable extends Migration
     {
         Schema::create('planet_starting_resources', function (Blueprint $table) {
             $table->integer('resource_id')->unsigned();
-            $table->integer('stored')->unsigned();
+            $table->bigInteger('stored')->unsigned();
             $table->integer('abundance');
 
             $table->primary('resource_id');

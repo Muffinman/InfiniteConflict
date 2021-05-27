@@ -14,7 +14,7 @@ class CreatePlanetsTable extends Migration
     {
         Schema::create('planets', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name', 32)->nullable();
+            $table->string('name')->nullable();
             $table->integer('ruler_id')->unsigned()->nullable();
             $table->integer('galaxy_id')->unsigned();
             $table->integer('system_id')->unsigned();

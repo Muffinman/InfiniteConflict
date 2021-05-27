@@ -12,29 +12,36 @@ const vuexPersist = new VuexPersist({
 export default new Vuex.Store({
     plugins: [vuexPersist.plugin],
     state: {
-        auth: {
-            access_token: null,
-            expires_in: null,
-            token_type: null,
-        },
-        user: {
-
-        }
+        accessToken: null,
+        user: null,
+        planets: [],
     },
     getters: {
-        getAuth: state => {
-            return state.auth
+        getAccessToken: state => {
+            return state.accessToken
         },
         getUser: state => {
             return state.user
-        }
+        },
+        getPlanets: state => {
+            return state.planets
+        },
     },
     mutations: {
-        setAuth: (state, authValue) => {
-            Object.assign(state.auth, authValue);
+        setAccessToken: (state, tokenValue) => {
+            state.accessToken = tokenValue;
         },
         setUser: (state, userValue) => {
-            Object.assign(state.user, userValue);
-        }
+            state.user = userValue;
+        },
+        removeAccessToken: (state) => {
+            state.accessToken = null;
+        },
+        removeUser: (state) => {
+            state.user = null;
+        },
+        setPlanets: (state, planets) => {
+            state.planets = planets;
+        },
     }
 })

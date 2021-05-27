@@ -1,0 +1,102 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use DB;
+
+class ResearchResourceTableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        DB::table('research_resource')->insert([
+            ['research_id' => 1, 'resource_id' => 10, 'cost' => 100],
+            ['research_id' => 2, 'resource_id' => 10, 'cost' => 100],
+            ['research_id' => 3, 'resource_id' => 10, 'cost' => 100],
+            ['research_id' => 4, 'resource_id' => 10, 'cost' => 5000],
+            ['research_id' => 5, 'resource_id' => 10, 'cost' => 5000],
+            ['research_id' => 6, 'resource_id' => 10, 'cost' => 5000],
+            ['research_id' => 7, 'resource_id' => 10, 'cost' => 5000],
+            ['research_id' => 8, 'resource_id' => 10, 'cost' => 12000],
+            ['research_id' => 9, 'resource_id' => 10, 'cost' => 25000],
+            ['research_id' => 10, 'resource_id' => 10, 'cost' => 50000],
+            ['research_id' => 11, 'resource_id' => 10, 'cost' => 50000],
+            ['research_id' => 12, 'resource_id' => 10, 'cost' => 50000],
+            ['research_id' => 13, 'resource_id' => 10, 'cost' => 50000],
+            ['research_id' => 14, 'resource_id' => 10, 'cost' => 50000],
+            ['research_id' => 15, 'resource_id' => 10, 'cost' => 50000],
+            ['research_id' => 16, 'resource_id' => 10, 'cost' => 40000],
+            ['research_id' => 17, 'resource_id' => 10, 'cost' => 40000],
+            ['research_id' => 18, 'resource_id' => 10, 'cost' => 10000],
+            ['research_id' => 19, 'resource_id' => 10, 'cost' => 50000],
+            ['research_id' => 20, 'resource_id' => 10, 'cost' => 250000],
+            ['research_id' => 21, 'resource_id' => 10, 'cost' => 2000],
+            ['research_id' => 22, 'resource_id' => 10, 'cost' => 20000],
+            ['research_id' => 23, 'resource_id' => 10, 'cost' => 100000],
+            ['research_id' => 24, 'resource_id' => 10, 'cost' => 500000],
+            ['research_id' => 25, 'resource_id' => 10, 'cost' => 5000],
+            ['research_id' => 26, 'resource_id' => 10, 'cost' => 50000],
+            ['research_id' => 27, 'resource_id' => 10, 'cost' => 50000],
+            ['research_id' => 29, 'resource_id' => 10, 'cost' => 1000],
+            ['research_id' => 30, 'resource_id' => 10, 'cost' => 10000],
+            ['research_id' => 31, 'resource_id' => 10, 'cost' => 20000],
+            ['research_id' => 32, 'resource_id' => 10, 'cost' => 50000],
+            ['research_id' => 33, 'resource_id' => 10, 'cost' => 100000],
+            ['research_id' => 34, 'resource_id' => 10, 'cost' => 250000],
+            ['research_id' => 35, 'resource_id' => 10, 'cost' => 1000000],
+            ['research_id' => 37, 'resource_id' => 10, 'cost' => 500],
+            ['research_id' => 38, 'resource_id' => 10, 'cost' => 1000],
+            ['research_id' => 39, 'resource_id' => 10, 'cost' => 2000],
+            ['research_id' => 40, 'resource_id' => 10, 'cost' => 5000],
+            ['research_id' => 41, 'resource_id' => 10, 'cost' => 5000],
+            ['research_id' => 42, 'resource_id' => 10, 'cost' => 10000],
+            ['research_id' => 43, 'resource_id' => 10, 'cost' => 10000],
+            ['research_id' => 44, 'resource_id' => 10, 'cost' => 25000],
+            ['research_id' => 45, 'resource_id' => 10, 'cost' => 25000],
+            ['research_id' => 46, 'resource_id' => 10, 'cost' => 25000],
+            ['research_id' => 47, 'resource_id' => 10, 'cost' => 25000],
+            ['research_id' => 48, 'resource_id' => 10, 'cost' => 25000],
+            ['research_id' => 49, 'resource_id' => 10, 'cost' => 50000],
+            ['research_id' => 50, 'resource_id' => 10, 'cost' => 50000],
+            ['research_id' => 51, 'resource_id' => 10, 'cost' => 50000],
+            ['research_id' => 52, 'resource_id' => 10, 'cost' => 50000],
+            ['research_id' => 53, 'resource_id' => 10, 'cost' => 50000],
+            ['research_id' => 54, 'resource_id' => 10, 'cost' => 100000],
+            ['research_id' => 55, 'resource_id' => 10, 'cost' => 100000],
+            ['research_id' => 56, 'resource_id' => 10, 'cost' => 100000],
+            ['research_id' => 57, 'resource_id' => 10, 'cost' => 100000],
+            ['research_id' => 58, 'resource_id' => 10, 'cost' => 100000],
+            ['research_id' => 59, 'resource_id' => 10, 'cost' => 250000],
+            ['research_id' => 60, 'resource_id' => 10, 'cost' => 250000],
+            ['research_id' => 61, 'resource_id' => 10, 'cost' => 250000],
+            ['research_id' => 62, 'resource_id' => 10, 'cost' => 250000],
+            ['research_id' => 63, 'resource_id' => 10, 'cost' => 250000],
+            ['research_id' => 64, 'resource_id' => 10, 'cost' => 500000],
+            ['research_id' => 65, 'resource_id' => 10, 'cost' => 500000],
+            ['research_id' => 66, 'resource_id' => 10, 'cost' => 500000],
+            ['research_id' => 67, 'resource_id' => 10, 'cost' => 500000],
+            ['research_id' => 68, 'resource_id' => 10, 'cost' => 500000],
+            ['research_id' => 69, 'resource_id' => 10, 'cost' => 1000000],
+            ['research_id' => 70, 'resource_id' => 10, 'cost' => 1000000],
+            ['research_id' => 71, 'resource_id' => 10, 'cost' => 1000000],
+            ['research_id' => 72, 'resource_id' => 10, 'cost' => 1000000],
+            ['research_id' => 73, 'resource_id' => 10, 'cost' => 1000000],
+            ['research_id' => 74, 'resource_id' => 10, 'cost' => 2000000],
+            ['research_id' => 75, 'resource_id' => 10, 'cost' => 2000000],
+            ['research_id' => 76, 'resource_id' => 10, 'cost' => 2000000],
+            ['research_id' => 77, 'resource_id' => 10, 'cost' => 2000000],
+            ['research_id' => 78, 'resource_id' => 10, 'cost' => 2000000],
+            ['research_id' => 79, 'resource_id' => 10, 'cost' => 4000000],
+            ['research_id' => 80, 'resource_id' => 10, 'cost' => 4000000],
+            ['research_id' => 81, 'resource_id' => 10, 'cost' => 4000000],
+            ['research_id' => 82, 'resource_id' => 10, 'cost' => 4000000],
+            ['research_id' => 83, 'resource_id' => 10, 'cost' => 4000000],
+            ['research_id' => 84, 'resource_id' => 10, 'cost' => 8000000],
+        ]);
+    }
+}

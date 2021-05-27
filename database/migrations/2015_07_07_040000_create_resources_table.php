@@ -20,7 +20,7 @@ class CreateResourcesTable extends Migration
             $table->boolean('creatable')->default(0);
             $table->boolean('transferable')->default(0);
             $table->integer('turns')->default(0);
-            $table->double('interest', 15, 8)->default(0);
+            $table->double('interest', 15, 8)->nullable()->default(NULL);
             $table->boolean('requires_storage')->default(0);
             $table->boolean('global')->default(0);
             $table->boolean('production_resource')->default(0);

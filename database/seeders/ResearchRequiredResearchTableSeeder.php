@@ -1,0 +1,101 @@
+<?php
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use DB;
+
+class ResearchRequiredResearchTableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        DB::table('research_required_research')->insert([
+            ['research_id' => 4, 'requirement_id' => 1],
+            ['research_id' => 5, 'requirement_id' => 1],
+            ['research_id' => 6, 'requirement_id' => 1],
+            ['research_id' => 7, 'requirement_id' => 1],
+            ['research_id' => 8, 'requirement_id' => 1],
+            ['research_id' => 9, 'requirement_id' => 1],
+            ['research_id' => 10, 'requirement_id' => 8],
+            ['research_id' => 11, 'requirement_id' => 8],
+            ['research_id' => 12, 'requirement_id' => 8],
+            ['research_id' => 13, 'requirement_id' => 8],
+            ['research_id' => 14, 'requirement_id' => 9],
+            ['research_id' => 15, 'requirement_id' => 9],
+            ['research_id' => 16, 'requirement_id' => 9],
+            ['research_id' => 17, 'requirement_id' => 9],
+            ['research_id' => 18, 'requirement_id' => 2],
+            ['research_id' => 19, 'requirement_id' => 2],
+            ['research_id' => 20, 'requirement_id' => 2],
+            ['research_id' => 21, 'requirement_id' => 2],
+            ['research_id' => 22, 'requirement_id' => 21],
+            ['research_id' => 23, 'requirement_id' => 21],
+            ['research_id' => 24, 'requirement_id' => 21],
+            ['research_id' => 25, 'requirement_id' => 2],
+            ['research_id' => 26, 'requirement_id' => 25],
+            ['research_id' => 27, 'requirement_id' => 25],
+            ['research_id' => 29, 'requirement_id' => 3],
+            ['research_id' => 29, 'requirement_id' => 28],
+            ['research_id' => 30, 'requirement_id' => 29],
+            ['research_id' => 31, 'requirement_id' => 30],
+            ['research_id' => 32, 'requirement_id' => 31],
+            ['research_id' => 33, 'requirement_id' => 32],
+            ['research_id' => 34, 'requirement_id' => 33],
+            ['research_id' => 35, 'requirement_id' => 34],
+            ['research_id' => 37, 'requirement_id' => 36],
+            ['research_id' => 38, 'requirement_id' => 37],
+            ['research_id' => 39, 'requirement_id' => 38],
+            ['research_id' => 40, 'requirement_id' => 39],
+            ['research_id' => 41, 'requirement_id' => 40],
+            ['research_id' => 42, 'requirement_id' => 41],
+            ['research_id' => 43, 'requirement_id' => 42],
+            ['research_id' => 44, 'requirement_id' => 43],
+            ['research_id' => 45, 'requirement_id' => 44],
+            ['research_id' => 46, 'requirement_id' => 45],
+            ['research_id' => 47, 'requirement_id' => 46],
+            ['research_id' => 48, 'requirement_id' => 47],
+            ['research_id' => 49, 'requirement_id' => 48],
+            ['research_id' => 50, 'requirement_id' => 49],
+            ['research_id' => 51, 'requirement_id' => 50],
+            ['research_id' => 52, 'requirement_id' => 51],
+            ['research_id' => 53, 'requirement_id' => 52],
+            ['research_id' => 54, 'requirement_id' => 53],
+            ['research_id' => 55, 'requirement_id' => 54],
+            ['research_id' => 56, 'requirement_id' => 55],
+            ['research_id' => 57, 'requirement_id' => 56],
+            ['research_id' => 58, 'requirement_id' => 57],
+            ['research_id' => 59, 'requirement_id' => 58],
+            ['research_id' => 60, 'requirement_id' => 59],
+            ['research_id' => 61, 'requirement_id' => 60],
+            ['research_id' => 62, 'requirement_id' => 61],
+            ['research_id' => 63, 'requirement_id' => 62],
+            ['research_id' => 64, 'requirement_id' => 63],
+            ['research_id' => 65, 'requirement_id' => 64],
+            ['research_id' => 66, 'requirement_id' => 65],
+            ['research_id' => 67, 'requirement_id' => 66],
+            ['research_id' => 68, 'requirement_id' => 67],
+            ['research_id' => 69, 'requirement_id' => 68],
+            ['research_id' => 70, 'requirement_id' => 69],
+            ['research_id' => 71, 'requirement_id' => 70],
+            ['research_id' => 72, 'requirement_id' => 71],
+            ['research_id' => 73, 'requirement_id' => 72],
+            ['research_id' => 74, 'requirement_id' => 73],
+            ['research_id' => 75, 'requirement_id' => 74],
+            ['research_id' => 76, 'requirement_id' => 75],
+            ['research_id' => 77, 'requirement_id' => 76],
+            ['research_id' => 78, 'requirement_id' => 77],
+            ['research_id' => 79, 'requirement_id' => 78],
+            ['research_id' => 80, 'requirement_id' => 79],
+            ['research_id' => 81, 'requirement_id' => 80],
+            ['research_id' => 82, 'requirement_id' => 81],
+            ['research_id' => 83, 'requirement_id' => 82],
+            ['research_id' => 84, 'requirement_id' => 83],
+            ['research_id' => 18, 'requirement_id' => 3],
+            ['research_id' => 37, 'requirement_id' => 3],
+        ]);
+    }
+}

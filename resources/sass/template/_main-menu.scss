@@ -1,0 +1,51 @@
+.menu-container {
+    background: $grey-dark;
+    position: fixed;
+    width: 100vw;
+
+    .stripe {
+        border-bottom: 1px solid darken($yellow, 20%);
+    }
+}
+
+nav.main-menu {
+    @include font-heading;
+
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    padding: 0 $base-spacing;
+    width: 100vw;
+
+    ul {
+        display: flex;
+        justify-content: space-around;
+        align-items: stretch;
+    }
+
+    li {
+        display: flex;
+        align-items: stretch;
+    }
+
+    a {
+        padding: $base-spacing / 2;
+        display: flex;
+        align-items: center;
+        color: $white;
+        font-size: 0.9em;
+
+        &:hover {
+            color: $black;
+            background: $yellow;
+        }
+    }
+
+    span {
+        display: block;
+    }
+
+    h1 {
+        margin-right: $base-spacing * 2;
+    }
+}

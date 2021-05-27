@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RulerResource;
-use App\Ruler;
+use App\Models\Ruler;
 use Illuminate\Http\Request;
 
 class RulerController extends Controller

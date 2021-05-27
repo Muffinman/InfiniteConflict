@@ -1,6 +1,26 @@
+@charset "utf-8";
 
+// Fonts
 @import "~font-awesome/scss/font-awesome";
+@import '~@sweetalert2/theme-dark/dark.scss';
+
+
+// Bulma stuff
 @import "variables";
+@import "~bulma/bulma.sass";
+
+// Helpers
 @import "mixins";
-@import "template";
-@import "pages/planets";
+@import "helpers";
+
+// Components
+@import "components/border-box";
+@import "components/modal";
+
+// Template styles
+@import "template/shared";
+@import "template/main-menu";
+
+// Planets styles
+@import "planets/menu";
+@import "planets/planet";

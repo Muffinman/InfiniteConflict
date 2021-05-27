@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ResearchResource;
-use App\Research;
+use App\Models\Research;
 use Illuminate\Http\Request;
 
 class ResearchController extends Controller

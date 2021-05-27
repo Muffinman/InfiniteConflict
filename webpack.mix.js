@@ -16,7 +16,8 @@ mix.webpackConfig({
     resolve: {
         extensions: ['js', 'vue'],
         alias: {
-            '@': path.resolve(__dirname, 'resources/js')
+            'vue$': 'vue/dist/vue.runtime.esm.js',
+            '@': path.resolve('./resources/js')
         },
     },
     plugins: [
@@ -38,7 +39,7 @@ mix.js('resources/js/app.js', 'public/js/app.' + outName + '.js')
         'axios',
         'lodash',
         'moment',
-        'sweetalert',
+        'sweetalert2',
         'vue',
         'vuex',
         'vue-router',

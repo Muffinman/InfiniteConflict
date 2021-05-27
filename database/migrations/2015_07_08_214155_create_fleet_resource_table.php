@@ -15,7 +15,7 @@ class CreateFleetResourceTable extends Migration
         Schema::create('fleet_resource', function (Blueprint $table) {
             $table->integer('fleet_id')->unsigned();
             $table->integer('resource_id')->unsigned();
-            $table->integer('stored');
+            $table->bigInteger('stored');
 
             $table->primary(['fleet_id', 'resource_id']);
             $table->foreign('fleet_id')->references('id')->on('fleets')->onDelete('cascade')->onUpdate('cascade');

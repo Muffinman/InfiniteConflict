@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Galaxy;
+use App\Models\Galaxy;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\GalaxyResource;
 use Illuminate\Http\Request;

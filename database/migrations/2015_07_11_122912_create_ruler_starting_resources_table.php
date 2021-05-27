@@ -14,7 +14,7 @@ class CreateRulerStartingResourcesTable extends Migration
     {
         Schema::create('ruler_starting_resources', function (Blueprint $table) {
             $table->integer('resource_id')->unsigned();
-            $table->integer('stored')->unsigned();
+            $table->bigInteger('stored')->unsigned();
 
             $table->primary('resource_id');
             $table->foreign('resource_id')->references('id')->on('resources')->onDelete('cascade')->onUpdate('cascade');

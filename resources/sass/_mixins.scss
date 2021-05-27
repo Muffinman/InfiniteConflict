@@ -1,5 +1,25 @@
-@mixin grey-box($padding:0.75em, $background:$dark-grey, $opactity:0.9, $border:$light-grey) {
-    background: rgba($background, $opactity);
-    padding: $padding;
-    border: 1px solid $border;
+@mixin font-heading() {
+    font-family: Orbitron, monospace;
+
+    strong {
+        color: inherit;
+    }
+}
+
+@mixin font-body() {
+    font-family: 'Open Sans', sans-serif;
+}
+
+@mixin stripe($height: 6px, $repeat: 20px, $gap: 10px) {
+    min-height: $height;
+    border-top: 1px solid darken($yellow, 10%);
+    border-bottom: 1px solid darken($yellow, 40%);
+    background-image:
+        repeating-linear-gradient(
+            -45deg,
+            darken($yellow, 10%) 0,
+            darken($yellow, 10%) $repeat - $gap,
+            $grey-dark $repeat - $gap,
+            $grey-dark $repeat
+        );
 }

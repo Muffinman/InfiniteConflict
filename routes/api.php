@@ -1,5 +1,21 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\Api\AllianceController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BuildingController;
+use App\Http\Controllers\Api\FleetController;
+use App\Http\Controllers\Api\GalaxyController;
+use App\Http\Controllers\Api\IndexController;
+use App\Http\Controllers\Api\PingController;
+use App\Http\Controllers\Api\PlanetController;
+use App\Http\Controllers\Api\ResearchController;
+use App\Http\Controllers\Api\ResourceController;
+use App\Http\Controllers\Api\RulerController;
+use App\Http\Controllers\Api\SystemController;
+use App\Http\Controllers\Api\UnitController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -11,28 +27,39 @@
 |
 */
 
-Route::group(['namespace' => 'Api'], function () {
-    Route::get('index', 'IndexController@index');
-    Route::post('login', 'AuthController@login');
+Route::get('index', [IndexController::class, 'index']);
 
-    Route::group(['middleware' => 'auth:api'], function () {
-        Route::post('refresh', 'AuthController@refresh');
-        Route::post('logout', 'AuthController@logout');
-        Route::get('me', 'AuthController@me');
-        Route::get('ping', 'PingController@ping');
+/*
+ * Auth routes
+ */
+Route::group(['prefix' => 'auth'], function () {
+    Route::post('login/password', [AuthController::class, 'loginWithPassword']);
+    Route::get('login/google', [AuthController::class, 'redirectToGoogle']);
+    Route::post('login/google', [AuthController::class, 'loginWithGoogle']);
+});
 
-        Route::get('ruler/create', 'IndexController@createEmpire');
-        Route::post('ruler/create', 'IndexController@storeEmpire');
+Route::group(['middleware' => 'auth:sanctum'], function () {
 
-        Route::apiResource('alliances', AllianceController::class);
-        Route::apiResource('buildings', BuildingController::class);
-        Route::apiResource('fleets', FleetController::class);
-        Route::apiResource('galaxies', GalaxyController::class);
-        Route::apiResource('planets', PlanetController::class);
-        Route::apiResource('research', ResearchController::class);
-        Route::apiResource('resources', ResourceController::class);
-        Route::apiResource('rulers', RulerController::class);
-        Route::apiResource('systems', SystemController::class);
-        Route::apiResource('units', UnitController::class);
+    /*
+     * Auth routes
+     */
+    Route::group(['prefix' => 'auth'], function () {
+        Route::post('refresh', [AuthController::class, 'refresh']);
+        Route::post('logout', [AuthController::class, 'logout']);
+        Route::get('me', [AuthController::class, 'me']);
+        Route::post('setup', [AuthController::class, 'setupEmpire']);
     });
+
+    Route::get('ping', [PingController::class, 'ping']);
+
+    Route::apiResource('alliances', AllianceController::class);
+    Route::apiResource('buildings', BuildingController::class);
+    Route::apiResource('fleets', FleetController::class);
+    Route::apiResource('galaxies', GalaxyController::class);
+    Route::apiResource('planets', PlanetController::class);
+    Route::apiResource('research', ResearchController::class);
+    Route::apiResource('resources', ResourceController::class);
+    Route::apiResource('rulers', RulerController::class);
+    Route::apiResource('systems', SystemController::class);
+    Route::apiResource('units', UnitController::class);
 });

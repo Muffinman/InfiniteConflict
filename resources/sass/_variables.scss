@@ -1,30 +1,60 @@
-// Typography
-$base-font-family: 'Helvetica', sans-serif;
-$heading-font-family: $base-font-family;
+@import "~bulma/sass/utilities/initial-variables";
 
-// Font Sizes
-$base-font-size: 0.9em;
+// Spacing
+$base-spacing: 1rem;
+$content-heading-weight: normal;
 
-// Line height
-$base-line-height: 1.5;
-$heading-line-height: 1.2;
+// Other colours
+$blue: #6ddbf5;
+$yellow: #efce3d;
+$grey-darker:  hsl(0, 0%, 12%);
+$grey-dark:    hsl(0, 0%, 15%);
+$grey:         hsl(0, 0%, 18%);
+$grey-light:   hsl(0, 0%, 40%);
+$grey-lighter: hsl(0, 0%, 80%);
 
-// Other Sizes
-$base-border-radius: 3px;
-$base-spacing: $base-line-height * 1em;
-$small-spacing: $base-spacing / 2;
-$base-z-index: 0;
+// Primary colours
+$primary: $grey-darker;
 
-// Colors
-$dark-grey: rgb(50, 50, 50);
-$mid-grey: rgb(65, 65, 65);
-$light-grey: rgb(80, 80, 80);
+// Borders and backgrounds
+$border: $grey;
+$background: $grey;
 
-// Font Colors
-$base-background-color: #000;
-$base-font-color: white;
-$action-color: white;
+// Text colours
+$text: $white;
+$text-light: $white-ter !default;
+$text-strong: $grey-dark !default;
+$title-color: $grey-dark;
+$label-color: $white;
+$link: $white;
 
-// Border
-$base-border-color: $mid-grey;
-$base-border: 1px solid $base-border-color;
+// Corners
+$radius: 0;
+$radius-large: 0;
+$radius-rounded: 0;
+
+// Modals
+$modal-background-background-color: transparent;
+$modal-card-head-background-color: $yellow;
+$modal-card-head-border-bottom: 1px solid $border;
+$modal-card-body-background-color: $grey;
+
+$modal-card-foot-border-top: 1px solid $border;
+$modal-card-foot-background-color: $grey-dark;
+
+// Forms
+$input-background-color: rgba($white, 0.2);
+$input-border-color: $grey;
+
+// Cards
+$card-background-color: $background;
+$card-header-background-color: $grey-dark;
+$card-header-padding: $base-spacing;
+//$card-header-weight: $weight-bold !default
+//
+//$card-content-background-color: transparent !default
+//$card-content-padding: 1.5rem !default
+//
+//$card-footer-background-color: transparent !default
+$card-footer-border-top: 1px solid none;
+$card-footer-padding: $base-spacing;

@@ -1,0 +1,24 @@
+.planets-menu {
+    min-width: 150px;
+    height: 100%;
+    max-height: 100%;
+    display: flex;
+    flex-direction: row;
+    background: $background;
+    overflow: hidden;
+    overflow-y: auto;
+    padding-top: $base-spacing * 2;
+    justify-content: center;
+
+    .planet {
+        text-align: center;
+        font-size: 0.8em;
+        padding: $base-spacing/2 $base-spacing;
+    }
+
+    img {
+        display: block;
+        width: 100px;
+        height: auto;
+    }
+}

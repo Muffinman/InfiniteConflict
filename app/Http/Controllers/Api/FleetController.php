@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Fleet;
+use App\Models\Fleet;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\FleetResource;
 use Illuminate\Http\Request;
