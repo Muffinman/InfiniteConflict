@@ -1,61 +1,73 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+InfiniteConflict
+================
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Tick Based Strategy Game
 
-## About Laravel
+Background
+---------
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+The principle of IC was born from a project called [TurnEngine](http://www.turnengine.com/forums/). Who's creators, although very talented, had little will to maintain the project and keep their user base happy.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+TurnEngine attempted to remove the complexity from creating a turn (actually 'tick') based strategy game, by creating a layer of abstraction below the game code, which handled all the common tasks that any tick-based game might want to perform. Requiring the game designer to merely define the units/structures, and generate set of rules and boundaries within the game to operate in.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Using this technique they rebuilt their already popular game [DarkGalaxy](http://www.darkgalaxy.com) on top of TurnEngine, and to great success ran 5 or 6 rounds of the game on this code. At it's peak the game had about 30000 players, of which maybe 10000 were active.
 
-## Learning Laravel
+Unfortunately the developers gave up on the project claiming that it was too difficult to maintain and too time-consuming to administrate the game. Even though numerous community members, including myself, offered to help both admin the game and develop the code, all offers were rejected, and the game was closed down indefinitely.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Recently, the original developers have tried to resurrect the game, and even run a few rounds on some slightly different code. Although again, development does seem to have slowed/stopped in recent months.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Idea
+----
 
-## Laravel Sponsors
+IC was started with the same concept, allow users to create great games with minimum effort, by writing a core code and allowing developers to either integrate directly with it, or extend it to suit their needs.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+This example game is a clone of the original DarkGalaxy game concept, with some much-needed improvements and modifications, built on top of the Laravel. It has built as headless API, allowing mobile or web apps to easily integrate with it.
 
-### Premium Partners
+Built on top of Laravel and using queued jobs for the majority of the heavy lift processing, the project should be horizontally scalable to large numbers of users/planets with relative ease. It can also be easily hosted on containerised hosting to allow auto-scaling if demand grows.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[OP.GG](https://op.gg)**
+System Requirements
+-------------------
 
-## Contributing
+* **Apache 2/NGINX Webserver**
+* **PHP 7.4+**
+* **MySQL/MariaDB**
+* **Redis (for queues)**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Newer versions of the above should work, these are just the minimum.
 
-## Code of Conduct
+Development setup
+-------------------
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+# Install
+composer install
+php artisan migrate:fresh --seed
+npm install
 
-## Security Vulnerabilities
+# Develop / build frontend
+npm run watch
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Run Queues
+php artisan horizon
 
-## License
+# Test
+php artisan test
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Development Hints
+-----------------
+
+This project is built as a headless web app, the frontend will be separated into a separate repo once development starts on that properly.
+
+Areas of Active Development
+--------------------------
+
+* API Endpoints - *in progress*
+* API Docs - *in progress*
+* Turn update jobs - *in progress*
+
+
+License
+-------
+
+The InfiniteConflict framework is open-sourced software licensed under the MIT license.
