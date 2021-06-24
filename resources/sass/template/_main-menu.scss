@@ -1,3 +1,5 @@
+@use "sass:math";
+
 .menu-container {
     background: $grey-dark;
     position: fixed;
@@ -29,7 +31,7 @@ nav.main-menu {
     }
 
     a {
-        padding: $base-spacing / 2;
+        padding: math.div($base-spacing, 2);
         display: flex;
         align-items: center;
         color: $white;
