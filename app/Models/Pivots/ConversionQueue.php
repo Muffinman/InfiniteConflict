@@ -4,6 +4,7 @@ namespace App\Models\Pivots;
 
 use App\Models\Planet;
 use App\Models\Resource;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
@@ -72,8 +73,24 @@ class ConversionQueue extends Pivot
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function resource(): BelongsTo
+    public function convertingToresource(): BelongsTo
     {
         return $this->belongsTo(Resource::class);
+    }
+
+    public function convertingFromResources()
+    {
+        return $this->hasMany(Resource::class, 'cost_resource');
+    }
+
+    /**
+     * Production resources
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeOnlyRefundable(Builder $query): Builder
+    {
+        return $query->where('refund_on_completion', '=', 1);
     }
 }

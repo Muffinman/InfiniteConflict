@@ -42,10 +42,8 @@ class GalaxyStartingResource extends Model
      */
     public static function allAsResourceArray(): array
     {
-        $galaxy_resources = [];
-        foreach (static::all() as $res) {
-            $galaxy_resources[$res['resource_id']] = $res;
-        }
-        return $galaxy_resources;
+        return static::all()
+            ->keyBy('resource_id')
+            ->toArray();
     }
 }

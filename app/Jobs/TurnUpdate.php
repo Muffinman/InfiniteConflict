@@ -12,7 +12,7 @@ use App\Jobs\TurnUpdate\Planet\LocalInterest;
 use App\Jobs\TurnUpdate\Planet\LocalOutput;
 use App\Jobs\TurnUpdate\Planet\LocalResourceCache;
 use App\Jobs\TurnUpdate\Planet\LocalTaxes;
-use App\Jobs\TurnUpdate\Planet\LocalProductionQueue;
+use App\Jobs\TurnUpdate\Planet\LocalUnitQueue;
 use App\Jobs\TurnUpdate\PlanetsUpdate;
 use App\Jobs\TurnUpdate\ResearchQueues;
 use App\Jobs\TurnUpdate\StartUpdate;
@@ -66,7 +66,7 @@ class TurnUpdate implements ShouldQueue
             foreach ($planets as $planet) {
                 $planetsUpdateBatch->jobs->add([
                     new LocalBuildingQueue($planet),
-                    new LocalProductionQueue($planet),
+                    new LocalUnitQueue($planet),
                     new LocalConversionQueue($planet),
                     new LocalResourceCache($planet),
                     new LocalInterest($planet),

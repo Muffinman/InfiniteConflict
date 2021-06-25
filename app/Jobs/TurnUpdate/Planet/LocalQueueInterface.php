@@ -3,6 +3,7 @@
 namespace App\Jobs\TurnUpdate\Planet;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 interface LocalQueueInterface {
 
@@ -85,9 +86,20 @@ interface LocalQueueInterface {
      */
     public function startNextQueueItem();
 
+    /**
+     * Get resources required for next queue item
+     *
+     * @return Collection
+     */
+    public function getNextQueueItemResources(): Collection;
 
     /**
      * Take resources for starting a queue item
      */
     public function takeNextQueueItemResources();
+
+    /**
+     * Reimburse refunded resources
+     */
+    public function processRefunds(Model $queueItem);
 }

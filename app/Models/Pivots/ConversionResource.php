@@ -4,6 +4,7 @@ namespace App\Models\Pivots;
 
 use App\Models\Planet;
 use App\Models\Resource;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -32,7 +33,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder|PlanetResource whereStored($value)
  * @mixin \Eloquent
  * @property int $storage_cache
- * @property int $busy_cache
+ * @property int $busy
  * @property int $output_cache
  * @property int $abundance_cache
  * @method static \Illuminate\Database\Eloquent\Builder|PlanetResource whereAbundanceCache($value)
@@ -56,5 +57,17 @@ class ConversionResource extends Pivot
     public function convertToResource(): BelongsTo
     {
         return $this->belongsTo(Resource::class);
+    }
+
+
+    /**
+     * Production resources
+     *
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeOnlyRefundable(Builder $query): Builder
+    {
+        return $query->where('refund_on_completion', '=', 1);
     }
 }

@@ -16,9 +16,9 @@ class CreatePlanetResourceTable extends Migration
             $table->integer('planet_id')->unsigned();
             $table->integer('resource_id')->unsigned();
             $table->bigInteger('stored')->unsigned()->default(0);
+            $table->bigInteger('busy')->unsigned()->default(0);
             $table->smallInteger('abundance')->unsigned()->default(0);
             $table->integer('storage_cache')->unsigned()->default(0);
-            $table->integer('busy_cache')->unsigned()->default(0);
             $table->integer('output_cache')->default(0);
             $table->smallInteger('abundance_cache')->unsigned()->default(0);
 

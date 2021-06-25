@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use DB;
 
 /**
  * App\Models\Unit
@@ -59,9 +60,9 @@ class Unit extends Model
         return $this->belongsTo(Fleet::class);
     }
 
-    public function planet()
+    public function planets()
     {
-        return $this->belongsTo(Planet::class);
+        return $this->belongsToMany(Planet::class);
     }
 
     public function resources()
@@ -82,7 +83,7 @@ class Unit extends Model
      */
     public function requiredBuildings(): BelongsToMany
     {
-        return $this->belongsToMany(Building::class, 'unit_required_buildings', 'requirement_id')
+        return $this->belongsToMany(Building::class, 'unit_required_buildings', 'unit_id', 'requirement_id')
             ->withPivot(['qty']);
     }
 
@@ -98,7 +99,7 @@ class Unit extends Model
         return $query->whereHas('requiredResearch', function ($query) use ($ruler) {
             $query->whereIn('id', $ruler->research->modelKeys());
         })
-            ->doesntHave('requiredResearch', 'or');
+        ->doesntHave('requiredResearch', 'or');
     }
 
     /**
@@ -112,7 +113,7 @@ class Unit extends Model
             $query->whereIn('id', $buildings);
             $query->where('planet_id', $planet->id);
         })
-            ->doesntHave('requiredBuildings', 'or');
+        ->doesntHave('requiredBuildings', 'or');
     }
 
     /**

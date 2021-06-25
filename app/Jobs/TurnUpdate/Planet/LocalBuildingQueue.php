@@ -12,6 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use DB;
+use Illuminate\Support\Collection;
 use Illuminate\Support\MessageBag;
 
 class LocalBuildingQueue implements ShouldQueue, LocalQueueInterface
@@ -116,7 +117,24 @@ class LocalBuildingQueue implements ShouldQueue, LocalQueueInterface
      */
     public function processRefunds(Model $queueItem)
     {
-        // TODO: To follow
+        $refundCosts = $queueItem
+            ->building
+            ->resources()
+            ->wherePivot('refund_on_completion', '=', 1)
+            ->wherePivot('cost', '>', 0)
+            ->get()
+            ->pluck('pivot.cost', 'id')
+            ->toArray();
+
+        $refunds = $this->planet
+            ->resources()
+            ->whereIn('resource_id', array_keys($refundCosts))
+            ->get();
+
+        foreach ($refunds as $refund) {
+            $this->planet->takeBusyResource($refund, $refundCosts[$refund->id]);
+            $this->planet->addResource($refund, $refundCosts[$refund->id]);
+        }
     }
 
     /**
@@ -224,11 +242,7 @@ class LocalBuildingQueue implements ShouldQueue, LocalQueueInterface
      */
     public function nextQueueItemHasRequiredResources(): bool
     {
-        $resources = $this->nextQueueItem
-            ->building
-            ->resources()
-            ->wherePivot('cost', '>', 0)
-            ->get();
+        $resources = $this->getNextQueueItemResources();
 
         return $this->planet
             ->resources()
@@ -274,10 +288,29 @@ class LocalBuildingQueue implements ShouldQueue, LocalQueueInterface
     }
 
     /**
+     * @return Collection
+     */
+    public function getNextQueueItemResources(): Collection
+    {
+        return $this->nextQueueItem
+            ->building
+            ->resources()
+            ->wherePivot('cost', '>', 0)
+            ->get();
+    }
+
+    /**
      * @inheritDoc
      */
     public function takeNextQueueItemResources()
     {
-        // TODO: To follow
+        foreach ($this->getNextQueueItemResources() as $resource)
+        {
+            if ($resource->pivot->refund_on_completion) {
+                $this->planet->addBusyResource($resource, $resource->pivot->cost);
+            }
+
+            $this->planet->takeResource($resource, $resource->pivot->cost);
+        }
     }
 }

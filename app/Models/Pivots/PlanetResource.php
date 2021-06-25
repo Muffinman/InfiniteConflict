@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @method static \Illuminate\Database\Eloquent\Builder|PlanetResource whereStored($value)
  * @mixin \Eloquent
  * @property int $storage_cache
- * @property int $busy_cache
+ * @property int $busy
  * @property int $output_cache
  * @property int $abundance_cache
  * @method static \Illuminate\Database\Eloquent\Builder|PlanetResource whereAbundanceCache($value)

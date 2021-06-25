@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\TurnUpdate\Planet\LocalBuildingQueue;
 use App\Jobs\TurnUpdate\Planet\LocalConversionQueue;
-use App\Jobs\TurnUpdate\Planet\LocalProductionQueue;
+use App\Jobs\TurnUpdate\Planet\LocalUnitQueue;
 use App\Models\Planet;
 use Illuminate\Console\Command;
 
@@ -15,7 +15,7 @@ class Test extends Command
      *
      * @var string
      */
-    protected $signature = 'test';
+    protected $signature = 'ic:test';
 
     /**
      * The console command description.

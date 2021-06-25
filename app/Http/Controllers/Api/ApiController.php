@@ -4,6 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 
-class ApiController extends Controller
+abstract class ApiController extends Controller
 {
 }

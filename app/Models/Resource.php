@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Pivots\ConversionResource;
+use App\Models\Pivots\PlanetResource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use DB;
 
 /**
  * App\Models\Resource
@@ -101,6 +104,15 @@ class Resource extends Model
     }
 
     /**
+     * Get the planets with this resource
+     */
+    public function planets(): BelongsToMany
+    {
+        return $this->belongsToMany(Planet::class)
+            ->using(PlanetResource::class);
+    }
+
+    /**
      * Taxes on resources
      *
      * @return HasMany
@@ -109,7 +121,6 @@ class Resource extends Model
     {
         return $this->hasMany(ResourceTax::class, 'resource_id');
     }
-
 
     /**
      * Get the required research.
@@ -255,7 +266,7 @@ class Resource extends Model
     }
 
     /**
-     * Limit to buildings with prerequisites met.
+     * Limit to resources with conversion prerequisites met.
      */
     public function scopePrerequisitesMet(Builder $query, Planet $planet): Builder
     {
@@ -265,7 +276,7 @@ class Resource extends Model
             $query->whereIn('id', $buildings);
             $query->where('planet_id', $planet->id);
         })
-            ->doesntHave('requiredBuildings', 'or');
+        ->doesntHave('requiredBuildings', 'or');
     }
 
     /**
@@ -276,7 +287,7 @@ class Resource extends Model
         return $query->whereHas('planets', function ($query) use ($planet) {
             $query->where('planet_id', $planet->id);
             $query->where(function ($query) use ($planet) {
-                $query->where('planet_resource.stored', '<', DB::raw('planet_resource.storage'));
+                $query->where('planet_resource.stored', '<', DB::raw('planet_resource.storage_cache'));
                 $query->orWhere('resources.requires_storage', 0);
             });
         });

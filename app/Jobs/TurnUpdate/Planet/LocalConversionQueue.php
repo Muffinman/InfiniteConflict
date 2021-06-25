@@ -2,7 +2,9 @@
 
 namespace App\Jobs\TurnUpdate\Planet;
 
+use App\Models\Pivots\ConversionQueue;
 use App\Models\Planet;
+use App\Models\Resource;
 use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,6 +14,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use DB;
+use Illuminate\Support\Collection;
 use Illuminate\Support\MessageBag;
 
 class LocalConversionQueue implements ShouldQueue, LocalQueueInterface
@@ -29,9 +32,9 @@ class LocalConversionQueue implements ShouldQueue, LocalQueueInterface
     protected MessageBag $queueErrors;
 
     /**
-     * @var ?Model
+     * @var ?ConversionQueue
      */
-    protected ?Model $nextQueueItem;
+    protected ?ConversionQueue $nextQueueItem;
 
     /**
      * Create a new job instance.
@@ -93,7 +96,8 @@ class LocalConversionQueue implements ShouldQueue, LocalQueueInterface
     {
         // Update or delete
         if ($quantity = $this->getItemChangeQuantity($queueItem)) {
-            $this->updateItemQuantity($queueItem, $quantity);
+            $this->updateItemQuantity($queueItem, $quantity);;
+            $this->processRefunds($queueItem);
         } else {
             $this->removeItem($queueItem);
         }
@@ -112,27 +116,28 @@ class LocalConversionQueue implements ShouldQueue, LocalQueueInterface
     /**
      * @inheritDoc
      */
+    public function processRefunds(Model $queueItem)
+    {
+        $refunds = $queueItem
+            ->convertingFromResources
+            ->wherePivot('refund_on_completion', '=', 1)
+            ->wherePivot('cost', '>', 0)
+            ->get();
+
+        ray($refunds);
+
+        foreach ($refunds as $refund) {
+            $this->planet->takeBusyResource($refund, $refund->pivot->cost);
+            $this->planet->addResource($refund, $refund->pivot->cost);
+        }
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getItemChangeQuantity(Model $queueItem): int
     {
-        $quantity = 0;
-        $existing = $this->planet
-            ->conversionQueue()
-            ->where('resource_id', $queueItem->resource_id)
-            ->first();
-
-        if ($existing) {
-            $quantity = $existing->pivot->stored;
-        }
-
-        // Handle demolishing
-        if ($queueItem->demolish) {
-            $quantity -= $queueItem->qty;
-        } else {
-            $quantity += $queueItem->qty;
-        }
-
-        // Sanity check
-        return max($quantity, 0);
+        return  $queueItem->qty;
     }
 
     /**
@@ -140,11 +145,12 @@ class LocalConversionQueue implements ShouldQueue, LocalQueueInterface
      */
     public function updateItemQuantity(Model $queueItem, int $quantity)
     {
-        $this->planet->resources()->syncWithoutDetaching([
-            $queueItem->resource_id => [
-                'stored' => $quantity,
-            ],
-        ]);
+        $resource = $this->planet
+            ->resources()
+            ->where('resource_id', $queueItem->resource_id)
+            ->first();
+
+        $this->planet->addResource($resource, $quantity);
     }
 
     /**
@@ -208,33 +214,28 @@ class LocalConversionQueue implements ShouldQueue, LocalQueueInterface
      */
     public function nextQueueItemHasRequiredResources(): bool
     {
-        // TODO: Fix this eloquent relationship
-        //$resources = $this->nextQueueItem
-        //    ->convertingFromResources()
-        //    ->resources()
-        //    ->wherePivot('cost', '>', 0)
-        //    ->get();
+        $resources = $this->getNextQueueItemResources();
 
-        //return $this->planet
-        //        ->resources()
-        //        ->wherePivotIn('resource_id', $resources->modelKeys())
-        //        ->where(function (Builder $query) use ($resources) {
-        //            foreach ($resources as $resource) {
-        //                $query->orWhere(function (Builder $query) use ($resource) {
-        //                    $query->where('resource_id', '=', $resource->id);
-        //                    $query->where('stored', '>=', $resource->pivot->cost);
-        //                });
-        //            }
-        //        })
-        //        ->count() == $resources->count();
+        return $this->planet
+            ->resources()
+            ->wherePivotIn('resource_id', $resources->modelKeys())
+            ->where(function (Builder $query) use ($resources) {
+                foreach ($resources as $resource) {
+                    $query->orWhere(function (Builder $query) use ($resource) {
+                        $query->where('resource_id', '=', $resource->id);
+                        $query->where('stored', '>=', $resource->pivot->cost);
+                    });
+                }
+            })
+            ->count() == $resources->count();
     }
 
     public function nextQueueItemIsAvailable(): bool
     {
         return $this->planet
-                ->availableConversions()
-                ->where('id', $this->nextQueueItem->resource_id)
-                ->count() > 0;
+            ->availableConversions()
+            ->where('id', $this->nextQueueItem->resource_id)
+            ->count() > 0;
     }
 
     /**
@@ -256,11 +257,24 @@ class LocalConversionQueue implements ShouldQueue, LocalQueueInterface
     }
 
     /**
+     * @return Collection
+     */
+    public function getNextQueueItemResources(): Collection
+    {
+        return $this->nextQueueItem
+            ->where('cost', '>', 0)
+            ->convertingFromResources()
+            ->get();
+    }
+
+    /**
      * @inheritDoc
      */
     public function takeNextQueueItemResources()
     {
-        // TODO: To follow
+        foreach ($this->getNextQueueItemResources() as $resource)
+        {
+            $this->planet->takeResource($resource, $resource->pivot->cost);
+        }
     }
-
 }

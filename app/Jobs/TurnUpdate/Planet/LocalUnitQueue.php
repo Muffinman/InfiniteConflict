@@ -12,9 +12,10 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use DB;
+use Illuminate\Support\Collection;
 use Illuminate\Support\MessageBag;
 
-class LocalProductionQueue implements ShouldQueue, LocalQueueInterface
+class LocalUnitQueue implements ShouldQueue, LocalQueueInterface
 {
     use Batchable, Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -94,6 +95,7 @@ class LocalProductionQueue implements ShouldQueue, LocalQueueInterface
         // Update or delete
         if ($quantity = $this->getItemChangeQuantity($queueItem)) {
             $this->updateItemQuantity($queueItem, $quantity);
+            $this->processRefunds($queueItem);
         } else {
             $this->removeItem($queueItem);
         }
@@ -109,6 +111,23 @@ class LocalProductionQueue implements ShouldQueue, LocalQueueInterface
         }
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function processRefunds(Model $queueItem)
+    {
+        $refunds = $queueItem
+            ->unit
+            ->resources()
+            ->wherePivot('refund_on_completion', '=', 1)
+            ->wherePivot('cost', '>', 0)
+            ->get();
+
+        foreach ($refunds as $refund) {
+            $this->planet->takeBusyResource($refund, $refund->pivot->cost);
+            $this->planet->addResource($refund, $refund->pivot->cost);
+        }
+    }
 
     /**
      * @inheritDoc
@@ -209,12 +228,6 @@ class LocalProductionQueue implements ShouldQueue, LocalQueueInterface
      */
     public function nextQueueItemHasRequiredResources(): bool
     {
-        $resources = $this->nextQueueItem
-            ->unit
-            ->resources()
-            ->wherePivot('cost', '>', 0)
-            ->get();
-
         return $this->planet
                 ->resources()
                 ->wherePivotIn('resource_id', $resources->modelKeys())
@@ -256,11 +269,25 @@ class LocalProductionQueue implements ShouldQueue, LocalQueueInterface
     }
 
     /**
+     * @return Collection
+     */
+    public function getNextQueueItemResources(): Collection
+    {
+        return $this->nextQueueItem
+            ->unit
+            ->resources()
+            ->wherePivot('cost', '>', 0)
+            ->get();
+    }
+
+    /**
      * @inheritDoc
      */
     public function takeNextQueueItemResources()
     {
-        // TODO: To follow
+        foreach ($this->getNextQueueItemResources() as $resource)
+        {
+            $this->planet->takeResource($resource, $resource->pivot->cost);
+        }
     }
-
 }

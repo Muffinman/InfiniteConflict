@@ -30,10 +30,8 @@ class PlanetStartingResource extends Model
      */
     public static function allAsResourceArray(): array
     {
-        $planet_resources = [];
-        foreach (static::all() as $res) {
-            $planet_resources[$res['resource_id']] = $res;
-        }
-        return $planet_resources;
+        return static::all()
+            ->keyBy('resource_id')
+            ->toArray();
     }
 }

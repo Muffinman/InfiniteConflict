@@ -2,6 +2,8 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Planet;
+use App\Models\Ruler;
 use Illuminate\Console\Command;
 
 class TurnUpdate extends Command
@@ -37,6 +39,14 @@ class TurnUpdate extends Command
      */
     public function handle()
     {
+        $ruler = Ruler::find(1);
+        if (!$ruler->planets()->exists()) {
+            $home_planet = Planet::homePlanets()->unpopulated()->first();
+            $home_planet->ruler_id = 1;
+            $home_planet->save();
+            $home_planet->populateStartingBuildings();
+        }
+
         \App\Jobs\TurnUpdate::dispatch();
         return 0;
     }

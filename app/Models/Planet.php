@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 
 /**
  * App\Models\Planet
@@ -144,7 +145,7 @@ class Planet extends Model
     public function resources()
     {
         return $this->belongsToMany(Resource::class)
-            ->withPivot(['stored', 'abundance', 'output_cache', 'storage_cache', 'busy_cache', 'abundance_cache'])
+            ->withPivot(['stored', 'busy', 'abundance', 'output_cache', 'storage_cache', 'abundance_cache'])
             ->using(PlanetResource::class);
     }
 
@@ -154,7 +155,7 @@ class Planet extends Model
     public function productionResources()
     {
         return $this->belongsToMany(Resource::class)
-            ->withPivot(['stored', 'abundance', 'output_cache', 'storage_cache', 'busy_cache', 'abundance_cache'])
+            ->withPivot(['stored', 'busy', 'abundance', 'output_cache', 'storage_cache', 'abundance_cache'])
             ->where('production_resource', '=', 1)
             ->using(PlanetResource::class);
     }
@@ -165,7 +166,7 @@ class Planet extends Model
     public function staticResources()
     {
         return $this->belongsToMany(Resource::class)
-            ->withPivot(['stored', 'abundance', 'output_cache', 'storage_cache', 'busy_cache', 'abundance_cache'])
+            ->withPivot(['stored', 'busy', 'abundance', 'output_cache', 'storage_cache', 'abundance_cache'])
             ->where('production_resource', '=', 0)
             ->using(PlanetResource::class);
     }
@@ -235,12 +236,11 @@ class Planet extends Model
      */
     public function availableBuildings()
     {
-        $test = Building::query()
+        return Building::query()
             ->researched($this->ruler)
             ->prerequisitesMet($this)
             ->belowMax($this)
             ->get();
-        return $test;
     }
 
     /**
@@ -256,7 +256,7 @@ class Planet extends Model
     }
 
     /**
-     * Get buildings available for construction.
+     * Get resource conversions available.
      */
     public function availableConversions()
     {
@@ -312,11 +312,80 @@ class Planet extends Model
         return $this->buildings()->sync($starting_buildings);
     }
 
+    /**
+     * @param \App\Models\Resource $resourceWithPivot
+     * @param int $quantity
+     */
+    public function takeResource(\App\Models\Resource $resourceWithPivot, int $quantity)
+    {
+        $stored = $resourceWithPivot->pivot->stored - $quantity;
+        $stored = round(max(0, $stored));
+
+        $this->resources()->syncWithoutDetaching([
+            $resourceWithPivot->id => ['stored' => $stored],
+        ]);
+
+        Log::info("Planet {$this->id} Resource {$resourceWithPivot->name} changed from " .
+            "{$resourceWithPivot->pivot->stored} to {$stored} by Planet::takeResource: " . $quantity . ".");
+    }
+
+    /**
+     * @param \App\Models\Resource $resourceWithPivot
+     * @param int $quantity
+     */
+    public function addResource(\App\Models\Resource $resourceWithPivot, int $quantity)
+    {
+        $stored = $resourceWithPivot->pivot->stored + $quantity;
+        if ($resourceWithPivot->requires_storage) {
+            $stored = round(min($stored, $resourceWithPivot->pivot->storage_cache));
+        }
+
+        $this->resources()->syncWithoutDetaching([
+            $resourceWithPivot->id => ['stored' => $stored],
+        ]);
+
+        Log::info("Planet {$this->id} Resource {$resourceWithPivot->name} changed from " .
+            "{$resourceWithPivot->pivot->stored } to {$stored} by Planet::addResource: " . $quantity . ".");
+    }
+
+
+    /**
+     * @param \App\Models\Resource $resourceWithPivot
+     * @param int $quantity
+     */
+    public function takeBusyResource(\App\Models\Resource $resourceWithPivot, int $quantity)
+    {
+        $stored = $resourceWithPivot->pivot->busy - $quantity;
+        $stored = round(max(0, $stored));
+
+        $this->resources()->syncWithoutDetaching([
+            $resourceWithPivot->id => ['busy' => $stored],
+        ]);
+
+        Log::info("Planet {$this->id} Resource Busy Cache {$resourceWithPivot->name} changed from " .
+            "{$resourceWithPivot->pivot->busy} to {$stored} by Planet::takeBusyResource: " . $quantity . ".");
+    }
+
+    /**
+     * @param \App\Models\Resource $resourceWithPivot
+     * @param int $quantity
+     */
+    public function addBusyResource(\App\Models\Resource $resourceWithPivot, int $quantity)
+    {
+        $stored = $resourceWithPivot->pivot->busy + $quantity;
+        $this->resources()->syncWithoutDetaching([
+            $resourceWithPivot->id => ['busy' => $stored],
+        ]);
+
+        Log::info("Planet {$this->id} Resource Busy Cache {$resourceWithPivot->name} changed from " .
+            "{$resourceWithPivot->pivot->busy } to {$stored} by Planet::addBusyResource: " . $quantity . ".");
+    }
+
 
     /**
      * Calculated the resource output of this planet.
      *
-     * @param Resource $resource
+     * @param \App\Models\Resource $resource
      * @param bool $useCache
      * @return int
      */
